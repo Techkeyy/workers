@@ -1,0 +1,13 @@
+{
+  "name": "workers-cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo:serve": "node demo/serve.js",
+    "demo:test": "playwright test -c demo/playwright.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1"
+  }
+}

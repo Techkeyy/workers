@@ -91,7 +91,7 @@ skill/                Claude Code skill wrapping `workers port`
 | 0 Understand | Research and gates | DONE |
 | 1 Define | This file | DONE |
 | 2 Feasibility spike | (a) local TodoMVC plus the Playwright spec green locally; (b) one hand-written `_test.md`: author on clean, replay on clean (credits?), replay on a bug mutant (fails?), replay on a refactor mutant (passes?) | IN PROGRESS |
-| 3 Vertical slice | One test through translate → baseline → 1 mutant → parity → loop → report | pending |
+| 3 Vertical slice | One test through translate → baseline → 1 mutant → parity → loop → report | CODE DONE (2635ac9). Kane path unexecuted; blocked on credits |
 | 4 Product shell | All tests, CLI UX, progress output, report polish | pending |
 | 5 Failure and recovery | Kane auth, no credits, agent failure, Playwright missing, interrupted run (mutants must always revert) | pending |
 | 6 Package | npm-installable, `workers demo` from a fresh clone | pending |
@@ -155,6 +155,25 @@ skill/                Claude Code skill wrapping `workers port`
 - 2026-11-15, core-CLI builder (Sonnet) stopped correctly: standalone `claude -p` is not logged in on this machine (the session's auth comes from the host app). Codex CLI is logged in (ChatGPT).
   - **Decision:** two adapters (`--agent claude|codex`). The default is claude, falling back to codex when claude isn't logged in. Codex produces the dev and demo translations until the owner runs `claude /login`.
   - The rubric says "any agent", so both adapters are a Craft plus.
+
+- 2026-11-15, core CLI ACCEPTED as code (commit 2635ac9) after director review:
+  - **Director checks:** 56/56 unit tests re-run, parity.js matches design rule 3, run-kane uses `--no-adaptive-heal` for mutants, and the repair prompt excludes the mutant (unit-tested).
+  - **Real Playwright mutant table (24 tests):**
+
+    | Mutant | Spec tests broken |
+    | --- | --- |
+    | B1 | 6 |
+    | B2 | 0 |
+    | B3 | 1 (test 3, `toHaveText('3 items left')`) |
+    | B4 | 2 |
+    | B5 | 1 |
+    | R1 | 2 |
+    | R2 | 0 |
+
+  - **Codex translations:** 3 real ones (model `gpt-5.6-terra`, because the configured default `gpt-6-sol` is rejected by the account).
+  - **Rules:** `src/rules.md` rule 2 pre-empts K1 with the wording "exact visible text of X is …". Whether Kane then reads the full text is still unproven.
+  - **Unverified:** claude adapter (no standalone login), the real `runKane` spawn, and the Kane half of `port.js`. Report HTML unstyled.
+  - **Minor:** test 3's translation repeats the same fact as 4 Verify lines (rule 1 says keep the strictest). Tighten later.
 
 ## Open blockers
 

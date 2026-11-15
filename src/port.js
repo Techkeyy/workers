@@ -1,0 +1,166 @@
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { adapters, resolveAgent } from './agents.js';
+import { listTests } from './inventory.js';
+import { repairLoop } from './loop.js';
+import { computeCells } from './parity.js';
+import { writeReport } from './report.js';
+import { runKane } from './run-kane.js';
+import { runPlaywright } from './run-playwright.js';
+import { ensureServer } from './server.js';
+import { installSigintHandler, loadMutants, restoreLeftovers, withMutant } from './mutants.js';
+import { countExpects, extractSource, translateTest } from './translate.js';
+import { slugify } from './util.js';
+
+const CREDITS_PER_AUTHOR = 30;
+const lines = (s) => s.trim().split('\n').length;
+
+// Plain-text matrix of the Playwright verdicts (used for the dry run).
+export function pwMatrixText(states, mutants) {
+  const cols = ['clean', ...mutants.map((m) => m.id)];
+  const w = Math.max(...states.map((s) => s.test.title.length), 4);
+  const row = (name, cells) => name.padEnd(w) + '  ' + cells.map((c) => c.padEnd(5)).join(' ');
+  return [row('test', cols), ...states.map((s) => row(s.test.title, cols.map((c) => (s.pw[c].passed ? 'pass' : 'FAIL'))))].join('\n');
+}
+
+export async function port(opts) {
+  const log = opts.log ?? console.log;
+  const config = resolve(opts.config);
+  const appDir = resolve(opts.app);
+  const outDir = resolve(opts.out ?? 'workers-out');
+
+  const restored = restoreLeftovers(appDir);
+  if (restored.length) log(`Restored ${restored.length} file(s) left mutated by an interrupted run: ${restored.join(', ')}`);
+  const mutants = loadMutants(resolve(opts.mutants));
+  const stopSigint = installSigintHandler();
+
+  let stopServer = async () => {};
+  try {
+    // 1. inventory
+    log('Listing Playwright tests ...');
+    const inv = await listTests(config);
+    let tests = inv.tests;
+    if (opts.grep) tests = tests.filter((t) => t.titlePath.join(' ').toLowerCase().includes(opts.grep.toLowerCase()));
+    if (opts.maxTests) tests = tests.slice(0, opts.maxTests);
+    if (!tests.length) throw new Error('No Playwright tests selected (check --grep / --config).');
+    log(`Found ${inv.tests.length} tests, selected ${tests.length}:`);
+    tests.forEach((t, i) => log(`  ${i + 1}. ${t.titlePath.join(' > ')}`));
+    log(`Mutants: ${mutants.map((m) => `${m.id} (${m.kind})`).join(', ')}`);
+    const url = opts.url ?? (inv.webServer?.url ? inv.webServer.url.replace(/\/?$/, '/') : 'http://localhost:4173/');
+
+    // 2. translate
+    const agent = opts.agentImpl ?? (await resolveAgent(opts.agent ?? 'claude', log, adapters));
+    log(`Translating with ${agent.name}${opts.agentModel ? ` (${opts.agentModel})` : ''} ...`);
+    const states = [];
+    for (const [i, test] of tests.entries()) {
+      const src = readFileSync(test.file, 'utf8');
+      const { source, testBlock } = extractSource(src, test.line);
+      const slug = `${String(i + 1).padStart(2, '0')}-${slugify(test.title)}`;
+      const mdPath = join(outDir, 'tests', slug, `${slug}_test.md`);
+      log(`  [${i + 1}/${tests.length}] ${test.title}`);
+      const { md, attempts } = await translateTest({ test, url, agent, model: opts.agentModel });
+      mkdirSync(dirname(mdPath), { recursive: true });
+      writeFileSync(mdPath, md);
+      log(`      wrote ${mdPath}${attempts > 1 ? ' (needed a retry)' : ''}`);
+      states.push({ test, slug, mdPath, md, pwSource: source, pwLines: lines(testBlock), mdLines: lines(md), pw: {}, kane: {}, cells: {}, loop: [], credits: 0, status: 'translated' });
+    }
+
+    // 3. Playwright matrix: one run per column
+    log('Playwright: clean run ...');
+    const clean = await runPlaywright(config, tests);
+    states.forEach((s) => (s.pw.clean = clean[s.test.id]));
+    for (const m of mutants) {
+      log(`Playwright: mutant ${m.id} (${m.kind}) ...`);
+      const res = await withMutant(appDir, m, () => runPlaywright(config, tests));
+      states.forEach((s) => (s.pw[m.id] = res[s.test.id]));
+      log(`  fails ${states.filter((s) => !s.pw[m.id].passed).length} of ${states.length} selected tests`);
+    }
+    states.forEach((s) => (s.cells = computeCells(mutants, s.pw, null)));
+    log('\nPlaywright matrix (old suite):\n' + pwMatrixText(states, mutants) + '\n');
+
+    const eligible = states.filter((s) => s.pw.clean.passed);
+    states.filter((s) => !s.pw.clean.passed).forEach((s) => ((s.status = 'old-test-failing'), log(`  ! "${s.test.title}" fails on the clean app in Playwright; excluded.`)));
+
+    const build = () => ({
+      generatedAt: new Date().toISOString(),
+      dryRun: !!opts.dryRun,
+      mutants: mutants.map(({ id, kind, description }) => ({ id, kind, description })),
+      tests: states.map((s) => ({ id: s.test.id, title: s.test.title, status: s.status, reason: s.reason, cells: s.cells, pw: s.pw, kane: s.kane, loop: s.loop, pwLines: s.pwLines, mdLines: s.mdLines, credits: s.credits, mdPath: s.mdPath })),
+    });
+
+    // dry run stops here
+    if (opts.dryRun) {
+      const reportPath = writeReport(outDir, build());
+      log('Plan (dry run, Kane not executed):');
+      log(`  1. Author ${eligible.length} test(s) on the clean app with Kane (about ${CREDITS_PER_AUTHOR} credits each)`);
+      log(`  2. Replay each against ${mutants.length} mutants with --no-adaptive-heal (0 credits per replay)`);
+      log(`  3. Repair any test where Kane is weaker (up to ${opts.repairRounds ?? 2} rounds; each round re-authors, about ${CREDITS_PER_AUTHOR} credits)`);
+      log(`  Estimated Kane credits: about ${eligible.length * CREDITS_PER_AUTHOR} for authoring (plus repairs)`);
+      log(`Report (Playwright only): ${reportPath}`);
+      return build();
+    }
+
+    // 4. Kane
+    stopServer = await ensureServer({ url, command: inv.webServer?.command, cwd: inv.configDir });
+    const kane = async (state, col, noHeal) => {
+      const r = await runKane(state.mdPath, { noHeal });
+      state.kane[col] = r;
+      state.credits += r.credits;
+      if (r.status === 'error') throw new Error(`Kane could not run (${r.errorText ?? 'exit ' + r.exitCode}). If this is an auth problem, run \`kane-cli login\`.`);
+      return r;
+    };
+    const verdict = (r) => (r.status === 'passed' ? 'pass' : 'FAIL');
+
+    for (const [i, s] of eligible.entries()) {
+      log(`Kane: authoring on the clean app [${i + 1}/${eligible.length}] ${s.test.title}`);
+      const r = await kane(s, 'clean', false);
+      log(`  ${verdict(r)} (${r.credits.toFixed(1)} credits)${r.failedStep ? ': ' + r.failedStep.summary : ''}`);
+    }
+    for (const m of mutants) {
+      log(`Kane: replaying against mutant ${m.id} ...`);
+      await withMutant(appDir, m, async () => {
+        for (const s of eligible.filter((x) => x.kane.clean.status === 'passed')) {
+          const r = await kane(s, m.id, true);
+          log(`  ${s.test.title}: ${verdict(r)}`);
+        }
+      });
+    }
+    const recompute = (s) => (s.cells = computeCells(mutants, s.pw, s.kane));
+    eligible.forEach(recompute);
+
+    // 5. repair loop
+    const evaluate = async (s) => {
+      s.kane = {};
+      await kane(s, 'clean', false);
+      if (s.kane.clean.status === 'passed') {
+        for (const m of mutants) await withMutant(appDir, m, () => kane(s, m.id, true));
+      }
+      recompute(s);
+    };
+    for (const s of eligible) {
+      await repairLoop(s, mutants, {
+        rounds: opts.repairRounds ?? 2,
+        agent,
+        model: opts.agentModel,
+        writeMd: (st, md) => {
+          writeFileSync(st.mdPath, md);
+          st.mdLines = lines(md);
+        },
+        evaluate,
+        log,
+      });
+      if (s.status === 'translated') s.status = 'ported';
+    }
+
+    const reportPath = writeReport(outDir, build());
+    const h = JSON.parse(readFileSync(join(outDir, 'report.json'), 'utf8')).headline;
+    log(`\nDone. ${h.testsPorted}/${h.testsSelected} ported; bug mutants caught old/new: ${h.bugsCaughtOld}/${h.bugsCaughtNew}; false alarms avoided: ${h.falseAlarmsAvoided}; needs human: ${h.needsHuman}; Kane credits: ${h.credits}`);
+    log(`Report: ${reportPath}`);
+    return build();
+  } finally {
+    await stopServer();
+    stopSigint();
+    // belt and braces: nothing may stay mutated
+    restoreLeftovers(appDir);
+  }
+}

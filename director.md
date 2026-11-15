@@ -44,7 +44,7 @@ Research: `Desktop/skill/idea-research/kanecli-hackathon-idea-research.md` (the 
 | Ported tests catch the same bugs | Mutant matrix: both suites run per mutant, verdicts diffed | Real Playwright and Kane runs; verdicts come from exit codes and `run_end`, never from the agent's word | The demo matrix shows parity on every bug mutant | none | UNPROVEN |
 | The agent can't game it with vacuous tests | A test must fail on mutants that the old test catches | Parity diff (deterministic code) | A deliberately vacuous `_test.md` is flagged as weaker | none | UNPROVEN |
 | Closed loop: Kane's result fixes the test | Evidence from Kane and Playwright goes into the agent prompt, then a re-run | Re-run verdict | Log: missed → rewrite → caught, on a real mutant | none | UNPROVEN |
-| Kane avoids false alarms the old suite raises | "Refactor" mutants: same behaviour, different markup | Real runs | Playwright fails and Kane passes on at least 1 refactor mutant | none | UNPROVEN |
+| Kane avoids false alarms the old suite raises | "Refactor" mutants: same behaviour, different markup | Real runs | Playwright fails and Kane passes on at least 1 refactor mutant | R1: PW FAIL / Kane PASS (spike, hand-written test) | SUPPORTED (re-prove inside the product) |
 | Re-runs are cheap | `testmd` replay from cache | Kane | Credits per replay of about 0 on clean, and the cost on a mutant measured | Clean replay cost **0 credits** (balance 146.65 before and after). It took 15 s of steps, 83 s wall clock including startup and upload. Mutant replay not yet measured | PROVEN for clean replay; mutant replay pending |
 
 ## Key design rules (director decisions)
@@ -123,6 +123,38 @@ skill/                Claude Code skill wrapping `workers port`
     - `test_md_done.overall_status`
   - **Risk to check on mutants:** `adaptive_heal`. Kane may "heal" around a break and hide it. Bug mutants must still fail.
   - **Budget:** authoring costs about 25–35 credits per test. The demo spec has about 24 tests, so roughly 700 credits to author them all. **This needs the 10k credits**, or a subset of tests.
+
+- 2026-11-15, Phase 2(a) ACCEPTED after director re-check.
+  - The builder (Sonnet) built `demo/app` (vanilla TodoMVC) plus `demo/tests/demo-todo-app.spec.ts` from create-playwright@1.17.130. **The file is MIT, not Apache.**
+  - The director re-ran it: 24/24 pass. `diff` against upstream shows the URL as the only change.
+  - Committed as 2446a35.
+- 2026-11-15, **Phase 2(b) spike on the local app** (Counter test, hand-written `_test.md`, Kane 0.10.4):
+  - **Authoring on clean:**
+    - First try failed: Kane **could not read localStorage** ("verification setup repeatedly timed out reading browser storage").
+    - **Rule T1:** translate Playwright localStorage checks into the visible behaviour: reload, then verify the items are still listed.
+    - Re-authoring step 2 passed. About 25 + 27 credits.
+
+    | Break | Playwright | Kane | Meaning |
+    | --- | --- | --- | --- |
+    | B1 (bug: count shows completed instead of active) | FAIL | FAIL | **parity** ✅. Heal triggered, but it still failed |
+    | R1 (refactor: `data-testid="todo-count"` → `item-counter`) | FAIL | PASS (replay, 0 credits) | **false alarm avoided** ✅. The brittleness story is PROVEN on a real run |
+    | B2 (bug: always "items", so "1 items left") | PASS (`toContainText('1')` is loose) | PASS | both miss |
+
+  - **Finding K1: Kane extraction rebuilds the label.**
+    - The recorded `code_js` for "Verify the counter reads '1 item left'" is ``const n=Number(strong.textContent); return `${n} item${n===1?'':'s'} left` ``.
+    - It reads only the number and **re-creates the grammar itself**, so the assertion can never catch a label or plural bug. Proven by a replay with `--no-adaptive-heal` on B2: passed. Playwright's own read of the DOM on B2 gives "1 items left".
+    - This is precisely what Workers' mutation parity exists to expose. **Report it to the Kane team (Slack) and in the README's platform-feedback section.**
+  - **Finding K2: a failed run with heal on replaced the recordings.** B1's healed failure set `artifacts.replaced: true`. The next run (B2) had 0 replay decisions, re-authored on the *mutant* (about 49 credits) and committed that version. **Rule M1:** every mutant run uses `--no-adaptive-heal`. A replay miss is then terminal, costs no credits, and commits nothing.
+  - **Finding K3:** authoring-mode assertions on the mutant also passed. Kane extracted "1 item left" while the DOM showed "1 items left", which is consistent with K1.
+  - **Implication for the core-loop demo:**
+    - Use **Playwright test 3** ("append new items", `toHaveText('3 items left')`) against mutant **B3**: singular always (`'item'`), so it renders "3 item left".
+    - Playwright catches it. A naive Kane translation should miss it (per K1), giving **kane-weaker**.
+    - The agent gets the Playwright error, strengthens the wording, and Kane re-authors. Does it catch B3 after that? **This is the next spike, and it needs credits.**
+  - **Credits:** 24.6 left. Spikes are blocked until the 10k arrives.
+
+- 2026-11-15, core-CLI builder (Sonnet) stopped correctly: standalone `claude -p` is not logged in on this machine (the session's auth comes from the host app). Codex CLI is logged in (ChatGPT).
+  - **Decision:** two adapters (`--agent claude|codex`). The default is claude, falling back to codex when claude isn't logged in. Codex produces the dev and demo translations until the owner runs `claude /login`.
+  - The rubric says "any agent", so both adapters are a Craft plus.
 
 ## Open blockers
 

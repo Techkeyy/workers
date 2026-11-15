@@ -1,0 +1,86 @@
+{"type":"stream_start","cli_version":"0.10.4","surface":"testmd","pid":16724,"v":1,"ts":"2026-11-15T21:15:53.688Z"}
+{"type":"test_md_step_start","step_index":1,"heading":"Add the first todo","ref":null,"v":1,"ts":"2026-11-15T21:16:17.156Z"}
+{"type":"run_start","objective":"Type \"buy some cheese\" into the \"What needs to be done?\" box and press Enter.\nVerify the todo counter reads \"1 item left\".","timestamp":1794777377,"environment":{"resolution":"1280x900"},"v":1,"ts":"2026-11-15T21:16:17.254Z"}
+{"type":"step_event","index":0,"event":"replay_started","detail":"replaying 5 actions","recording_length":5,"v":1,"ts":"2026-11-15T21:16:17.261Z"}
+{"type":"step_start","index":1,"objective":"Step 1","v":1,"ts":"2026-11-15T21:16:17.264Z"}
+{"type":"step_event","index":1,"event":"screenshot","detail":"https://kaneai-playground.lambdatest.io/","v":1,"ts":"2026-11-15T21:16:17.743Z"}
+{"type":"step_event","index":1,"event":"action","detail":"Navigate to http://localhost:4173/","action_type":"navigate","success":true,"v":1,"ts":"2026-11-15T21:16:17.970Z"}
+{"type":"step_event","index":1,"event":"reasoning","detail":"Navigate to http://localhost:4173/","action_type":"navigate","v":1,"ts":"2026-11-15T21:16:17.972Z"}
+{"type":"step_end","index":1,"status":"passed","duration":0.7,"summary":"navigate: Navigate to http://localhost:4173/","ordinal":1,"id":"0-1","kind":"navigate","screenshot":"screenshot.jpg","action_id":"c08b9072-3872-4705-8c04-bd0822c802fa","v":1,"ts":"2026-11-15T21:16:17.994Z"}
+{"type":"step_start","index":2,"objective":"Step 2","v":1,"ts":"2026-11-15T21:16:17.996Z"}
+{"type":"step_event","index":2,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:18.187Z"}
+{"type":"step_event","index":2,"event":"action","detail":"Typing buy some cheese into the What needs to be done box","action_type":"fill","success":true,"v":1,"ts":"2026-11-15T21:16:18.583Z"}
+{"type":"step_event","index":2,"event":"reasoning","detail":"Typing buy some cheese into the What needs to be done box","action_type":"fill","v":1,"ts":"2026-11-15T21:16:18.585Z"}
+{"type":"step_end","index":2,"status":"passed","duration":0.6,"summary":"fill: Typing buy some cheese into the What needs to be done box","ordinal":2,"id":"0-2","kind":"fill","screenshot":"screenshot.jpg","action_id":"363f4e36-c936-4052-afbc-6e1c4dbb239b","v":1,"ts":"2026-11-15T21:16:18.692Z"}
+{"type":"step_start","index":3,"objective":"Step 3","v":1,"ts":"2026-11-15T21:16:18.694Z"}
+{"type":"step_event","index":3,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:18.817Z"}
+{"type":"step_event","index":3,"event":"action","detail":"Pressing the Enter key","action_type":"press_key","success":true,"v":1,"ts":"2026-11-15T21:16:19.455Z"}
+{"type":"step_event","index":3,"event":"reasoning","detail":"Pressing the Enter key","action_type":"press_key","v":1,"ts":"2026-11-15T21:16:19.457Z"}
+{"type":"step_end","index":3,"status":"passed","duration":0.8,"summary":"press_key: Pressing the Enter key","ordinal":3,"id":"0-3","kind":"press_key","screenshot":"screenshot.jpg","action_id":"9a8440ca-404b-4c8e-88de-2b3d1f20e065","v":1,"ts":"2026-11-15T21:16:19.480Z"}
+{"type":"step_start","index":4,"objective":"Step 4","v":1,"ts":"2026-11-15T21:16:19.482Z"}
+{"type":"step_event","index":4,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:19.585Z"}
+{"type":"step_event","index":4,"event":"action","detail":"Reading the todo counter from the footer","action_type":"analyze","success":true,"v":1,"ts":"2026-11-15T21:16:25.385Z"}
+{"type":"step_event","index":4,"event":"reasoning","detail":"Reading the todo counter from the footer","action_type":"analyze","v":1,"ts":"2026-11-15T21:16:25.387Z"}
+{"type":"step_end","index":4,"status":"passed","duration":5.9,"summary":"analyze: Reading the todo counter from the footer","ordinal":4,"id":"0-4","kind":"analyze","screenshot":"screenshot.jpg","action_id":"2b9c5182-0ebd-499b-9c6c-c8bf4f83904c","v":1,"ts":"2026-11-15T21:16:25.392Z"}
+{"type":"step_start","index":5,"objective":"Step 5","v":1,"ts":"2026-11-15T21:16:25.394Z"}
+{"type":"step_event","index":5,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:25.533Z"}
+{"type":"step_event","index":5,"event":"assertion","detail":"the todo counter reads \"1 item left\"","passed":true,"v":1,"ts":"2026-11-15T21:16:25.538Z"}
+{"type":"step_end","index":5,"status":"passed","duration":0.2,"summary":"assert: the todo counter reads \"1 item left\"","ordinal":5,"id":"0-5","kind":"assert","screenshot":"screenshot.jpg","action_id":"5f5ca829-e422-476d-a3e3-4cffc0d8cff7","v":1,"ts":"2026-11-15T21:16:25.570Z"}
+{"type":"run_end","run_id":"run-0","status":"passed","summary":"","reason":"replay completed","duration":8.39,"final_url":"http://localhost:4173/","actions_executed":5,"screenshot_path":"C:\\Users\\HomePC\\.testmuai\\kaneai\\sessions\\3911d5eb-f584-46eb-9b16-2b3601dd766c\\scratch\\0\\replay-test\\screenshots/step_005.png","run_dir":"C:\\Users\\HomePC\\.testmuai\\kaneai\\sessions\\3911d5eb-f584-46eb-9b16-2b3601dd766c\\scratch\\0\\replay-test","total_runs":1,"context":{"memory":{},"variables":{"todo_counter_check":{"syntax":"{{todo_counter_check}}","value":"1 item left","secret":false}},"pointer":""},"variables_out":{"todo_counter_check":{"syntax":"{{todo_counter_check}}","value":"1 item left","secret":false}},"store_out":{},"result_code":100,"reason_code":"success.complete","v":1,"ts":"2026-11-15T21:16:25.625Z"}
+{"type":"test_md_step_end","step_index":1,"status":"passed","duration_s":8.39,"ref_kind":null,"unit_kind":null,"inlined_count":null,"failed_sub_step_index":null,"v":1,"ts":"2026-11-15T21:16:25.628Z"}
+{"type":"test_md_step_start","step_index":2,"heading":"Add the second todo","ref":null,"v":1,"ts":"2026-11-15T21:16:25.629Z"}
+{"type":"run_start","objective":"Type \"feed the cat\" into the \"What needs to be done?\" box and press Enter.\nVerify the todo counter reads \"2 items left\".\nReload the page and verify both todos, \"buy some cheese\" and \"feed the cat\", are still listed.","timestamp":1794777385,"environment":{"resolution":"1280x900"},"v":1,"ts":"2026-11-15T21:16:25.704Z"}
+{"type":"step_event","index":0,"event":"replay_started","detail":"replaying 10 actions","recording_length":10,"v":1,"ts":"2026-11-15T21:16:25.709Z"}
+{"type":"step_start","index":1,"objective":"Step 1","v":1,"ts":"2026-11-15T21:16:25.762Z"}
+{"type":"step_event","index":1,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:25.865Z"}
+{"type":"step_event","index":1,"event":"action","detail":"Typing into What needs to be done? box","action_type":"fill","success":true,"v":1,"ts":"2026-11-15T21:16:26.154Z"}
+{"type":"step_event","index":1,"event":"reasoning","detail":"Typing into What needs to be done? box","action_type":"fill","v":1,"ts":"2026-11-15T21:16:26.156Z"}
+{"type":"step_end","index":1,"status":"passed","duration":0.4,"summary":"fill: Typing into What needs to be done? box","ordinal":6,"id":"1-1","kind":"fill","screenshot":"screenshot.jpg","action_id":"3e9a802e-868e-4de2-a0cb-14939420436a","v":1,"ts":"2026-11-15T21:16:26.219Z"}
+{"type":"step_start","index":2,"objective":"Step 2","v":1,"ts":"2026-11-15T21:16:26.221Z"}
+{"type":"step_event","index":2,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:26.355Z"}
+{"type":"step_event","index":2,"event":"action","detail":"Pressing Enter to submit feed the cat","action_type":"press_key","success":true,"v":1,"ts":"2026-11-15T21:16:26.906Z"}
+{"type":"step_event","index":2,"event":"reasoning","detail":"Pressing Enter to submit feed the cat","action_type":"press_key","v":1,"ts":"2026-11-15T21:16:26.908Z"}
+{"type":"step_end","index":2,"status":"passed","duration":0.7,"summary":"press_key: Pressing Enter to submit feed the cat","ordinal":7,"id":"1-2","kind":"press_key","screenshot":"screenshot.jpg","action_id":"757391c2-bf51-4435-ae58-dc75a0a6ee11","v":1,"ts":"2026-11-15T21:16:26.930Z"}
+{"type":"step_start","index":3,"objective":"Step 3","v":1,"ts":"2026-11-15T21:16:26.931Z"}
+{"type":"step_event","index":3,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:27.037Z"}
+{"type":"step_event","index":3,"event":"action","detail":"Reading the todo counter from the footer","action_type":"analyze","success":true,"v":1,"ts":"2026-11-15T21:16:27.102Z"}
+{"type":"step_event","index":3,"event":"reasoning","detail":"Reading the todo counter from the footer","action_type":"analyze","v":1,"ts":"2026-11-15T21:16:27.104Z"}
+{"type":"step_end","index":3,"status":"passed","duration":0.2,"summary":"analyze: Reading the todo counter from the footer","ordinal":8,"id":"1-3","kind":"analyze","screenshot":"screenshot.jpg","action_id":"a0263315-8bd0-4ea2-bab1-0b3fc969a26c","v":1,"ts":"2026-11-15T21:16:27.119Z"}
+{"type":"step_start","index":4,"objective":"Step 4","v":1,"ts":"2026-11-15T21:16:27.121Z"}
+{"type":"step_event","index":4,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:27.220Z"}
+{"type":"step_event","index":4,"event":"assertion","detail":"the todo counter reads \"2 items left\"","passed":true,"v":1,"ts":"2026-11-15T21:16:27.227Z"}
+{"type":"step_end","index":4,"status":"passed","duration":0.1,"summary":"assert: the todo counter reads \"2 items left\"","ordinal":9,"id":"1-4","kind":"assert","screenshot":"screenshot.jpg","action_id":"23103881-3203-40bd-8399-b59bcea53193","v":1,"ts":"2026-11-15T21:16:27.251Z"}
+{"type":"step_start","index":5,"objective":"Step 5","v":1,"ts":"2026-11-15T21:16:27.252Z"}
+{"type":"step_event","index":5,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:27.354Z"}
+{"type":"step_event","index":5,"event":"action","detail":"Navigate refresh","action_type":"refresh","success":true,"v":1,"ts":"2026-11-15T21:16:27.465Z"}
+{"type":"step_event","index":5,"event":"reasoning","detail":"Navigate refresh","action_type":"refresh","v":1,"ts":"2026-11-15T21:16:27.493Z"}
+{"type":"step_end","index":5,"status":"passed","duration":0.2,"summary":"refresh: Navigate refresh","ordinal":10,"id":"1-5","kind":"refresh","screenshot":"screenshot.jpg","action_id":"ed265256-bcfc-4f75-9606-e360b6f49834","v":1,"ts":"2026-11-15T21:16:27.498Z"}
+{"type":"step_start","index":6,"objective":"Step 6","v":1,"ts":"2026-11-15T21:16:27.501Z"}
+{"type":"step_event","index":6,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:27.633Z"}
+{"type":"step_event","index":6,"event":"action","detail":"Waiting for the page to remain loaded after reloading","action_type":"wait","success":true,"v":1,"ts":"2026-11-15T21:16:28.156Z"}
+{"type":"step_event","index":6,"event":"reasoning","detail":"Waiting for the page to remain loaded after reloading","action_type":"wait","v":1,"ts":"2026-11-15T21:16:28.194Z"}
+{"type":"step_end","index":6,"status":"passed","duration":0.7,"summary":"wait: Waiting for the page to remain loaded after reloading","ordinal":11,"id":"1-6","kind":"wait","screenshot":"screenshot.jpg","action_id":"120d5689-272e-4c99-a176-a87eb682b543","v":1,"ts":"2026-11-15T21:16:28.197Z"}
+{"type":"step_start","index":7,"objective":"Step 7","v":1,"ts":"2026-11-15T21:16:28.198Z"}
+{"type":"step_event","index":7,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:28.312Z"}
+{"type":"step_event","index":7,"event":"action","detail":"Checking whether buy some cheese is listed","action_type":"analyze","success":true,"v":1,"ts":"2026-11-15T21:16:28.405Z"}
+{"type":"step_event","index":7,"event":"reasoning","detail":"Checking whether buy some cheese is listed","action_type":"analyze","v":1,"ts":"2026-11-15T21:16:28.406Z"}
+{"type":"step_end","index":7,"status":"passed","duration":0.2,"summary":"analyze: Checking whether buy some cheese is listed","ordinal":12,"id":"1-7","kind":"analyze","screenshot":"screenshot.jpg","action_id":"cce97311-1f38-4fbb-bcba-90e0883b6dbd","v":1,"ts":"2026-11-15T21:16:28.423Z"}
+{"type":"step_start","index":8,"objective":"Step 8","v":1,"ts":"2026-11-15T21:16:28.424Z"}
+{"type":"step_event","index":8,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:28.557Z"}
+{"type":"step_event","index":8,"event":"action","detail":"Checking whether feed the cat is listed","action_type":"analyze","success":true,"v":1,"ts":"2026-11-15T21:16:28.632Z"}
+{"type":"step_event","index":8,"event":"reasoning","detail":"Checking whether feed the cat is listed","action_type":"analyze","v":1,"ts":"2026-11-15T21:16:28.633Z"}
+{"type":"step_end","index":8,"status":"passed","duration":0.2,"summary":"analyze: Checking whether feed the cat is listed","ordinal":13,"id":"1-8","kind":"analyze","screenshot":"screenshot.jpg","action_id":"9cf3d3e1-1903-4272-a0bb-3f5ff735c124","v":1,"ts":"2026-11-15T21:16:28.646Z"}
+{"type":"step_start","index":9,"objective":"Step 9","v":1,"ts":"2026-11-15T21:16:28.647Z"}
+{"type":"step_event","index":9,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:28.738Z"}
+{"type":"step_event","index":9,"event":"assertion","detail":"\"buy some cheese\" is still listed","passed":true,"v":1,"ts":"2026-11-15T21:16:28.743Z"}
+{"type":"step_end","index":9,"status":"passed","duration":0.1,"summary":"assert: \"buy some cheese\" is still listed","ordinal":14,"id":"1-9","kind":"assert","screenshot":"screenshot.jpg","action_id":"8392a979-8b8c-4f16-ba01-5e09dc8bf893","v":1,"ts":"2026-11-15T21:16:28.768Z"}
+{"type":"step_start","index":10,"objective":"Step 10","v":1,"ts":"2026-11-15T21:16:28.769Z"}
+{"type":"step_event","index":10,"event":"screenshot","detail":"http://localhost:4173/","v":1,"ts":"2026-11-15T21:16:28.870Z"}
+{"type":"step_event","index":10,"event":"assertion","detail":"\"feed the cat\" is still listed","passed":true,"v":1,"ts":"2026-11-15T21:16:28.877Z"}
+{"type":"step_end","index":10,"status":"passed","duration":0.1,"summary":"assert: \"feed the cat\" is still listed","ordinal":15,"id":"1-10","kind":"assert","screenshot":"screenshot.jpg","action_id":"51be6506-21b2-4911-9e32-a6e1858e3f8d","v":1,"ts":"2026-11-15T21:16:28.897Z"}
+{"type":"run_end","run_id":"run-1","status":"passed","summary":"","reason":"replay completed","duration":3.28,"final_url":"http://localhost:4173/","actions_executed":10,"screenshot_path":"C:\\Users\\HomePC\\.testmuai\\kaneai\\sessions\\3911d5eb-f584-46eb-9b16-2b3601dd766c\\scratch\\1\\replay-test\\screenshots/step_010.png","run_dir":"C:\\Users\\HomePC\\.testmuai\\kaneai\\sessions\\3911d5eb-f584-46eb-9b16-2b3601dd766c\\scratch\\1\\replay-test","total_runs":1,"context":{"memory":{},"variables":{"todo_counter_check":{"syntax":"{{todo_counter_check}}","value":"2 items left","secret":false},"buy_some_cheese_listed":{"syntax":"{{buy_some_cheese_listed}}","value":"true","secret":false},"feed_the_cat_listed":{"syntax":"{{feed_the_cat_listed}}","value":"true","secret":false}},"pointer":""},"variables_out":{"todo_counter_check":{"syntax":"{{todo_counter_check}}","value":"2 items left","secret":false},"buy_some_cheese_listed":{"syntax":"{{buy_some_cheese_listed}}","value":"true","secret":false},"feed_the_cat_listed":{"syntax":"{{feed_the_cat_listed}}","value":"true","secret":false}},"store_out":{},"result_code":100,"reason_code":"success.complete","v":1,"ts":"2026-11-15T21:16:28.944Z"}
+{"type":"test_md_step_end","step_index":2,"status":"passed","duration_s":3.28,"ref_kind":null,"unit_kind":null,"inlined_count":null,"failed_sub_step_index":null,"v":1,"ts":"2026-11-15T21:16:28.945Z"}
+{"type":"test_md_evidence_ingest","status":"ok","evidence_id":"66dc9c1d-8826-413d-9c6c-425ca462242b","v":1,"ts":"2026-11-15T21:16:34.478Z"}
+{"type":"test_md_summary","overall_status":"passed","duration_s":33,"steps":{"total":2,"passed":2,"failed":0,"skipped":0,"replay_decisions":2,"author_decisions":0},"adaptive_heal":{"triggered":false},"commit":{"committed":false,"reason":"readonly_fallback"},"artifacts":{"replaced":false},"upload":{"performed":true,"succeeded":true},"cancelled":false,"v":1,"ts":"2026-11-15T21:16:34.489Z"}
+{"type":"coverage","status":"skipped","reason":"not_assurance_project","pack":"C:\\Users\\HomePC\\.testmuai\\kaneai\\sessions\\3911d5eb-f584-46eb-9b16-2b3601dd766c\\evidence\\66dc9c1d-8826-413d-9c6c-425ca462242b.evidence","v":1,"ts":"2026-11-15T21:16:34.537Z"}
+{"type":"test_md_done","overall_status":"passed","duration_s":33,"session_id":"3911d5eb-f584-46eb-9b16-2b3601dd766c","coverage":{"status":"skipped"},"v":1,"ts":"2026-11-15T21:16:34.538Z"}

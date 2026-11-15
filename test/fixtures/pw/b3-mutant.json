@@ -1,0 +1,1047 @@
+{
+ "config": {
+  "argv": [
+   "C:\\Program Files\\nodejs\\node.exe",
+   "<repo>\\node_modules\\@playwright\\test\\cli.js",
+   "test",
+   "-c",
+   "<repo>\\demo\\playwright.config.ts",
+   "--reporter=json"
+  ],
+  "configFile": "<repo>\\demo\\playwright.config.ts",
+  "rootDir": "<repo>/demo/tests",
+  "failOnFlakyTests": false,
+  "forbidOnly": false,
+  "fullyParallel": false,
+  "globalSetup": null,
+  "globalTeardown": null,
+  "globalTimeout": 0,
+  "grep": {},
+  "grepInvert": null,
+  "maxFailures": 0,
+  "metadata": {
+   "actualWorkers": 1
+  },
+  "preserveOutput": "always",
+  "projects": [
+   {
+    "outputDir": "<repo>/test-results",
+    "repeatEach": 1,
+    "retries": 0,
+    "metadata": {
+     "actualWorkers": 1
+    },
+    "id": "chromium",
+    "name": "chromium",
+    "testDir": "<repo>/demo/tests",
+    "testIgnore": [],
+    "testMatch": [
+     "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+    ],
+    "timeout": 30000
+   }
+  ],
+  "filteredProjects": [
+   {
+    "grep": {},
+    "grepInvert": null,
+    "outputDir": "<repo>\\test-results",
+    "repeatEach": 1,
+    "retries": 0,
+    "metadata": {
+     "actualWorkers": 1
+    },
+    "name": "chromium",
+    "testDir": "<repo>\\demo\\tests",
+    "snapshotDir": "<repo>\\demo\\tests",
+    "testIgnore": [],
+    "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+    "timeout": 30000,
+    "use": {
+     "baseURL": "http://localhost:4173",
+     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/159.0.8154.6 Safari/537.36",
+     "viewport": {
+      "width": 1280,
+      "height": 720
+     },
+     "screen": {
+      "width": 1920,
+      "height": 1080
+     },
+     "deviceScaleFactor": 1,
+     "isMobile": false,
+     "hasTouch": false,
+     "defaultBrowserType": "chromium"
+    },
+    "dependencies": [],
+    "ignoreSnapshots": false,
+    "__projectId": "chromium"
+   }
+  ],
+  "quiet": false,
+  "reporter": [
+   [
+    "json"
+   ]
+  ],
+  "reportSlowTests": {
+   "max": 5,
+   "threshold": 300000
+  },
+  "shard": null,
+  "tags": [],
+  "updateSnapshots": "default",
+  "updateSourceMethod": "patch",
+  "version": "1.65.1",
+  "workers": 2,
+  "webServer": {
+   "command": "node serve.js",
+   "url": "http://localhost:4173",
+   "reuseExistingServer": true
+  }
+ },
+ "suites": [
+  {
+   "title": "demo-todo-app.spec.ts",
+   "file": "demo-todo-app.spec.ts",
+   "column": 0,
+   "line": 0,
+   "specs": [],
+   "suites": [
+    {
+     "title": "New Todo",
+     "file": "demo-todo-app.spec.ts",
+     "line": 13,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should allow me to add todo items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 0,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 546,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:10.390Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-de14671fd2e5e71cfcf4",
+       "file": "demo-todo-app.spec.ts",
+       "line": 14,
+       "column": 3
+      },
+      {
+       "title": "should clear text input field when an item is added",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 0,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 329,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:11.271Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-3b8f34f2e93d2414c1ab",
+       "file": "demo-todo-app.spec.ts",
+       "line": 40,
+       "column": 3
+      },
+      {
+       "title": "should append new items to the bottom of the list",
+       "ok": false,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 0,
+           "parallelIndex": 0,
+           "status": "failed",
+           "duration": 5391,
+           "error": {
+            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('3 items left')\u001b[22m\n",
+            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('3 items left')\u001b[22m\n\n    at <repo>\\demo\\tests\\demo-todo-app.spec.ts:61:50",
+            "location": {
+             "file": "<repo>\\demo\\tests\\demo-todo-app.spec.ts",
+             "column": 50,
+             "line": 61
+            },
+            "snippet": " \u001b[90m 59 |\u001b[39m   \n \u001b[90m 60 |\u001b[39m     \u001b[90m// Check test using different methods.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'3 items left'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 62 |\u001b[39m     \u001b[36mawait\u001b[39m expect(todoCount)\u001b[33m.\u001b[39mtoHaveText(\u001b[32m'3 items left'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[36mawait\u001b[39m expect(todoCount)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'3'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m     \u001b[36mawait\u001b[39m expect(todoCount)\u001b[33m.\u001b[39mtoHaveText(\u001b[35m/3/\u001b[39m)\u001b[33m;\u001b[39m"
+           },
+           "errors": [
+            {
+             "location": {
+              "file": "<repo>\\demo\\tests\\demo-todo-app.spec.ts",
+              "column": 50,
+              "line": 61
+             },
+             "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('3 items left')\u001b[22m\n\n\n  59 |   \n  60 |     // Check test using different methods.\n> 61 |     await expect(page.getByText('3 items left')).toBeVisible();\n     |                                                  ^\n  62 |     await expect(todoCount).toHaveText('3 items left');\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n    at <repo>\\demo\\tests\\demo-todo-app.spec.ts:61:50"
+            }
+           ],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:11.633Z",
+           "annotations": [],
+           "attachments": [
+            {
+             "name": "error-context",
+             "contentType": "text/markdown",
+             "path": "<repo>\\test-results\\demo-todo-app-New-Todo-sho-149e5-s-to-the-bottom-of-the-list-chromium\\error-context.md"
+            }
+           ],
+           "errorLocation": {
+            "file": "<repo>\\demo\\tests\\demo-todo-app.spec.ts",
+            "column": 50,
+            "line": 61
+           }
+          }
+         ],
+         "status": "unexpected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-2531b32b950949c93e0b",
+       "file": "demo-todo-app.spec.ts",
+       "line": 53,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Mark all as completed",
+     "file": "demo-todo-app.spec.ts",
+     "line": 72,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should allow me to mark all items as completed",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 569,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:18.071Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-e38558bd3234b0b8d82c",
+       "file": "demo-todo-app.spec.ts",
+       "line": 82,
+       "column": 3
+      },
+      {
+       "title": "should allow me to clear the complete state of all items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 454,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:18.923Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-2e7d774e9c08aeb850d5",
+       "file": "demo-todo-app.spec.ts",
+       "line": 91,
+       "column": 3
+      },
+      {
+       "title": "complete all checkbox should update state when items are completed / cleared",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 744,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:19.410Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-e5befab6d7114c3aa529",
+       "file": "demo-todo-app.spec.ts",
+       "line": 101,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Item",
+     "file": "demo-todo-app.spec.ts",
+     "line": 122,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should allow me to mark items as complete",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 546,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:20.192Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-489ea41f87390de41c21",
+       "file": "demo-todo-app.spec.ts",
+       "line": 124,
+       "column": 3
+      },
+      {
+       "title": "should allow me to un-mark items as complete",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 648,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:20.780Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-5710470e4e4a966b2f75",
+       "file": "demo-todo-app.spec.ts",
+       "line": 149,
+       "column": 3
+      },
+      {
+       "title": "should allow me to edit an item",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 1003,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:21.458Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-1a97b61d023a429bd040",
+       "file": "demo-todo-app.spec.ts",
+       "line": 174,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Editing",
+     "file": "demo-todo-app.spec.ts",
+     "line": 194,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should hide other controls when editing",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 1405,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:22.505Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-28fb607624050fd82521",
+       "file": "demo-todo-app.spec.ts",
+       "line": 200,
+       "column": 3
+      },
+      {
+       "title": "should save edits on blur",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 685,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:23.948Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-1bd6ee2fec1beaaf42aa",
+       "file": "demo-todo-app.spec.ts",
+       "line": 210,
+       "column": 3
+      },
+      {
+       "title": "should trim entered text",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 536,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:24.675Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-53f971c12bed0d92be82",
+       "file": "demo-todo-app.spec.ts",
+       "line": 224,
+       "column": 3
+      },
+      {
+       "title": "should remove the item if an empty text string was entered",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 507,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:25.243Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-10ce05380c00810d697e",
+       "file": "demo-todo-app.spec.ts",
+       "line": 238,
+       "column": 3
+      },
+      {
+       "title": "should cancel edits on escape",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 600,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:25.785Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-f1199d69dfa0655fa016",
+       "file": "demo-todo-app.spec.ts",
+       "line": 250,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Counter",
+     "file": "demo-todo-app.spec.ts",
+     "line": 259,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should display the current number of todo items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 494,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:26.423Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-bbb1bb0c9c77cda96f15",
+       "file": "demo-todo-app.spec.ts",
+       "line": 260,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Clear completed button",
+     "file": "demo-todo-app.spec.ts",
+     "line": 280,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should display the correct text",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 626,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:26.954Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-d1d24c10b0b14b6d95da",
+       "file": "demo-todo-app.spec.ts",
+       "line": 285,
+       "column": 3
+      },
+      {
+       "title": "should remove completed items when clicked",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 476,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:27.622Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-afaa39a2add3b845087f",
+       "file": "demo-todo-app.spec.ts",
+       "line": 290,
+       "column": 3
+      },
+      {
+       "title": "should be hidden when there are no items that are completed",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 569,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:28.130Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-4ebb083191c59dda5f31",
+       "file": "demo-todo-app.spec.ts",
+       "line": 298,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Persistence",
+     "file": "demo-todo-app.spec.ts",
+     "line": 305,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should persist its data",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 732,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:28.730Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-67ccbc7dc463cf92ee08",
+       "file": "demo-todo-app.spec.ts",
+       "line": 306,
+       "column": 3
+      }
+     ]
+    },
+    {
+     "title": "Routing",
+     "file": "demo-todo-app.spec.ts",
+     "line": 333,
+     "column": 6,
+     "specs": [
+      {
+       "title": "should allow me to display active items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 708,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:29.502Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-168ac99248367a9c5f75",
+       "file": "demo-todo-app.spec.ts",
+       "line": 342,
+       "column": 3
+      },
+      {
+       "title": "should respect the back button",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 1088,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "steps": [
+            {
+             "title": "Showing all items",
+             "duration": 38
+            },
+            {
+             "title": "Showing active items",
+             "duration": 48
+            },
+            {
+             "title": "Showing completed items",
+             "duration": 47
+            }
+           ],
+           "startTime": "2026-11-15T21:42:30.246Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-f4a7bfde65c589b439d6",
+       "file": "demo-todo-app.spec.ts",
+       "line": 352,
+       "column": 3
+      },
+      {
+       "title": "should allow me to display completed items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 687,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:31.367Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-b038b6fb9d0061cc555a",
+       "file": "demo-todo-app.spec.ts",
+       "line": 378,
+       "column": 3
+      },
+      {
+       "title": "should allow me to display all items",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 807,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:32.088Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-ac5122dabccbd5dd6ae5",
+       "file": "demo-todo-app.spec.ts",
+       "line": 385,
+       "column": 3
+      },
+      {
+       "title": "should highlight the currently applied filter",
+       "ok": true,
+       "tags": [],
+       "tests": [
+        {
+         "timeout": 30000,
+         "annotations": [],
+         "expectedStatus": "passed",
+         "projectId": "chromium",
+         "projectName": "chromium",
+         "results": [
+          {
+           "workerIndex": 1,
+           "parallelIndex": 0,
+           "status": "passed",
+           "duration": 636,
+           "errors": [],
+           "stdout": [],
+           "stderr": [],
+           "retry": 0,
+           "startTime": "2026-11-15T21:42:32.930Z",
+           "annotations": [],
+           "attachments": []
+          }
+         ],
+         "status": "expected"
+        }
+       ],
+       "id": "849da1cee0c412ce5534-237c74ea6ef08dd9500e",
+       "file": "demo-todo-app.spec.ts",
+       "line": 394,
+       "column": 3
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "stats": {
+  "startTime": "2026-11-15T21:42:09.002Z",
+  "duration": 24808.294,
+  "expected": 23,
+  "skipped": 0,
+  "unexpected": 1,
+  "flaky": 0
+ }
+}

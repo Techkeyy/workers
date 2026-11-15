@@ -1,0 +1,58 @@
+[
+  {
+    "id": "B1",
+    "kind": "bug",
+    "description": "Active count counts completed items instead",
+    "file": "app.js",
+    "find": "const activeCount = todos.filter((item) => !item.completed).length;",
+    "replace": "const activeCount = todos.filter((item) => item.completed).length;"
+  },
+  {
+    "id": "B2",
+    "kind": "bug",
+    "description": "Counter always says \"items\" (so \"1 items left\")",
+    "file": "app.js",
+    "find": "const itemWord = activeCount === 1 ? 'item' : 'items';",
+    "replace": "const itemWord = 'items';"
+  },
+  {
+    "id": "B3",
+    "kind": "bug",
+    "description": "Counter always says \"item\" (so \"3 item left\")",
+    "file": "app.js",
+    "find": "const itemWord = activeCount === 1 ? 'item' : 'items';",
+    "replace": "const itemWord = 'item';"
+  },
+  {
+    "id": "B4",
+    "kind": "bug",
+    "description": "\"Clear completed\" removes active items instead",
+    "file": "app.js",
+    "find": "todos = todos.filter((item) => !item.completed);",
+    "replace": "todos = todos.filter((item) => item.completed);"
+  },
+  {
+    "id": "B5",
+    "kind": "bug",
+    "description": "Escape saves the edit instead of cancelling it",
+    "file": "app.js",
+    "find": "if (event.key === 'Escape') cancelEdit();",
+    "replace": "if (event.key === 'Escape') saveEdit(todo.id, editInput.value);"
+  },
+  {
+    "id": "R1",
+    "kind": "refactor",
+    "description": "Counter test-id renamed from todo-count to item-counter (same behaviour)",
+    "file": "index.html",
+    "find": "data-testid=\"todo-count\"",
+    "replace": "data-testid=\"item-counter\""
+  },
+  {
+    "id": "R2",
+    "kind": "refactor",
+    "description": "\"Clear completed\" button keeps its text; extra class and data attribute added (same behaviour)",
+    "file": "index.html",
+    "find": "<button class=\"clear-completed\" hidden>Clear completed</button>",
+    "replace": "<button class=\"clear-completed btn btn-link\" data-action=\"clear-completed\" hidden>Clear completed</button>"
+  }
+]

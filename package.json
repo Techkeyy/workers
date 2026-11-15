@@ -5,9 +5,17 @@
   "type": "module",
   "scripts": {
     "demo:serve": "node demo/serve.js",
-    "demo:test": "playwright test -c demo/playwright.config.ts"
+    "demo:test": "playwright test -c demo/playwright.config.ts",
+    "test": "node --test",
+    "workers": "node bin/workers.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1"
+  },
+  "bin": {
+    "workers": "bin/workers.js"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

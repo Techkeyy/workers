@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { adapters, resolveAgent } from './agents.js';
 import { restoreCache, snapshotCache, withRestoredCache } from './kane-cache.js';
@@ -63,10 +63,18 @@ export async function port(opts) {
       const slug = `${String(i + 1).padStart(2, '0')}-${slugify(test.title)}`;
       const mdPath = join(outDir, 'tests', slug, `${slug}_test.md`);
       log(`  [${i + 1}/${tests.length}] ${test.title}`);
-      const { md, attempts } = await translateTest({ test, url, agent, model: opts.agentModel });
-      mkdirSync(dirname(mdPath), { recursive: true });
-      writeFileSync(mdPath, md);
-      log(`      wrote ${mdPath}${attempts > 1 ? ' (needed a retry)' : ''}`);
+      let md;
+      if (opts.resume && existsSync(mdPath)) {
+        // --resume: keep the translation from an interrupted run, so Kane replays its recordings instead of re-authoring
+        md = readFileSync(mdPath, 'utf8');
+        log(`      reused ${mdPath}`);
+      } else {
+        const r = await translateTest({ test, url, agent, model: opts.agentModel });
+        md = r.md;
+        mkdirSync(dirname(mdPath), { recursive: true });
+        writeFileSync(mdPath, md);
+        log(`      wrote ${mdPath}${r.attempts > 1 ? ' (needed a retry)' : ''}`);
+      }
       states.push({ test, slug, mdPath, md, pwSource: source, pwImports: formatImports(collectImports(test.file)), pwLines: lines(testBlock), mdLines: lines(md), pw: {}, kane: {}, cells: {}, loop: [], credits: 0, status: 'translated' });
     }
 

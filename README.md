@@ -105,6 +105,21 @@ Prerequisites:
 - `kane-cli` (`npm install -g @testmuai/kane-cli`), logged in, with credits
 - `claude` or `codex` CLI, logged in
 
+From npm, in any empty folder (the demo app and its Playwright suite are copied to `./workers-demo`):
+
+```bash
+npm install workers-port
+npx playwright install chromium
+
+# everything except Kane: list, translate, run Playwright on every mutant, print a credit estimate
+npx workers-port demo --dry-run --max-tests 1
+
+# the real run (spends Kane credits)
+npx workers-port demo --max-tests 3
+```
+
+Or from a clone of this repo:
+
 <!-- quickstart verified on a fresh clone: pending -->
 
 ```bash

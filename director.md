@@ -179,6 +179,27 @@ skill/                Claude Code skill wrapping `workers port`
   - **Plan:** `kane-cli login --oauth --profile alt`, then `kane-cli profiles switch alt`.
   - **Pending:** the owner confirms with the organizer whether the hackathon registration should also move to the alt email (scoring gate: "same email on both").
 
+- 2026-11-16, **first real end-to-end run** (`workers demo --max-tests 3 --agent codex --agent-model gpt-5.6-terra`, Kane profile `alt`):
+  - 3/3 translated and authored on clean, 124.9 credits.
+  - Kane matched Playwright on bug mutants B1 and B3 (test 3). **B3 was caught on the first try**: rule 2's "exact visible text" wording made Kane read `innerText` of the counter, so K1 is pre-empted. No repair round was needed.
+  - **R1 → `kane-false-alarm`.** Kane's recorded `code_js` uses `[data-testid="todo-count"]`, the same selector Playwright uses. So a heal-off replay is exactly as brittle as Playwright.
+- 2026-11-16, **heal-on experiment** (test 3, local cache snapshot and restore):
+
+  | Run | Result | Credits |
+  | --- | --- | --- |
+  | R1 with heal on | PASS, heal triggered | about 32 |
+  | Restore snapshot, then clean replay | PASS, 3/3 replay | **0**, so restoring `output-<stem>/` works |
+  | B3 with heal on | FAIL, heal triggered but cannot invent "3 items left" | about 20 |
+
+  **DECISION (replaces rule M1):**
+  - Every mutant run uses Kane's default (heal ON), exactly like real Kane CI. The same command runs for every mutant; the mutant kind is used only when classifying, as with Playwright.
+  - Before AND after every mutant run, Workers restores the snapshot of `output-<stem>/` taken after clean authoring. K2 isolation is solved locally. A passing heal still commits a new version to Test Manager, which is harmless.
+  - The heal flag is recorded per cell:
+    - a bug mutant that Kane passes only after healing is still a miss (`kane-weaker` if Playwright caught it)
+    - a refactor mutant Kane passes after healing is `false-alarm-avoided (healed)`
+  - `--no-adaptive-heal` is no longer used.
+
 ## Open blockers
 
-1. **Credits:** 179 available. Owner to claim the 10k (testmuai.com/kane-cli/#creditOffer) or ask in Slack.
+1. ~~Credits~~ RESOLVED: alt profile, about 10,980 credits on 2026-11-16.
+2. Owner to confirm with the organizer which email the hackathon registration should use (scoring gate).

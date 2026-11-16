@@ -1,0 +1,520 @@
+{
+  "generatedAt": "2026-11-16T09:30:00Z",
+  "dryRun": false,
+  "mutants": [
+    {
+      "id": "B1",
+      "kind": "bug",
+      "description": "Cart total ignores quantity"
+    },
+    {
+      "id": "B2",
+      "kind": "bug",
+      "description": "Login accepts an empty password"
+    },
+    {
+      "id": "B3",
+      "kind": "bug",
+      "description": "Search returns no results for exact matches"
+    },
+    {
+      "id": "B4",
+      "kind": "bug",
+      "description": "Checkout button stays disabled with a valid cart"
+    },
+    {
+      "id": "B5",
+      "kind": "bug",
+      "description": "Coupon discount applied twice"
+    },
+    {
+      "id": "R1",
+      "kind": "refactor",
+      "description": "Test ids renamed and class names changed, behaviour identical"
+    },
+    {
+      "id": "R2",
+      "kind": "refactor",
+      "description": "Layout wrapped in extra containers, behaviour identical"
+    }
+  ],
+  "tests": [
+    {
+      "id": "t1",
+      "title": "Add item to cart",
+      "status": "ported",
+      "reason": null,
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-caught",
+        "B2": "parity-missed",
+        "B3": "parity-missed",
+        "B4": "parity-missed",
+        "B5": "parity-missed",
+        "R1": "false-alarm-avoided",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": false
+        },
+        "B2": {
+          "passed": true
+        },
+        "B3": {
+          "passed": true
+        },
+        "B4": {
+          "passed": true
+        },
+        "B5": {
+          "passed": true
+        },
+        "R1": {
+          "passed": false
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "failed"
+        },
+        "B2": {
+          "status": "passed"
+        },
+        "B3": {
+          "status": "passed"
+        },
+        "B4": {
+          "status": "passed"
+        },
+        "B5": {
+          "status": "passed"
+        },
+        "R1": {
+          "status": "passed"
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [],
+      "pwLines": 14,
+      "mdLines": 7,
+      "credits": 2.5,
+      "mdPath": "workers-out/tests/add-item-to-cart/add-item-to-cart_test.md"
+    },
+    {
+      "id": "t2",
+      "title": "Log in with valid credentials",
+      "status": "ported",
+      "reason": null,
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-missed",
+        "B2": "parity-caught",
+        "B3": "parity-missed",
+        "B4": "parity-missed",
+        "B5": "parity-missed",
+        "R1": "parity",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": true
+        },
+        "B2": {
+          "passed": false
+        },
+        "B3": {
+          "passed": true
+        },
+        "B4": {
+          "passed": true
+        },
+        "B5": {
+          "passed": true
+        },
+        "R1": {
+          "passed": true
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "passed"
+        },
+        "B2": {
+          "status": "failed"
+        },
+        "B3": {
+          "status": "passed"
+        },
+        "B4": {
+          "status": "passed"
+        },
+        "B5": {
+          "status": "passed"
+        },
+        "R1": {
+          "status": "passed"
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [],
+      "pwLines": 17,
+      "mdLines": 8,
+      "credits": 2.9,
+      "mdPath": "workers-out/tests/log-in-with-valid-credentials/log-in-with-valid-credentials_test.md"
+    },
+    {
+      "id": "t3",
+      "title": "Search finds a product",
+      "status": "needs-human",
+      "reason": "still not at parity after 2 repair round(s): B5",
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-missed",
+        "B2": "parity-missed",
+        "B3": "parity-caught",
+        "B4": "parity-missed",
+        "B5": "kane-weaker",
+        "R1": "parity",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": true
+        },
+        "B2": {
+          "passed": true
+        },
+        "B3": {
+          "passed": false
+        },
+        "B4": {
+          "passed": true
+        },
+        "B5": {
+          "passed": false
+        },
+        "R1": {
+          "passed": true
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "passed"
+        },
+        "B2": {
+          "status": "passed"
+        },
+        "B3": {
+          "status": "failed"
+        },
+        "B4": {
+          "status": "passed"
+        },
+        "B5": {
+          "status": "passed"
+        },
+        "R1": {
+          "status": "passed"
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [
+        {
+          "round": 1,
+          "weakOn": [
+            "B5"
+          ],
+          "change": "- Verify the price is shown\n+ Verify the price shown after the coupon is 10% lower",
+          "after": {
+            "clean": "ok",
+            "B5": "kane-weaker"
+          }
+        },
+        {
+          "round": 2,
+          "weakOn": [
+            "B5"
+          ],
+          "change": "+ Verify the discount line appears exactly once",
+          "after": {
+            "clean": "ok",
+            "B5": "kane-weaker"
+          }
+        }
+      ],
+      "pwLines": 20,
+      "mdLines": 9,
+      "credits": 3.3,
+      "mdPath": "workers-out/tests/search-finds-a-product/search-finds-a-product_test.md"
+    },
+    {
+      "id": "t4",
+      "title": "Checkout with a valid cart",
+      "status": "ported",
+      "reason": null,
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-missed",
+        "B2": "parity-missed",
+        "B3": "parity-missed",
+        "B4": "parity-caught",
+        "B5": "parity-missed",
+        "R1": "false-alarm-avoided",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": true
+        },
+        "B2": {
+          "passed": true
+        },
+        "B3": {
+          "passed": true
+        },
+        "B4": {
+          "passed": false
+        },
+        "B5": {
+          "passed": true
+        },
+        "R1": {
+          "passed": false
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "passed"
+        },
+        "B2": {
+          "status": "passed"
+        },
+        "B3": {
+          "status": "passed"
+        },
+        "B4": {
+          "status": "failed"
+        },
+        "B5": {
+          "status": "passed"
+        },
+        "R1": {
+          "status": "passed"
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [],
+      "pwLines": 23,
+      "mdLines": 10,
+      "credits": 3.7,
+      "mdPath": "workers-out/tests/checkout-with-a-valid-cart/checkout-with-a-valid-cart_test.md"
+    },
+    {
+      "id": "t5",
+      "title": "Apply a coupon code",
+      "status": "ported",
+      "reason": null,
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-missed",
+        "B2": "parity-missed",
+        "B3": "parity-missed",
+        "B4": "parity-missed",
+        "B5": "parity-caught",
+        "R1": "false-alarm-avoided",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": true
+        },
+        "B2": {
+          "passed": true
+        },
+        "B3": {
+          "passed": true
+        },
+        "B4": {
+          "passed": true
+        },
+        "B5": {
+          "passed": false
+        },
+        "R1": {
+          "passed": false
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "passed"
+        },
+        "B2": {
+          "status": "passed"
+        },
+        "B3": {
+          "status": "passed"
+        },
+        "B4": {
+          "status": "passed"
+        },
+        "B5": {
+          "status": "failed"
+        },
+        "R1": {
+          "status": "passed",
+          "healTriggered": true
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [],
+      "pwLines": 26,
+      "mdLines": 11,
+      "credits": 4.1,
+      "mdPath": "workers-out/tests/apply-a-coupon-code/apply-a-coupon-code_test.md"
+    },
+    {
+      "id": "t6",
+      "title": "Remove item from cart",
+      "status": "repaired",
+      "reason": null,
+      "cells": {
+        "clean": "ok",
+        "B1": "parity-caught",
+        "B2": "parity-missed",
+        "B3": "parity-missed",
+        "B4": "parity-missed",
+        "B5": "parity-missed",
+        "R1": "parity",
+        "R2": "parity"
+      },
+      "pw": {
+        "clean": {
+          "passed": true
+        },
+        "B1": {
+          "passed": false
+        },
+        "B2": {
+          "passed": true
+        },
+        "B3": {
+          "passed": true
+        },
+        "B4": {
+          "passed": true
+        },
+        "B5": {
+          "passed": true
+        },
+        "R1": {
+          "passed": true
+        },
+        "R2": {
+          "passed": true
+        }
+      },
+      "kane": {
+        "clean": {
+          "status": "passed"
+        },
+        "B1": {
+          "status": "failed"
+        },
+        "B2": {
+          "status": "passed"
+        },
+        "B3": {
+          "status": "passed"
+        },
+        "B4": {
+          "status": "passed"
+        },
+        "B5": {
+          "status": "passed"
+        },
+        "R1": {
+          "status": "passed"
+        },
+        "R2": {
+          "status": "passed"
+        }
+      },
+      "loop": [
+        {
+          "round": 1,
+          "weakOn": [
+            "B1"
+          ],
+          "change": "  Open the cart page\n  Click \"Remove\" on the first item\n- Verify the cart is updated\n+ Verify the cart item count drops from 2 to 1\n+ Verify the cart total equals the price of the remaining item",
+          "after": {
+            "clean": "ok",
+            "B1": "parity-caught",
+            "B2": "parity-missed",
+            "R1": "parity",
+            "R2": "parity"
+          }
+        }
+      ],
+      "pwLines": 29,
+      "mdLines": 12,
+      "credits": 4.5,
+      "mdPath": "workers-out/tests/remove-item-from-cart/remove-item-from-cart_test.md"
+    }
+  ]
+}

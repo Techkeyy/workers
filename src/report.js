@@ -101,10 +101,12 @@ a{color:var(--accent)}a:focus-visible,pre:focus-visible,.scroll:focus-visible{ou
 .when{color:var(--mut);font-size:14px;margin:0 0 24px}
 h2{font-size:20px;margin:40px 0 12px}
 h2 small{font-weight:400;font-size:15px;color:var(--mut);margin-left:8px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .tile{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0}
 .tile b{display:block;font-size:30px;line-height:1.15;font-variant-numeric:tabular-nums}
 .tile span{font-size:14px;color:var(--mut)}
+@media (max-width:1100px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}.tile:last-child{grid-column:span 2}}
+@media (max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tile:last-child{grid-column:span 2}}
 .tile.alert b{color:var(--del)}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 table{border-collapse:separate;border-spacing:0;width:100%;font-size:14px}
@@ -142,7 +144,7 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:v
 footer h2{font-size:16px;margin:0 0 6px;color:var(--fg)}
 footer p{margin:0}
 @media (max-width:760px){
-.scroll{border:0;background:none;overflow:visible}
+.scroll.mx{border:0;background:none;overflow:visible}
 table.matrix,table.matrix tbody,table.matrix tr,table.matrix td,table.matrix th{display:block;width:100%}
 table.matrix thead{position:absolute;left:-9999px}
 table.matrix tr{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:0 0 14px;overflow:hidden}
@@ -202,7 +204,7 @@ export function renderHtml(report) {
   ].join('')}</div>
 ${h.kaneFalseAlarms > 0 ? `<p class="note nh">Kane raised ${plural(h.kaneFalseAlarms, 'false alarm', 'false alarms')} on harmless refactors.</p>` : ''}
 <h2>Matrix <small>Playwright (PW) vs Kane, per test and per break</small></h2>
-<div class="scroll" tabindex="0" role="region" aria-label="Test by mutant matrix"><table class="matrix"><thead><tr><th scope="col" class="t">Test</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
+<div class="scroll mx" tabindex="0" role="region" aria-label="Test by mutant matrix"><table class="matrix"><thead><tr><th scope="col" class="t">Test</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
 <p class="note">healed = Kane's self-healing re-authored a step during this run. Each cell shows the verdict of both suites and the outcome in words.</p>
 <ul class="legend" aria-label="Mutant legend"><li><b>clean</b><span class="k">baseline</span>The unchanged app. Both suites must pass.</li>${legend}</ul>
 <h2>Repair loop</h2><div class="loop">${loops}</div>

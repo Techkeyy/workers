@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRepairPrompt, collectEvidence, lineDiff, repairLoop } from '../src/loop.js';
+import { buildRepairPrompt, collectEvidence, repairLoop } from '../src/loop.js';
 
 const MUTANT_TEXT = ['MUTANT-DESCRIPTION-SECRET', 'itemWord = \'item\'', 'app.js', 'B3'];
 const mutants = [
@@ -62,9 +62,6 @@ test('broken-on-clean evidence carries the failed step', () => {
   assert.match(p, /assert: x/);
 });
 
-test('lineDiff shows only changed lines', () => {
-  assert.equal(lineDiff('a\nb\nc', 'a\nB\nc'), '- b\n+ B');
-});
 
 test('repairLoop: weaker -> agent rewrites -> parity, with a loop log', async () => {
   const s = state();
@@ -80,7 +77,7 @@ test('repairLoop: weaker -> agent rewrites -> parity, with a loop log', async ()
   assert.equal(written.length, 1);
   assert.equal(s.loop.length, 1);
   assert.deepEqual(s.loop[0].weakOn, ['B3']);
-  assert.match(s.loop[0].change, /^- .*reads/m);
+  assert.match(s.loop[0].change, /^-Verify.*reads/m);
   assert.equal(s.loop[0].after.B3, 'parity-caught');
   assert.equal(prompts.length, 1);
 });

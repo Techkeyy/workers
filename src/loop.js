@@ -2,6 +2,7 @@
 // what Kane did (its step summaries). It never gets the mutant's id, description, file or diff (design rule 2).
 import { needsRepair } from './parity.js';
 import { cleanOutput, countExpects, loadRules, validateTestMd } from './translate.js';
+import { unifiedDiff } from './diff.js';
 
 const bullets = (lines) => lines.map((l) => `- ${l}`).join('\n') || '- (none)';
 const clip = (s, n = 1500) => (s.length > n ? s.slice(0, n) + ' ...' : s);
@@ -57,25 +58,6 @@ Rewrite the \`_test.md\` so that it would fail wherever the original Playwright 
 Return ONLY the full contents of the new \`_test.md\`, starting with the \`---\` frontmatter line. No commentary, no code fences.`;
 }
 
-// Tiny line diff (LCS) -> ['- removed', '+ added', '  same']
-export function lineDiff(a, b) {
-  const x = a.split('\n');
-  const y = b.split('\n');
-  const dp = Array.from({ length: x.length + 1 }, () => new Array(y.length + 1).fill(0));
-  for (let i = x.length - 1; i >= 0; i--) for (let j = y.length - 1; j >= 0; j--) dp[i][j] = x[i] === y[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
-  const out = [];
-  let i = 0;
-  let j = 0;
-  while (i < x.length && j < y.length) {
-    if (x[i] === y[j]) (out.push('  ' + x[i]), i++, j++);
-    else if (dp[i + 1][j] >= dp[i][j + 1]) out.push('- ' + x[i++]);
-    else out.push('+ ' + y[j++]);
-  }
-  while (i < x.length) out.push('- ' + x[i++]);
-  while (j < y.length) out.push('+ ' + y[j++]);
-  return out.filter((l) => !l.startsWith('  ')).join('\n');
-}
-
 // Evidence from a test state (see port.js for its shape).
 export function collectEvidence(state, mutants) {
   const notes = (k) => k?.runSummaries ?? [];
@@ -107,7 +89,7 @@ export async function repairLoop(state, mutants, { rounds = 2, agent, model, wri
       state.reason = e.message;
       return;
     }
-    const change = lineDiff(state.md, md);
+    const change = unifiedDiff(state.md, md);
     state.md = md;
     writeMd(state, md);
     await evaluate(state);

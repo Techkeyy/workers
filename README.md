@@ -2,7 +2,7 @@
 
 Workers ports your Playwright suite to Kane CLI tests and proves the new tests catch the same bugs, by breaking your app on purpose. When a ported test is weaker, your coding agent rewrites it from Kane's own result.
 
-**[GitHub repo](https://github.com/Techkeyy/workers)** <!-- placeholder until the repo is created -->  · **Demo video: TODO** · **Sample report: TODO**
+**[Live site](https://workers-port.vercel.app)** · **[A real report](https://workers-port.vercel.app/report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · **Demo video: TODO**
 
 Teams want off brittle selector tests. Rewriting a suite by hand takes weeks, and nobody trusts an AI rewrite they cannot check. TestMu's own [*State of AI in Quality Engineering 2026*](https://www.testmuai.com/research/state-of-ai-in-quality-engineering.md) puts the median trust in AI-generated tests at 54 out of 100, and finds teams spend 50% of their AI testing budget on generating tests but only 17% on verifying them.
 

@@ -1,0 +1,1867 @@
+{
+ "generatedAt": "2026-11-16T14:52:11.328Z",
+ "dryRun": false,
+ "mutants": [
+  {
+   "id": "B1",
+   "kind": "bug",
+   "description": "Active count counts completed items instead"
+  },
+  {
+   "id": "B2",
+   "kind": "bug",
+   "description": "Counter always says \"items\" (so \"1 items left\")"
+  },
+  {
+   "id": "B3",
+   "kind": "bug",
+   "description": "Counter always says \"item\" (so \"3 item left\")"
+  },
+  {
+   "id": "B4",
+   "kind": "bug",
+   "description": "\"Clear completed\" removes active items instead"
+  },
+  {
+   "id": "B5",
+   "kind": "bug",
+   "description": "Escape saves the edit instead of cancelling it"
+  },
+  {
+   "id": "R1",
+   "kind": "refactor",
+   "description": "Counter test-id renamed from todo-count to item-counter (same behaviour)"
+  },
+  {
+   "id": "R2",
+   "kind": "refactor",
+   "description": "\"Clear completed\" button keeps its text; extra class and data attribute added (same behaviour)"
+  }
+ ],
+ "tests": [
+  {
+   "id": "849da1cee0c412ce5534-de14671fd2e5e71cfcf4",
+   "title": "should allow me to add todo items",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-missed",
+    "B2": "parity-missed",
+    "B3": "parity-missed",
+    "B4": "parity-missed",
+    "B5": "parity-missed",
+    "R1": "parity",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: ANALYZE(textual_visual, 'The list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: analyze: ANALYZE(textual_visual, 'The list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "added a to-do item on the local to-do list | Added “buy some cheese” to the to-do list as requested.\nThe list now contains exactly one item: “buy some cheese”.",
+      "added a to-do item and reloaded the list on localhost | Added “feed the cat” to the to-do list as requested.\nConfirmed the list order was “buy some cheese” followed by “feed the cat.”\nReloaded the page and confirmed both items remained in the same order."
+     ],
+     "credits": 39.64407999999999,
+     "replayDecisions": 0,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9035Q79BWVF61SG7JX3P0/dashboard/share/US_4RLN4G6OZ56XIUXN3US0508FQFZKRYVIJNHZXD41J98N65RB8S6BKU509YXAUXS1?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan steps to load",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\"",
+      "passed: wait: Waiting for the next queued step to start",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order after reload",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 25,
+   "mdLines": 18,
+   "credits": 39.64407999999999,
+   "mdPath": "tests/01-should-allow-me-to-add-todo-items/01-should-allow-me-to-add-todo-items_test.md"
+  },
+  {
+   "id": "849da1cee0c412ce5534-2531b32b950949c93e0b",
+   "title": "should append new items to the bottom of the list",
+   "status": "repaired",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-caught",
+    "B2": "parity-missed",
+    "B3": "parity-caught",
+    "B4": "parity-missed",
+    "B5": "parity-missed",
+    "R1": "false-alarm-avoided",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\n  - waiting for getByText('3 items left')\n\n\n  59 |   \n  60 |     // Check test using different methods.\n> 61 |     await expect(page.getByText('3 items left')).toBeVisible();\n     |                                                  ^\n  62 |     await expect(todoCount).toHaveText('3 items left');\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:61:50"
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\n  - waiting for getByText('3 items left')\n\n\n  59 |   \n  60 |     // Check test using different methods.\n> 61 |     await expect(page.getByText('3 items left')).toBeVisible();\n     |                                                  ^\n  62 |     await expect(todoCount).toHaveText('3 items left');\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:61:50"
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected: \"3 items left\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n\n\n  60 |     // Check test using different methods.\n  61 |     await expect(page.getByText('3 items left')).toBeVisible();\n> 62 |     await expect(todoCount).toHaveText('3 items left');\n     |                             ^\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n  65 |\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:62:29"
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter in the foote",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: wait: PRIMARY: Reload the page",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "verified the to-do list on localhost | Verified the to-do list on the page.\nConfirmed that the list contains, in order: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”\nConfirmed that the footer shows “3 items left.”\nThe requested list and remaining-item count were displayed successfully.",
+      "reloaded the to-do list on localhost | Reloaded the page as requested.\nConfirmed the to-do list contains, in order: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”"
+     ],
+     "credits": 26.576569999999997,
+     "replayDecisions": 1,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9530R6HPRBDJ5EJQB5DKV/dashboard/share/US_VAVU3GBWGJBFU6EJ9IPIDJVEPAX24DV086AQHMO29J83NHX3H9MY7UY6ISLRBZFW?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 3,
+      "summary": "assert: the exact visible text of the todo counter in the footer is \"3 items left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "failed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter in the foote",
+      "failed: assert: the exact visible text of the todo counter in the footer is \"3 items left\""
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 3",
+      "The footer says \"0 items left\" even though all three listed todos are unchecked. | The counter is not matching the visible todo list: three unfinished items are shown, but the footer reports zero items left.\nFix the footer count so it counts the visible unchecked todos. With these three items unfinished, it should display \"3 items left\".\nevidence: objective_contradiction: 0 items left | Checkpoint assertion failed: \"the exact visible text of the todo counter in the footer is \"3 items left\"\""
+     ],
+     "credits": 9.017929999999998,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page to reload",
+      "passed: analyze: Reading the ordered todo items from the list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 3,
+      "summary": "assert: the exact visible text of the todo counter in the footer is \"3 items left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "failed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'The exact visible text of the todo counter in the foote",
+      "failed: assert: The exact visible text of the todo counter in the footer is \"3 items left\"."
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 3",
+      "The footer shows “3 item left” instead of the required “3 items left.” | The footer counter uses the singular word “item” even though there are three remaining todos.\nUpdate the counter’s plural wording so counts other than one display “items left.”\nevidence: objective_contradiction: 3 item left | Checkpoint assertion failed: \"The exact visible text of the todo counter in the footer is \"3 items left\".\""
+     ],
+     "credits": 8.84377,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page to reload",
+      "passed: analyze: Reading the ordered todo items from the list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page to reload",
+      "passed: analyze: Reading the ordered todo items from the list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page to reload",
+      "passed: analyze: Reading the ordered todo items from the list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the plan steps to be queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing feed the cat into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing book a doctors appointment into What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the exact visible text of the todo counter in the footer is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page to reload",
+      "passed: analyze: Reading the ordered todo items from the list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [
+    {
+     "round": 1,
+     "weakOn": [
+      "B3"
+     ],
+     "change": "+ \n- ## Verify the todo count\n+ ## Verify the visible todo count\n+ \n+ Verify visible text \"3 items left\" is shown on the page.\n+ ",
+     "after": {
+      "clean": "broken-on-clean",
+      "B1": "pw-only",
+      "B2": "pw-only",
+      "B3": "pw-only",
+      "B4": "pw-only",
+      "B5": "pw-only",
+      "R1": "pw-only",
+      "R2": "pw-only"
+     }
+    },
+    {
+     "round": 2,
+     "weakOn": [
+      "clean"
+     ],
+     "change": "- # Should append new items to the bottom of the list\n+ # should append new items to the bottom of the list\n- ## Verify the visible todo count\n+ ## Verify the todo count and item order\n- Verify visible text \"3 items left\" is shown on the page.\n+ Verify the list shows exactly these items, in this order: \"buy some cheese\", \"feed the cat\", \"book a doctors appointment\".\n- ## Verify the item order and persistence\n+ ## Verify the items persist after reloading\n+ Reload the page.\n- Reload the page. Verify the list shows exactly these items, in this order: \"buy some cheese\", \"feed the cat\", \"book a doctors appointment\".",
+     "after": {
+      "clean": "ok",
+      "B1": "parity-caught",
+      "B2": "parity-missed",
+      "B3": "parity-caught",
+      "B4": "parity-missed",
+      "B5": "parity-missed",
+      "R1": "false-alarm-avoided",
+      "R2": "parity"
+     }
+    }
+   ],
+   "pwLines": 17,
+   "mdLines": 24,
+   "credits": 125.98016099999998,
+   "mdPath": "tests/02-should-append-new-items-to-the-bottom-of-the-list/02-should-append-new-items-to-the-bottom-of-the-list_test.md"
+  },
+  {
+   "id": "849da1cee0c412ce5534-f1199d69dfa0655fa016",
+   "title": "should cancel edits on escape",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-missed",
+    "B2": "parity-missed",
+    "B3": "parity-missed",
+    "B4": "parity-missed",
+    "B5": "parity-caught",
+    "R1": "parity",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByTestId('todo-item')\nTimeout: 5000ms\n- Expected  - 1\n+ Received  + 1\n\n  Array [\n    \"buy some cheese\",\n-   \"feed the cat\",\n+   \"buy some sausages\",\n    \"book a doctors appointment\",\n  ]\n\nCall log:\n  - Expect \"toHaveText\" getByTestId('todo-item') with timeout 5000ms\n  - waiting for getByTestId('todo-item')\n    14 × locator resolved to 3 elements\n\n\n  253 |     await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('buy some sausages');\n  254 |     await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).press('Escape');\n> 255 |     await expect(todoItems).toHaveText(TODO_ITEMS);\n      |                             ^\n  256 |   });\n  257 | });\n  258 |\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:255:29"
+    },
+    "R1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: queued plan (6 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press Enter after \"buy some cheese\" in the \"What needs to be done?\" box",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: PRIMARY: confirm the page reload has completed",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: type: Typing buy some sausages into the todo text box",
+      "passed: press_key: PRIMARY: Press Escape to cancel the edit",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "added and verified to-do items on the local to-do page | Added the three requested to-do items: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”\nReloaded the page as requested.\nAfter reloading, the list still showed exactly those three items in the requested order.",
+      "canceled a todo edit on localhost | You asked to edit the “feed the cat” to-do item, change its text to “buy some sausages,” and then cancel the edit.\nThe item was opened for editing and the replacement text was entered.\nThe edit was canceled with Escape, so the list remained unchanged: “buy some cheese,” “feed the cat,” and “book a doctors appointment,” in that order."
+     ],
+     "credits": 42.216944999999996,
+     "replayDecisions": 0,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9BDPVD7JHAZFM6EGPWFSN/dashboard/share/US_R4V3RL2XU6CFSODQGP88NOOQH02V98UA42F40BGVE1CTS8Z5C51T019UKTRPJ3UC?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 5,
+      "summary": "assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "failed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: type: Typing buy some sausages into the todo item",
+      "passed: press_key: PRIMARY: Press Escape to cancel the edit.",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "failed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 5",
+      "Pressing Escape did not restore “feed the cat”; the edited text “buy some sausages” remained in the list. | The todo editor saved or retained the replacement text when Escape was pressed, although Escape should cancel the edit and keep the original item text.\nFix the edit cancel handling so Escape discards the pending text and restores the todo's original label. Add a regression test that edits “feed the cat”, changes it, presses Escape, and confirms the original ordered list remains unchanged.\nevidence: objective_contradiction: Final verification failed: \"the list shows exactly these items, in this order: \"buy some cheese\", \"feed the cat\", \"book  | Final verification failed: \"the list shows exactly these items, in this order: \"buy some cheese\", \"feed the cat\", \"book a doctors appointment\"\""
+     ],
+     "credits": 23.8253575,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting while steps are being queued",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: wait: Waiting for the queued plan to load",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: Waiting for the queued plan steps to be processed",
+      "passed: fill: Type \"book a doctors appointment\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Waiting for the page reload to complete",
+      "passed: analyze: Reading the ordered todo items",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: click: Double-clicking the feed the cat todo item to edit it",
+      "passed: fill: Typing buy some sausages into the todo text box",
+      "passed: press_key: Pressing Escape to cancel the edit",
+      "passed: analyze: Reading the todo items in their displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 7,
+   "mdLines": 21,
+   "credits": 66.04230249999999,
+   "mdPath": "tests/03-should-cancel-edits-on-escape/03-should-cancel-edits-on-escape_test.md"
+  },
+  {
+   "id": "849da1cee0c412ce5534-bbb1bb0c9c77cda96f15",
+   "title": "should display the current number of todo items",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-caught",
+    "B2": "parity-missed",
+    "B3": "parity-missed",
+    "B4": "parity-missed",
+    "B5": "parity-missed",
+    "R1": "false-alarm-avoided",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected substring: \"1\"\nReceived string:    \"0 items left\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n    14 × locator resolved to <span class=\"todo-count\" data-testid=\"todo-count\">…</span>\n       - unexpected value \"0 items left\"\n\n\n  268 |     await newTodo.press('Enter');\n  269 |\n> 270 |     await expect(todoCount).toContainText('1');\n      |                             ^\n  271 |\n  272 |     await newTodo.fill(TODO_ITEMS[1]);\n  273 |     await newTodo.press('Enter');\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:270:29"
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected substring: \"1\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toContainText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n\n\n  268 |     await newTodo.press('Enter');\n  269 |\n> 270 |     await expect(todoCount).toContainText('1');\n      |                             ^\n  271 |\n  272 |     await newTodo.fill(TODO_ITEMS[1]);\n  273 |     await newTodo.press('Enter');\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:270:29"
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: type: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: analyze: the todo counter shows \"1\"",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: the todo counter shows \"2\"",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "added a to-do item on the local to-do app | You asked to add “buy some cheese” to the to-do list.\nEntered “buy some cheese” in the “What needs to be done?” box and submitted it.\nThe item was added successfully, and the to-do counter shows 1.",
+      "added a to-do item and reloaded the list on the local to-do app | Added “feed the cat” to the to-do list as requested.\nConfirmed that the list showed 2 remaining items after adding the new task.\nReloaded the page and confirmed the saved list order was “buy some cheese” followed by “feed the cat”."
+     ],
+     "credits": 39.20514,
+     "replayDecisions": 0,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9HJJZ9NBVKBAVV8Q10SQC/dashboard/share/US_GBEKB1VO8OUKNW64RR6TMJ0SQ5ZQN4R39MRE2Y17IO0KBDDC3E122U430RCQNYOH?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 5,
+      "summary": "assert: the todo counter shows \"1\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "failed: assert: the todo counter shows \"1\"",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: analyze: The todo counter shows \"1\".",
+      "failed: assert: Verify the todo counter shows \"1\"."
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 5",
+      "A newly added unchecked todo is displayed, but the counter says there are zero items left. | The page added “buy some cheese” as an unfinished todo but did not update the remaining-items count from zero to one.\nFix the remaining-items counter so it updates when a new unchecked todo is added, then add a test that verifies one visible unchecked todo shows “1 item left.”\nevidence: objective_contradiction: 0 items left | Final verification failed: \"Verify the todo counter shows \"1\".\""
+     ],
+     "credits": 16.092673,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: fill: Typing buy some cheese into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: analyze: Reading the todo counter from the footer",
+      "passed: assert: the todo counter shows \"1\"",
+      "passed: wait: Waiting while the plan is queued",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the todo counter from the items-left footer",
+      "passed: assert: the todo counter shows \"2\"",
+      "passed: refresh: Navigate refresh",
+      "passed: analyze: Reading the todo items in displayed order",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 18,
+   "mdLines": 17,
+   "credits": 55.297813000000005,
+   "mdPath": "tests/04-should-display-the-current-number-of-todo-items/04-should-display-the-current-number-of-todo-items_test.md"
+  },
+  {
+   "id": "849da1cee0c412ce5534-afaa39a2add3b845087f",
+   "title": "should remove completed items when clicked",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-missed",
+    "B2": "parity-missed",
+    "B3": "parity-missed",
+    "B4": "parity-caught",
+    "B5": "parity-missed",
+    "R1": "parity",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('todo-item')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('todo-item') with timeout 5000ms\n  - waiting for getByTestId('todo-item')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n\n\n  292 |     await todoItems.nth(1).getByRole('checkbox').check();\n  293 |     await page.getByRole('button', { name: 'Clear completed' }).click();\n> 294 |     await expect(todoItems).toHaveCount(2);\n      |                             ^\n  295 |     await expect(todoItems).toHaveText([TODO_ITEMS[0], TODO_ITEMS[2]]);\n  296 |   });\n  297 |\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:294:29"
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: type: Typing feed the cat in What needs to be done?",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: type: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: wait: Waiting after confirming all three submitted todo items",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [
+      "added three to-do items on the local to-do page | Added three to-do items as requested: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”\nAll three items were entered successfully on the to-do page.",
+      "cleared the completed “feed the cat” task on the todo list | You asked to mark “feed the cat” as completed and then clear completed tasks.\nMarked “feed the cat” as completed and used the “Clear completed” button.\nThe completed task was removed; the remaining list is “buy some cheese” followed by “book a doctors appointment”."
+     ],
+     "credits": 28.497493499999997,
+     "replayDecisions": 0,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9PBNGN6GVWS3ZR4RQR2XW/dashboard/share/US_LX7LJYU0F69IKIBIS3PNMAJ16LFQKUAH14XH9N3PJJGN3NCYIUSWADGR8PWW57ET?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 4,
+      "summary": "assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "failed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat in the todo list",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: ANALYZE(textual_visual, 'the list shows exactly these items, in this order: \"buy",
+      "failed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 4",
+      "Using Clear completed left the completed “feed the cat” item and removed the two active items. | The Clear completed action removed the wrong todos. After “feed the cat” was marked complete, the app should have removed that item and kept the two active items.\nFix Clear completed so it removes completed todos only and preserves active todos in their existing order.\nevidence: objective_contradiction: Final verification failed: \"the list shows exactly these items, in this order: \"buy some cheese\", \"book a doctors appoin | Final verification failed: \"the list shows exactly these items, in this order: \"buy some cheese\", \"book a doctors appointment\".\""
+     ],
+     "credits": 17.5388265,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan step to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key",
+      "passed: fill: Typing feed the cat in What needs to be done?",
+      "passed: press_key: Pressing the Enter key",
+      "passed: fill: Typing \"book a doctors appointment\" into the What needs to be done box",
+      "passed: press_key: Pressing Enter key",
+      "passed: click: Clicking the checkbox for feed the cat",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: Reading the ordered items from the todo list",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"book a do"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 7,
+   "mdLines": 18,
+   "credits": 46.036319999999996,
+   "mdPath": "tests/05-should-remove-completed-items-when-clicked/05-should-remove-completed-items-when-clicked_test.md"
+  },
+  {
+   "id": "849da1cee0c412ce5534-4ebb083191c59dda5f31",
+   "title": "should be hidden when there are no items that are completed",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-caught",
+    "B2": "parity-missed",
+    "B3": "parity-missed",
+    "B4": "parity-caught",
+    "B5": "parity-missed",
+    "R1": "parity",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeHidden() failed\n\nLocator:  getByRole('button', { name: 'Clear completed' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeHidden\" getByRole('button', { name: 'Clear completed' }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'Clear completed' })\n    14 × locator resolved to <button class=\"clear-completed\">Clear completed</button>\n       - unexpected value \"visible\"\n\n\n  299 |     await page.locator('.todo-list li .toggle').first().check();\n  300 |     await page.getByRole('button', { name: 'Clear completed' }).click();\n> 301 |     await expect(page.getByRole('button', { name: 'Clear completed' })).toBeHidden();\n      |                                                                         ^\n  302 |   });\n  303 | });\n  304 |\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:301:73"
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeHidden() failed\n\nLocator:  getByRole('button', { name: 'Clear completed' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeHidden\" getByRole('button', { name: 'Clear completed' }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'Clear completed' })\n    14 × locator resolved to <button class=\"clear-completed\">Clear completed</button>\n       - unexpected value \"visible\"\n\n\n  299 |     await page.locator('.todo-list li .toggle').first().check();\n  300 |     await page.getByRole('button', { name: 'Clear completed' }).click();\n> 301 |     await expect(page.getByRole('button', { name: 'Clear completed' })).toBeHidden();\n      |                                                                         ^\n  302 |   });\n  303 | });\n  304 |\n    at ~/Desktop/workers/demo/tests/demo-todo-app.spec.ts:301:73"
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: queued plan (6 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press Enter after \"buy some cheese\" in the \"What needs to be done?\" box",
+      "passed: type: Typing feed the cat into What needs to be done?",
+      "passed: press_key: PRIMARY: press Enter after \"feed the cat\" in the \"What needs to be done?\" box",
+      "passed: type: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: PRIMARY: press Enter after \"book a doctors appointment\" in the \"What needs to be",
+      "passed: wait: Waiting after confirming all three requested todo items are present",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: the \"Clear completed\" button is hidden",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [
+      "added three to-do items on the local to-do app | Added the requested items to the “What needs to be done?” list: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”\nThe task was completed successfully.",
+      "cleared the completed “buy some cheese” task on the TodoMVC page | Marked the “buy some cheese” to-do item as completed.\nClicked “Clear completed” to remove the completed item.\nThe “Clear completed” button was no longer visible, confirming the completed item was cleared."
+     ],
+     "credits": 30.604348499999997,
+     "replayDecisions": 0,
+     "authorDecisions": 2,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M7J9VE8EC0RPXA0CBRNPV8CZ/dashboard/share/US_X55Y5QUO8FDVVMU4KRTXW75U81NTBW15IGFJOG06SNK5LUQJ1GT5OLT3O0YLRN5A?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 4,
+      "summary": "assert: the \"Clear completed\" button is hidden"
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "failed: assert: the \"Clear completed\" button is hidden",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Checking the checkbox for buy some cheese",
+      "passed: click: Clicking Clear completed button",
+      "passed: analyze: the \"Clear completed\" button is hidden",
+      "failed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 4",
+      "After the completed todo was cleared, the Clear completed control was still shown even though no completed items remained. | The app removes the completed todo but does not hide the Clear completed control after there is nothing left to clear.\nUpdate the todo footer so Clear completed is hidden immediately when clearing leaves zero completed todos.\nevidence: objective_contradiction: Final verification failed: \"the \"Clear completed\" button is hidden\" | Final verification failed: \"the \"Clear completed\" button is hidden\""
+     ],
+     "credits": 15.953947500000002,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 4,
+      "summary": "assert: the \"Clear completed\" button is hidden"
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "failed: assert: the \"Clear completed\" button is hidden",
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking Clear completed button",
+      "passed: wait: PRIMARY: wait for the \"Clear completed\" button to become hidden",
+      "passed: click: Clicking Clear completed",
+      "failed: wait: Waiting after attempting to clear completed todos"
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 4",
+      "Clear completed was clicked, but the completed cheese task and the button stayed visible. | The Clear completed action did not remove the completed cheese task, so the control that should disappear also remained on screen.\nFix the Clear completed action so it removes completed tasks and hides the button when no completed tasks remain.\nevidence: objective_contradiction: The visible Clear completed button was clicked twice but remains visible and the completed cheese todo remains. | The visible Clear completed button was clicked twice but remains visible and the completed cheese todo remains."
+     ],
+     "credits": 10.259506,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4173/",
+      "passed: wait: Waiting for the queued plan actions to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter after typing buy some cheese in the What needs to be done box",
+      "passed: fill: Typing feed the cat into What needs to be done?",
+      "passed: press_key: Pressing Enter after typing feed the cat in the What needs to be done box",
+      "passed: fill: Typing “book a doctors appointment” into the What needs to be done box",
+      "passed: press_key: Pressing Enter in the What needs to be done box",
+      "passed: click: Clicking the checkbox for buy some cheese",
+      "passed: click: Clicking the Clear completed button",
+      "passed: analyze: Checking whether the Clear completed button is present",
+      "passed: assert: the \"Clear completed\" button is hidden"
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 5,
+   "mdLines": 18,
+   "credits": 56.817802,
+   "mdPath": "tests/06-should-be-hidden-when-there-are-no-items-that-are-completed/06-should-be-hidden-when-there-are-no-items-that-are-completed_test.md"
+  }
+ ],
+ "headline": {
+  "testsSelected": 6,
+  "testsPorted": 6,
+  "bugCells": 30,
+  "bugsCaughtOld": 7,
+  "bugsCaughtNew": 7,
+  "falseAlarmsAvoided": 2,
+  "kaneStronger": 0,
+  "kaneWeaker": 0,
+  "kaneFalseAlarms": 0,
+  "needsHuman": 0,
+  "pwLines": 79,
+  "mdLines": 116,
+  "credits": 389.8
+ }
+}

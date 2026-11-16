@@ -18,7 +18,7 @@ Options:
   --mutants <file>       mutants JSON: [{id, kind: "bug"|"refactor", description, file, find, replace}]
   --url <url>            app URL for the tests (default: the config's webServer.url)
   --out <dir>            output folder for _test.md files and the report (default: workers-out)
-  --grep <text>          only port tests whose title contains this text
+  --grep <text>          only port tests whose title contains this text (several: "a|b")
   --max-tests <n>        port at most n tests
   --repair-rounds <n>    agent repair rounds per weak test (default: 2)
   --agent claude|codex   coding agent that writes the tests (default: claude; falls back to
@@ -28,7 +28,10 @@ Options:
                          mutant, then print the plan and a credit estimate
   -h, --help             show this help
 
-Kane authoring costs about 30 credits per test. Replays against mutants cost 0.`;
+Kane credit estimate: authoring is about 40 credits per test. A clean replay costs 0.
+A mutant run where Kane's self-healing kicks in costs about 10-30 credits.
+Mutant runs use Kane's default (self-healing on); the test's local Kane cache is restored before
+and after every mutant run.`;
 
 const options = {
   config: { type: 'string' },

@@ -45,3 +45,12 @@ test('needsRepair is true for kane-weaker or broken-on-clean only', () => {
   assert.equal(needsRepair({ clean: 'broken-on-clean' }), true);
   assert.equal(needsRepair({ clean: 'ok', B1: 'parity-caught', R1: 'kane-false-alarm', B2: 'parity-missed' }), false);
 });
+
+test('a bug mutant Kane passes after self-healing is still a pass: kane-weaker when Playwright caught it', () => {
+  // healTriggered is recorded for display only; it is not an input to classification
+  const kane = { clean: { status: 'passed', healTriggered: false }, B3: { status: 'passed', healTriggered: true } };
+  const pw = { clean: { passed: true }, B3: { passed: false } };
+  const cells = computeCells([{ id: 'B3', kind: 'bug' }], pw, kane);
+  assert.equal(cells.B3, 'kane-weaker');
+  assert.equal(needsRepair(cells), true);
+});

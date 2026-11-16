@@ -1,10 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { adapters, resolveAgent } from './agents.js';
+import { restoreCache, snapshotCache, withRestoredCache } from './kane-cache.js';
 import { listTests } from './inventory.js';
 import { repairLoop } from './loop.js';
 import { computeCells } from './parity.js';
-import { writeReport } from './report.js';
+import { doneLine, writeReport } from './report.js';
 import { runKane } from './run-kane.js';
 import { runPlaywright } from './run-playwright.js';
 import { ensureServer } from './server.js';
@@ -12,7 +13,8 @@ import { installSigintHandler, loadMutants, restoreLeftovers, withMutant } from 
 import { countExpects, extractSource, translateTest } from './translate.js';
 import { slugify } from './util.js';
 
-const CREDITS_PER_AUTHOR = 30;
+const CREDITS_PER_AUTHOR = 40;
+const CREDITS_PER_HEALED_RUN = '10-30';
 const lines = (s) => s.trim().split('\n').length;
 
 // Plain-text matrix of the Playwright verdicts (used for the dry run).
@@ -40,7 +42,10 @@ export async function port(opts) {
     log('Listing Playwright tests ...');
     const inv = await listTests(config);
     let tests = inv.tests;
-    if (opts.grep) tests = tests.filter((t) => t.titlePath.join(' ').toLowerCase().includes(opts.grep.toLowerCase()));
+    if (opts.grep) {
+      const wanted = opts.grep.toLowerCase().split('|').map((s) => s.trim()).filter(Boolean);
+      tests = tests.filter((t) => wanted.some((w) => t.titlePath.join(' ').toLowerCase().includes(w)));
+    }
     if (opts.maxTests) tests = tests.slice(0, opts.maxTests);
     if (!tests.length) throw new Error('No Playwright tests selected (check --grep / --config).');
     log(`Found ${inv.tests.length} tests, selected ${tests.length}:`);
@@ -93,7 +98,7 @@ export async function port(opts) {
       const reportPath = writeReport(outDir, build());
       log('Plan (dry run, Kane not executed):');
       log(`  1. Author ${eligible.length} test(s) on the clean app with Kane (about ${CREDITS_PER_AUTHOR} credits each)`);
-      log(`  2. Replay each against ${mutants.length} mutants with --no-adaptive-heal (0 credits per replay)`);
+      log(`  2. Run each against ${mutants.length} mutants with Kane's self-healing on, restoring its local cache around every run (clean replay: 0 credits; a run where Kane heals: about ${CREDITS_PER_HEALED_RUN} credits)`);
       log(`  3. Repair any test where Kane is weaker (up to ${opts.repairRounds ?? 2} rounds; each round re-authors, about ${CREDITS_PER_AUTHOR} credits)`);
       log(`  Estimated Kane credits: about ${eligible.length * CREDITS_PER_AUTHOR} for authoring (plus repairs)`);
       log(`Report (Playwright only): ${reportPath}`);
@@ -102,25 +107,34 @@ export async function port(opts) {
 
     // 4. Kane
     stopServer = await ensureServer({ url, command: inv.webServer?.command, cwd: inv.configDir });
-    const kane = async (state, col, noHeal) => {
-      const r = await runKane(state.mdPath, { noHeal });
+    const kane = async (state, col) => {
+      const r = await runKane(state.mdPath);
       state.kane[col] = r;
       state.credits += r.credits;
       if (r.status === 'error') throw new Error(`Kane could not run (${r.errorText ?? 'exit ' + r.exitCode}). If this is an auth problem, run \`kane-cli login\`.`);
       return r;
     };
-    const verdict = (r) => (r.status === 'passed' ? 'pass' : 'FAIL');
+    const verdict = (r) => (r.status === 'passed' ? 'pass' : 'FAIL') + (r.healTriggered ? ' (healed)' : '');
+    // Mutant run: the test's Kane cache is restored before and after, also if the run throws.
+    const kaneMutant = (state, m) => withRestoredCache(state.mdPath, outDir, () => kane(state, m.id));
+    // Clean authoring run: on a pass, snapshot the cache for later restores.
+    const kaneClean = async (state) => {
+      restoreCache(state.mdPath, outDir); // reset to the last snapshot, if any
+      const r = await kane(state, 'clean');
+      if (r.status === 'passed') snapshotCache(state.mdPath, outDir);
+      return r;
+    };
 
     for (const [i, s] of eligible.entries()) {
       log(`Kane: authoring on the clean app [${i + 1}/${eligible.length}] ${s.test.title}`);
-      const r = await kane(s, 'clean', false);
+      const r = await kaneClean(s);
       log(`  ${verdict(r)} (${r.credits.toFixed(1)} credits)${r.failedStep ? ': ' + r.failedStep.summary : ''}`);
     }
     for (const m of mutants) {
-      log(`Kane: replaying against mutant ${m.id} ...`);
+      log(`Kane: running against mutant ${m.id} (self-healing on) ...`);
       await withMutant(appDir, m, async () => {
         for (const s of eligible.filter((x) => x.kane.clean.status === 'passed')) {
-          const r = await kane(s, m.id, true);
+          const r = await kaneMutant(s, m);
           log(`  ${s.test.title}: ${verdict(r)}`);
         }
       });
@@ -131,9 +145,9 @@ export async function port(opts) {
     // 5. repair loop
     const evaluate = async (s) => {
       s.kane = {};
-      await kane(s, 'clean', false);
+      await kaneClean(s); // a pass takes a fresh snapshot
       if (s.kane.clean.status === 'passed') {
-        for (const m of mutants) await withMutant(appDir, m, () => kane(s, m.id, true));
+        for (const m of mutants) await withMutant(appDir, m, () => kaneMutant(s, m));
       }
       recompute(s);
     };
@@ -154,7 +168,7 @@ export async function port(opts) {
 
     const reportPath = writeReport(outDir, build());
     const h = JSON.parse(readFileSync(join(outDir, 'report.json'), 'utf8')).headline;
-    log(`\nDone. ${h.testsPorted}/${h.testsSelected} ported; bug mutants caught old/new: ${h.bugsCaughtOld}/${h.bugsCaughtNew}; false alarms avoided: ${h.falseAlarmsAvoided}; needs human: ${h.needsHuman}; Kane credits: ${h.credits}`);
+    log('\n' + doneLine(h));
     log(`Report: ${reportPath}`);
     return build();
   } finally {

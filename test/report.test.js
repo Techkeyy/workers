@@ -34,3 +34,23 @@ test('html is self-contained and escapes content', () => {
   assert.match(html, /kane-weaker/);
   assert.match(html, /needs human: r/);
 });
+
+test('headline counts false-alarm-avoided, kane-false-alarm, kane-stronger and kane-weaker separately', async () => {
+  const { doneLine } = await import('../src/report.js');
+  const r = structuredClone(report);
+  r.tests[0].cells.R1 = 'kane-false-alarm';
+  r.tests[1].cells.R1 = 'false-alarm-avoided';
+  r.tests[1].cells.B1 = 'kane-stronger';
+  r.tests[0].cells.B1 = 'kane-weaker';
+  const h = headline(r);
+  assert.deepEqual([h.falseAlarmsAvoided, h.kaneFalseAlarms, h.kaneStronger, h.kaneWeaker], [1, 1, 1, 1]);
+  assert.match(doneLine(h), /kane-stronger 1, kane-weaker 1\); refactors: false-alarm-avoided 1, kane-false-alarm 1;/);
+});
+
+test('healed tag and legend are rendered per cell', () => {
+  const r = structuredClone(report);
+  r.tests[0].kane.B1.healTriggered = true;
+  const html = renderHtml({ ...r, headline: headline(r) });
+  assert.equal((html.match(/<span class="heal">healed<\/span>/g) || []).length, 1);
+  assert.match(html, /healed = Kane's self-healing re-authored a step during this run/);
+});

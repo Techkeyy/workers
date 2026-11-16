@@ -14,12 +14,17 @@ export function headline(report) {
     bugsCaughtNew: count(bug, (t, id) => t.kane?.[id]?.status === 'failed'),
     falseAlarmsAvoided: count(refactor, (t, id) => t.cells[id] === 'false-alarm-avoided'),
     kaneStronger: count(bug, (t, id) => t.cells[id] === 'kane-stronger'),
+    kaneWeaker: count(bug, (t, id) => t.cells[id] === 'kane-weaker'),
+    kaneFalseAlarms: count(refactor, (t, id) => t.cells[id] === 'kane-false-alarm'),
     needsHuman: tests.filter((t) => t.status === 'needs-human').length,
     pwLines: report.tests.reduce((n, t) => n + (t.pwLines || 0), 0),
     mdLines: report.tests.reduce((n, t) => n + (t.mdLines || 0), 0),
     credits: Math.round(report.tests.reduce((n, t) => n + (t.credits || 0), 0) * 10) / 10,
   };
 }
+
+// The "Done." console line; every outcome is counted separately so nothing is hidden.
+export const doneLine = (h) => `Done. ${h.testsPorted}/${h.testsSelected} ported; bug mutants caught old/new: ${h.bugsCaughtOld}/${h.bugsCaughtNew} (kane-stronger ${h.kaneStronger}, kane-weaker ${h.kaneWeaker}); refactors: false-alarm-avoided ${h.falseAlarmsAvoided}, kane-false-alarm ${h.kaneFalseAlarms}; needs human: ${h.needsHuman}; Kane credits: ${h.credits}`;
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const mark = (v) => (v === undefined ? '-' : v === true || v === 'passed' ? 'pass' : v === false || v === 'failed' ? 'FAIL' : v);
@@ -37,7 +42,8 @@ export function renderHtml(report) {
       const pw = t.pw[c] ? mark(t.pw[c].passed) : '-';
       const kane = t.kane?.[c] ? mark(t.kane[c].status) : '-';
       const link = t.kane?.[c]?.shareUrl && t.kane[c].shareUrl !== 'REDACTED' ? ` <a href="${esc(t.kane[c].shareUrl)}">run</a>` : '';
-      return `<td class="${esc(cls)}"><b>${esc(cls)}</b><br><small>PW ${pw} / Kane ${kane}${link}</small></td>`;
+      const healed = t.kane?.[c]?.healTriggered ? ' <span class="heal">healed</span>' : '';
+      return `<td class="${esc(cls)}"><b>${esc(cls)}</b>${healed}<br><small>PW ${pw} / Kane ${kane}${link}</small></td>`;
     }).join('');
     return `<tr><th class="t">${esc(t.title)}${t.status === 'needs-human' ? `<br><small class="nh">needs human: ${esc(t.reason)}</small>` : ''}</th>${cells}</tr>`;
   }).join('');
@@ -56,19 +62,22 @@ td.ok,td.parity,td.parity-caught{background:#e3f4e6;color:#14401c}td.false-alarm
 td.parity-missed{background:#f1f1f1;color:#333}td.kane-weaker,td.broken-on-clean,td.kane-false-alarm,td.error{background:#fbe0dd;color:#5c1410}
 td.old-test-failing,td.excluded,td.pw-only{background:#f7f2dc;color:#4d4310}
 @media (prefers-color-scheme:dark){td{color:#111}}
+.heal{display:inline-block;font-size:11px;border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:4px}
 pre{background:rgba(127,127,127,.12);padding:8px;border-radius:6px;overflow-x:auto;white-space:pre-wrap}.round{margin:8px 0}
 </style></head><body>
 <h1>Workers report</h1><div class="sub">${esc(report.generatedAt)}${report.dryRun ? ' &middot; dry run (Kane not executed)' : ''}</div>
 <div class="stats">${[
     stat(`${h.testsPorted}/${h.testsSelected}`, 'tests ported'),
     stat(`${h.bugsCaughtOld} / ${h.bugsCaughtNew}`, `bug mutants caught (old / new) of ${h.bugCells}`),
-    stat(h.falseAlarmsAvoided, 'false alarms avoided'),
-    stat(h.kaneStronger, 'kane-stronger findings'),
+    stat(h.falseAlarmsAvoided, 'false-alarm-avoided (Playwright failed, Kane passed)'),
+    stat(h.kaneFalseAlarms, 'kane-false-alarm (Kane failed a harmless refactor)'),
+    stat(h.kaneStronger, 'kane-stronger (Kane caught what Playwright missed)'),
+    stat(h.kaneWeaker, 'kane-weaker (Playwright caught, Kane missed)'),
     stat(h.needsHuman, 'needs human'),
     stat(`${h.pwLines} to ${h.mdLines}`, 'lines: Playwright to _test.md'),
     stat(h.credits, 'Kane credits used'),
   ].join('')}</div>
-<h2>Matrix</h2><div class="scroll"><table><tr><th>Test</th>${head}</tr>${rows}</table></div>
+<h2>Matrix</h2><p class="sub">healed = Kane's self-healing re-authored a step during this run.</p><div class="scroll"><table><tr><th>Test</th>${head}</tr>${rows}</table></div>
 <h2>Repair loop</h2>${loops}
 <h2>Mutants</h2><ul>${report.mutants.map((m) => `<li><b>${esc(m.id)}</b> (${m.kind}): ${esc(m.description)}</li>`).join('')}</ul>
 </body></html>`;

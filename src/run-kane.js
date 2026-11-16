@@ -44,10 +44,9 @@ export function parseKane(text, exitCode) {
 }
 
 // Run `kane-cli testmd run <file> --agent --headless` in the file's directory.
-// noHeal=true for mutant runs (rule M1): a replay miss is terminal, free, and commits nothing.
-export async function runKane(file, { noHeal = false, timeoutMs = 900000 } = {}) {
+// Self-healing stays on (Kane's default), exactly like real Kane CI; see result.healTriggered.
+export async function runKane(file, { timeoutMs = 900000 } = {}) {
   const args = ['testmd', 'run', basename(file), '--agent', '--headless'];
-  if (noHeal) args.push('--no-adaptive-heal');
   const r = await run('kane-cli', args, { cwd: dirname(file), env: { KANE_CLI_USER_AGENT: 'workers' }, timeoutMs });
   const result = parseKane(r.stdout, r.code);
   if (result.status === 'error' && !result.failedStep) {

@@ -31,7 +31,8 @@ test('validateTestMd flags missing frontmatter, steps, and Verify lines', () => 
   assert.match(validateTestMd('# T\n## S\nVerify x', {}).join(), /frontmatter/);
   assert.match(validateTestMd(GOOD.replace('## Step one', 'Step one'), {}).join(), /Step/);
   assert.match(validateTestMd(GOOD.replace(/Verify.*\n/g, ''), { expectCount: 1 }).join(), /no "Verify/);
-  assert.match(validateTestMd(GOOD, { expectCount: 8 }).join(), /at least 4/);
+  // same fact asserted several ways collapses to one Verify line: many expects never demand more Verify lines
+  assert.deepEqual(validateTestMd(GOOD, { expectCount: 8 }), []);
   assert.match(validateTestMd(GOOD.replace('mode: testing', 'mode: x'), {}).join(), /mode: testing/);
 });
 

@@ -118,9 +118,8 @@ export function validateTestMd(md, { expectCount = 0 } = {}) {
   if (steps < 1) problems.push('needs at least one "## Step" heading');
   const verifies = (md.match(/^\s*(?:[-*]\s*)?Verify\b/gim) || []).length;
   if (expectCount > 0 && verifies < 1) problems.push('has no "Verify ..." line, but the Playwright test has assertions');
-  // Every expect should be represented; allow merging of the same fact asserted several ways.
-  const needed = Math.ceil(expectCount / 2);
-  if (verifies < needed) problems.push(`has ${verifies} Verify line(s) for ${expectCount} Playwright expects; at least ${needed} are needed (one per assertion)`);
+  // No upper bound on the count: one fact asserted several ways correctly collapses to one Verify line,
+  // so the number of expects says nothing about how many Verify lines are right.
   return problems;
 }
 

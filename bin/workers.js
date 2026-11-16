@@ -2,9 +2,30 @@
 import { parseArgs } from 'node:util';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cpSync, existsSync, symlinkSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { port } from '../src/port.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+// Installed from npm, the demo lives under node_modules, where Node will not run TypeScript and where
+// Workers should not edit files. So copy it to ./workers-demo and work on the copy. The copy gets a
+// node_modules link to the folder that holds this package's @playwright/test.
+function prepareDemo() {
+  const src = join(root, 'demo');
+  if (!/[\\/]node_modules[\\/]/.test(src)) return src;
+  const dest = join(process.cwd(), 'workers-demo');
+  if (!existsSync(dest)) {
+    cpSync(src, dest, { recursive: true });
+    console.log(`Copied the demo app and its Playwright tests to ${dest}`);
+  }
+  const link = join(dest, 'node_modules');
+  if (!existsSync(link)) {
+    const pwEntry = createRequire(import.meta.url).resolve('@playwright/test');
+    symlinkSync(join(dirname(pwEntry), '..', '..'), link, 'junction');
+  }
+  return dest;
+}
 
 const HELP = `workers: port a Playwright suite to Kane CLI tests and prove they catch the same bugs.
 
@@ -67,10 +88,11 @@ async function main() {
     process.exit(2);
   }
   const demo = cmd === 'demo';
+  const demoDir = demo ? prepareDemo() : null;
   const opts = {
-    config: v.config ?? (demo ? join(root, 'demo', 'playwright.config.ts') : undefined),
-    app: v.app ?? (demo ? join(root, 'demo', 'app') : undefined),
-    mutants: v.mutants ?? (demo ? join(root, 'demo', 'workers.mutants.json') : undefined),
+    config: v.config ?? (demo ? join(demoDir, 'playwright.config.ts') : undefined),
+    app: v.app ?? (demo ? join(demoDir, 'app') : undefined),
+    mutants: v.mutants ?? (demo ? join(demoDir, 'workers.mutants.json') : undefined),
     url: v.url,
     out: v.out,
     grep: v.grep,

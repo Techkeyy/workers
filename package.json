@@ -1,20 +1,45 @@
 {
-  "name": "workers-cli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "workers-port",
+  "version": "0.1.0",
+  "description": "Port a Playwright suite to Kane CLI tests and prove the new tests catch the same bugs, by breaking your app on purpose.",
   "type": "module",
+  "license": "MIT",
+  "author": "Techkeyy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Techkeyy/workers.git"
+  },
+  "homepage": "https://github.com/Techkeyy/workers#readme",
+  "keywords": [
+    "kane-cli",
+    "playwright",
+    "testing",
+    "mutation-testing",
+    "migration",
+    "e2e",
+    "ai-agent"
+  ],
   "scripts": {
     "demo:serve": "node demo/serve.js",
     "demo:test": "playwright test -c demo/playwright.config.ts",
     "test": "node --test",
     "workers": "node bin/workers.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "@playwright/test": "^1.65.1"
   },
   "bin": {
-    "workers": "bin/workers.js"
+    "workers": "bin/workers.js",
+    "workers-port": "bin/workers.js"
   },
+  "files": [
+    "bin/",
+    "src/",
+    "demo/",
+    "skill/",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=22"
   }

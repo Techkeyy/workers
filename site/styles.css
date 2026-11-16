@@ -23,7 +23,6 @@
   --serif:"Instrument Serif",Georgia,"Iowan Old Style","Times New Roman",serif;
   --ease:cubic-bezier(.2,.7,.2,1);
   --spring:cubic-bezier(.2,1.4,.4,1);
-  --burst-o:1;
   --hdr:62px;
 }
 *{box-sizing:border-box}
@@ -84,25 +83,21 @@ p{margin:0 0 14px}
 /* panels: thick ink border, hard offset shadow */
 .panel{background:var(--card);border:3px solid var(--ink);box-shadow:8px 8px 0 var(--shadow);margin:0;position:relative}
 
-/* hero: full bleed cover */
-.hero{position:relative;overflow:clip;min-height:max(92vh,640px);display:flex;align-items:center;padding:56px 0 64px;border-bottom:3px solid var(--ink)}
+/* hero: the cover */
+.hero{position:relative;overflow:clip;min-height:max(84vh,600px);display:flex;align-items:center;padding:56px 0 64px;border-bottom:3px solid var(--ink)}
 .hero>.wrap{width:100%}
-.burst{position:absolute;left:0;top:-14%;width:100%;height:128%;object-fit:cover;object-position:50% 50%;scale:1.12;mix-blend-mode:multiply;pointer-events:none;user-select:none;z-index:0}
-.hero-dots{position:absolute;right:-6%;bottom:-8%;width:62%;aspect-ratio:1.3;pointer-events:none;z-index:1;
-  background:radial-gradient(circle,var(--signal) 2.6px,transparent 3.2px) 0 0/18px 18px;opacity:.55;
+.hero-dots{position:absolute;right:-8%;bottom:-12%;width:72%;aspect-ratio:1.3;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,var(--signal) 2.6px,transparent 3.2px) 0 0/18px 18px;opacity:.7;
   -webkit-mask-image:radial-gradient(ellipse at 70% 70%,#000 0,transparent 66%);mask-image:radial-gradient(ellipse at 70% 70%,#000 0,transparent 66%)}
 .hero-copy{z-index:2}
 .hero-tag{margin-bottom:26px}
-.hero h1{font-size:clamp(3.5rem,11.2vw,9.6rem);line-height:.86;letter-spacing:-.035em;margin:0 0 30px;max-width:11.5em;
-  paint-order:stroke fill;-webkit-text-stroke:9px var(--paper);text-shadow:0 0 22px var(--paper)}
+.hero h1{font-size:clamp(3.5rem,11.2vw,9.6rem);line-height:.86;letter-spacing:-.035em;margin:0 0 30px;max-width:11.5em}
 .hero h1 em{color:var(--signal-t)}
 .lede{font-size:clamp(18px,2vw,21px);max-width:34em;margin:0 0 32px;line-height:1.85;color:var(--fg)}
-.lede span{background:var(--paper);padding:.18em .55em;box-decoration-break:clone;-webkit-box-decoration-break:clone;box-shadow:0 0 0 3px var(--paper)}
 .cta{display:flex;flex-wrap:wrap;gap:16px}
 @media (max-width:700px){
   .hero{padding:40px 0 48px}
-  .burst{left:calc(50% - 100vw);top:calc(50% - 100vw);width:200vw;height:200vw;max-width:none;object-fit:contain}
-  .hero h1{-webkit-text-stroke:6px var(--paper)}
+  .hero-dots{width:110%;right:-30%;bottom:-6%}
 }
 
 /* ticker */
@@ -346,16 +341,10 @@ p{margin:0 0 14px}
 .anim .matrix tbody tr.flash td{animation:flash 1.1s ease}
 @keyframes flash{0%{background:color-mix(in srgb,var(--signal) 35%,transparent)}100%{background:transparent}}
 
-/* motion: hero burst parallax (about 0.4x scroll speed) and drifting halftone */
+/* motion: drifting halftone */
 @media (prefers-reduced-motion:no-preference){
-  .anim .burst{animation:burstIn 1.2s var(--ease) both}
-  @keyframes burstIn{from{opacity:0;scale:.88}to{opacity:var(--burst-o);scale:1.12}}
   .hero-dots{animation:drift 60s linear infinite}
   @keyframes drift{to{background-position:180px 90px}}
-  @supports (animation-timeline:scroll()){
-    .anim .burst{animation:burstIn 1.2s var(--ease) both,par linear both;animation-timeline:auto,scroll(root);animation-range:normal,0 100vh}
-    @keyframes par{to{translate:0 60vh}}
-  }
   @supports (animation-timeline:view()){
     .ht::before{animation:htshift linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
     @keyframes htshift{from{translate:0 80px}to{translate:0 -120px}}

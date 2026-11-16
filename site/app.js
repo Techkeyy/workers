@@ -88,15 +88,6 @@
       rows.forEach(function (tr, i) { setTimeout(function () { tr.classList.add('on'); }, 350 + i * 190); });
     }, { threshold: 0.25, rootMargin: ROOT });
 
-    /* Parallax fallback where CSS scroll-driven animations are missing: the burst moves at about 0.4x scroll speed. */
-    var burst = document.querySelector('.burst');
-    if (burst && !(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) {
-      var tick = false;
-      addEventListener('scroll', function () {
-        if (tick) return; tick = true;
-        requestAnimationFrame(function () { burst.style.translate = '0 ' + (Math.min(scrollY, innerHeight) * 0.6).toFixed(1) + 'px'; tick = false; });
-      }, { passive: true });
-    }
   }
 
   /* Copy buttons */

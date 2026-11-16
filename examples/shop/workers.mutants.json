@@ -1,0 +1,58 @@
+[
+  {
+    "id": "B1",
+    "kind": "bug",
+    "description": "Coupon INK10 takes 1% off instead of 10%",
+    "file": "app.js",
+    "find": "const COUPON = { code: 'INK10', rate: 0.1 };",
+    "replace": "const COUPON = { code: 'INK10', rate: 0.01 };"
+  },
+  {
+    "id": "B2",
+    "kind": "bug",
+    "description": "Subtotal ignores line quantities",
+    "file": "app.js",
+    "find": "const subtotal = cart.reduce((sum, line) => sum + product(line.id).price * line.qty, 0);",
+    "replace": "const subtotal = cart.reduce((sum, line) => sum + product(line.id).price, 0);"
+  },
+  {
+    "id": "B3",
+    "kind": "bug",
+    "description": "Remove deletes the line after the one clicked",
+    "file": "app.js",
+    "find": "const index = cart.findIndex((line) => line.id === id);\n  cart.splice(index, 1);",
+    "replace": "const index = (cart.findIndex((line) => line.id === id) + 1) % cart.length;\n  cart.splice(index, 1);"
+  },
+  {
+    "id": "B4",
+    "kind": "bug",
+    "description": "Checkout accepts an empty email",
+    "file": "app.js",
+    "find": "if (!values.email.trim() || !EMAIL_RE.test(values.email)) errors.email",
+    "replace": "if (values.email.trim() && !EMAIL_RE.test(values.email)) errors.email"
+  },
+  {
+    "id": "B5",
+    "kind": "bug",
+    "description": "Cart badge is not refreshed when an item is added",
+    "file": "app.js",
+    "find": "  updateBadge(); // reflect the new count in the header",
+    "replace": "  // badge not refreshed here"
+  },
+  {
+    "id": "R1",
+    "kind": "refactor",
+    "description": "Rename the cart badge test id (cart-badge to cart-count); behaviour unchanged",
+    "file": "index.html",
+    "find": "data-testid=\"cart-badge\"",
+    "replace": "data-testid=\"cart-count\""
+  },
+  {
+    "id": "R2",
+    "kind": "refactor",
+    "description": "Restructure the product card markup: wrap the price in a div and change p to span; behaviour and roles unchanged",
+    "file": "app.js",
+    "find": "<p class=\"price\" data-testid=\"product-price\">${money(p.price)}</p>",
+    "replace": "<div class=\"meta\"><span class=\"price\" data-testid=\"product-price\">${money(p.price)}</span></div>"
+  }
+]

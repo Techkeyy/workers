@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inkwell Supply</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#/shop">Inkwell Supply</a>
+    <nav aria-label="Main">
+      <a href="#/shop">Shop</a>
+      <a href="#/cart" id="cart-link">Cart <span class="badge" id="cart-badge" data-testid="cart-badge">0</span></a>
+      <span id="user-email" class="user" data-testid="user-email" hidden></span>
+      <button type="button" id="logout" class="link-button" hidden>Sign out</button>
+    </nav>
+  </header>
+  <main id="view"></main>
+  <script src="app.js"></script>
+</body>
+</html>

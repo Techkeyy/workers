@@ -5,3 +5,4 @@ playwright-report/
 workers-out/
 workers-out-preview/
 .vercel
+examples/shop/workers-out/

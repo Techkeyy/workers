@@ -10,7 +10,7 @@ import { runKane } from './run-kane.js';
 import { runPlaywright } from './run-playwright.js';
 import { ensureServer } from './server.js';
 import { installSigintHandler, loadMutants, restoreLeftovers, withMutant } from './mutants.js';
-import { countExpects, extractSource, translateTest } from './translate.js';
+import { collectImports, countExpects, extractSource, formatImports, translateTest } from './translate.js';
 import { slugify } from './util.js';
 
 const CREDITS_PER_AUTHOR = 40;
@@ -67,7 +67,7 @@ export async function port(opts) {
       mkdirSync(dirname(mdPath), { recursive: true });
       writeFileSync(mdPath, md);
       log(`      wrote ${mdPath}${attempts > 1 ? ' (needed a retry)' : ''}`);
-      states.push({ test, slug, mdPath, md, pwSource: source, pwLines: lines(testBlock), mdLines: lines(md), pw: {}, kane: {}, cells: {}, loop: [], credits: 0, status: 'translated' });
+      states.push({ test, slug, mdPath, md, pwSource: source, pwImports: formatImports(collectImports(test.file)), pwLines: lines(testBlock), mdLines: lines(md), pw: {}, kane: {}, cells: {}, loop: [], credits: 0, status: 'translated' });
     }
 
     // 3. Playwright matrix: one run per column

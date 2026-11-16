@@ -1,0 +1,36 @@
+:root { --ink: #1d2433; --paper: #faf7f0; --accent: #1f4fd8; --line: #d9d2c3; --bad: #b3261e; --ok: #1a7f4b; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px/1.5 Georgia, 'Times New Roman', serif; color: var(--ink); background: var(--paper); }
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-bottom: 2px solid var(--ink); }
+.brand { font-size: 1.4rem; font-weight: bold; color: var(--ink); text-decoration: none; }
+nav { display: flex; gap: 18px; align-items: center; }
+nav a { color: var(--ink); }
+.badge { display: inline-block; min-width: 1.5em; padding: 0 6px; border-radius: 999px; background: var(--accent); color: #fff; text-align: center; font: 600 0.85rem/1.5 system-ui, sans-serif; }
+.user { font: 0.85rem system-ui, sans-serif; color: #55607a; }
+main { max-width: 920px; margin: 0 auto; padding: 28px 24px 60px; }
+h1 { margin-top: 0; }
+button { font: 600 0.95rem system-ui, sans-serif; padding: 8px 14px; border: 2px solid var(--ink); background: var(--ink); color: #fff; cursor: pointer; }
+button.secondary, .link-button { background: transparent; color: var(--ink); }
+.link-button { border: 0; text-decoration: underline; padding: 0; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+input { font: 1rem system-ui, sans-serif; padding: 8px; border: 2px solid var(--line); width: 100%; background: #fff; }
+label { display: block; margin: 14px 0 4px; font: 600 0.9rem system-ui, sans-serif; }
+.field-error, .form-error { color: var(--bad); font: 0.85rem system-ui, sans-serif; margin: 4px 0 0; }
+.form-error { border: 2px solid var(--bad); padding: 8px 12px; margin: 14px 0; background: #fff; }
+.form-ok { color: var(--ok); font: 0.9rem system-ui, sans-serif; margin: 8px 0 0; }
+.login-form { max-width: 360px; }
+.note { font: 0.85rem system-ui, sans-serif; color: #55607a; }
+.grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.card { border: 2px solid var(--ink); background: #fff; padding: 16px; }
+.card h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.price { font: 600 1rem system-ui, sans-serif; margin: 0 0 12px; }
+.cart-lines { list-style: none; padding: 0; margin: 0 0 20px; }
+.cart-line { display: grid; grid-template-columns: 1fr auto auto auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.qty { display: flex; gap: 8px; align-items: center; font: 600 1rem system-ui, sans-serif; }
+.totals { margin: 0 0 24px; max-width: 320px; margin-left: auto; font: 1rem system-ui, sans-serif; }
+.totals div { display: flex; justify-content: space-between; padding: 4px 0; }
+.totals .grand { border-top: 2px solid var(--ink); font-weight: 700; margin-top: 6px; padding-top: 8px; }
+.panel { border: 2px solid var(--ink); background: #fff; padding: 18px; margin-bottom: 24px; }
+.panel.confirmed { border-color: var(--ok); }
+.coupon-row { display: flex; gap: 8px; align-items: end; max-width: 420px; }
+.coupon-row > div { flex: 1; }

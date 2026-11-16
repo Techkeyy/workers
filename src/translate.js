@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -70,9 +70,86 @@ export function extractSource(src, line) {
   };
 }
 
+// ---- imported local modules (page objects, fixtures) -----------------------------------------
+
+const EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.mts'];
+const IMPORT_RE = /(?:\bimport|\bexport)\s[^'"`;]*?\bfrom\s*['"]([^'"]+)['"]|\bimport\s*['"]([^'"]+)['"]|\brequire\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+const isFile = (p) => existsSync(p) && statSync(p).isFile();
+
+// Resolve a relative import specifier to an existing file, trying extensions and index files.
+export function resolveImport(fromFile, spec) {
+  if (!spec.startsWith('.')) return null; // package imports (and node_modules) are never followed
+  const base = resolve(dirname(fromFile), spec);
+  const candidates = [base, ...EXTS.map((e) => base + e), ...EXTS.map((e) => join(base, 'index' + e))];
+  const stripped = base.replace(/\.(m?js|jsx)$/, ''); // './x.js' may really be x.ts
+  if (stripped !== base) candidates.push(...EXTS.map((e) => stripped + e));
+  return candidates.find((c) => isFile(c)) ?? null;
+}
+
+export function importSpecifiers(src) {
+  const out = [];
+  let m;
+  IMPORT_RE.lastIndex = 0;
+  while ((m = IMPORT_RE.exec(src))) out.push(m[1] ?? m[2] ?? m[3]);
+  return out;
+}
+
+// Local files the spec imports (one level), plus what those import (one more level). Deduplicated,
+// capped at maxBytes in total. Returns {files: [{path, source}], truncated}; path is relative to the spec's folder.
+export function collectImports(specFile, { maxBytes = 40 * 1024, depth = 2 } = {}) {
+  const root = dirname(resolve(specFile));
+  const seen = new Set([resolve(specFile)]);
+  const files = [];
+  let used = 0;
+  let truncated = false;
+  let level = [resolve(specFile)];
+  for (let d = 0; d < depth; d++) {
+    const next = [];
+    for (const from of level) {
+      for (const spec of importSpecifiers(readFileSync(from, 'utf8'))) {
+        const file = resolveImport(from, spec);
+        if (!file || seen.has(file)) continue;
+        seen.add(file);
+        next.push(file);
+        let source = readFileSync(file, 'utf8');
+        const room = maxBytes - used;
+        if (room <= 0) {
+          truncated = true;
+          continue;
+        }
+        if (Buffer.byteLength(source) > room) {
+          source = Buffer.from(source).subarray(0, room).toString('utf8') + '\n// ... truncated (size cap reached)';
+          truncated = true;
+        }
+        used += Buffer.byteLength(source);
+        files.push({ path: relative(root, file).split(sep).join('/'), source });
+      }
+    }
+    level = next;
+  }
+  return { files, truncated };
+}
+
+// Prompt section for the collected imports ('' when there are none).
+export function formatImports({ files, truncated }) {
+  if (!files.length) return '';
+  const blocks = files.map((f) => `// ===== FILE: ${f.path} =====
+${f.source.trim()}`).join('\n\n');
+  const note = truncated ? ' Some files were omitted or cut because of a size cap.' : '';
+  return `
+# Imported local files (page objects, fixtures, helpers)
+The test uses these files. Expand every page-object method, fixture and helper it calls into the concrete steps and values it performs.${note}
+
+\`\`\`ts
+${blocks}
+\`\`\`
+`;
+}
+
 // ---- prompt --------------------------------------------------------------------------------
 
-export function buildTranslatePrompt({ title, source, url, rules = loadRules() }) {
+export function buildTranslatePrompt({ title, source, url, imports = '', rules = loadRules() }) {
   return `You convert a Playwright test into a Kane CLI test file (\`_test.md\`).
 
 # Translation rules
@@ -87,7 +164,7 @@ The code below contains this one test plus its enclosing describe blocks, hooks 
 \`\`\`ts
 ${source}
 \`\`\`
-
+${imports}
 # Output
 Return ONLY the full contents of the \`_test.md\` file, starting with the \`---\` frontmatter line. No commentary, no code fences.`;
 }
@@ -130,7 +207,8 @@ export async function translateTest({ test, url, agent, model }) {
   const src = readFileSync(test.file, 'utf8');
   const { source } = extractSource(src, test.line);
   const expectCount = countExpects(source);
-  const base = buildTranslatePrompt({ title: test.title, source, url });
+  const imports = formatImports(collectImports(test.file));
+  const base = buildTranslatePrompt({ title: test.title, source, url, imports });
   let prompt = base;
   let problems = [];
   for (let attempt = 1; attempt <= 2; attempt++) {

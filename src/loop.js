@@ -9,7 +9,7 @@ const clip = (s, n = 1500) => (s.length > n ? s.slice(0, n) + ' ...' : s);
 
 // weaknesses: [{playwrightError, kaneSteps, kaneNotes}] one per place Kane was weaker
 // brokenOnClean: null | {failedStep, kaneSteps, kaneNotes}
-export function buildRepairPrompt({ title, pwSource, currentMd, weaknesses = [], brokenOnClean = null, rules = loadRules() }) {
+export function buildRepairPrompt({ title, pwSource, pwImports = '', currentMd, weaknesses = [], brokenOnClean = null, rules = loadRules() }) {
   let evidence = '';
   if (brokenOnClean) {
     evidence += `## The Kane test FAILED on the unchanged app, where the original Playwright test passes.
@@ -76,7 +76,7 @@ export async function repairLoop(state, mutants, { rounds = 2, agent, model, wri
   state.loop = state.loop ?? [];
   for (let round = 1; round <= rounds && needsRepair(state.cells); round++) {
     const weak = Object.keys(state.cells).filter((k) => state.cells[k] === 'kane-weaker' || state.cells[k] === 'broken-on-clean');
-    const prompt = buildRepairPrompt({ title: state.test.title, pwSource: state.pwSource, currentMd: state.md, ...collectEvidence(state, mutants) });
+    const prompt = buildRepairPrompt({ title: state.test.title, pwSource: state.pwSource, pwImports: state.pwImports, currentMd: state.md, ...collectEvidence(state, mutants) });
     log(`  repair round ${round}/${rounds} for "${state.test.title}" (weaker on: ${weak.join(', ')})`);
     let md;
     try {

@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildTranslatePrompt, cleanOutput, countExpects, extractSource, translateTest, validateTestMd } from '../src/translate.js';
+import { buildTranslatePrompt, cleanOutput, collectImports, countExpects, extractSource, formatImports, resolveImport, translateTest, validateTestMd } from '../src/translate.js';
 
 const specPath = fileURLToPath(new URL('../demo/tests/demo-todo-app.spec.ts', import.meta.url));
 const spec = readFileSync(specPath, 'utf8');
@@ -89,4 +91,76 @@ test('translateTest retries once with the problems listed, then succeeds', async
 test('translateTest throws after a failed retry', async () => {
   const agent = { name: 'stub', run: async () => 'still nothing' };
   await assert.rejects(translateTest({ test: test3, url: 'u', agent }), /invalid after a retry/);
+});
+
+// ---- imported local files ------------------------------------------------------------------
+
+function makeSuite(files) {
+  const dir = mkdtempSync(join(tmpdir(), 'workers-imports-'));
+  for (const [rel, text] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, rel)), { recursive: true });
+    writeFileSync(join(dir, rel), text);
+  }
+  return dir;
+}
+
+test('collectImports follows relative imports, resolves .ts, and goes two levels deep', () => {
+  const dir = makeSuite({
+    'a.spec.ts': "import { test } from '@playwright/test';\nimport { Cart } from './pages/Cart';\nimport { x } from './fixtures';\n",
+    'pages/Cart.ts': "import { Base } from './Base';\nexport class Cart {}\n",
+    'pages/Base.ts': "import { deep } from '../deep';\nexport class Base {}\n",
+    'deep.ts': 'export const deep = 1;\n',
+    'fixtures.ts': "import { Cart } from './pages/Cart';\nexport const x = 1;\n",
+  });
+  const { files, truncated } = collectImports(join(dir, 'a.spec.ts'));
+  assert.deepEqual(files.map((f) => f.path).sort(), ['fixtures.ts', 'pages/Base.ts', 'pages/Cart.ts']); // deep.ts is level 3
+  assert.equal(truncated, false);
+  assert.match(files.find((f) => f.path === 'pages/Cart.ts').source, /class Cart/);
+});
+
+test('collectImports ignores package imports and missing files, and dedupes', () => {
+  const dir = makeSuite({
+    'a.spec.ts': "import { test } from '@playwright/test';\nimport fs from 'node:fs';\nimport { n } from './nope';\nimport { a } from './h';\nimport { b } from './h.ts';\nconst r = require('./h');\n",
+    'h.ts': 'export const a = 1;\n',
+  });
+  const { files } = collectImports(join(dir, 'a.spec.ts'));
+  assert.deepEqual(files.map((f) => f.path), ['h.ts']);
+  assert.equal(resolveImport(join(dir, 'a.spec.ts'), 'left-pad'), null);
+});
+
+test('collectImports resolves index files and .js specifiers that point at .ts', () => {
+  const dir = makeSuite({
+    'a.spec.ts': "import { p } from './pages';\nimport { q } from './q.js';\n",
+    'pages/index.ts': 'export const p = 1;\n',
+    'q.ts': 'export const q = 1;\n',
+  });
+  const { files } = collectImports(join(dir, 'a.spec.ts'));
+  assert.deepEqual(files.map((f) => f.path).sort(), ['pages/index.ts', 'q.ts']);
+});
+
+test('collectImports caps the total size and says so', () => {
+  const dir = makeSuite({
+    'a.spec.ts': "import './one';\nimport './two';\nimport './three';\n",
+    'one.ts': '1'.repeat(60),
+    'two.ts': '2'.repeat(60),
+    'three.ts': '3'.repeat(60),
+  });
+  const res = collectImports(join(dir, 'a.spec.ts'), { maxBytes: 100 });
+  assert.equal(res.truncated, true);
+  assert.equal(res.files.length, 2); // third file dropped, second cut
+  assert.match(res.files[1].source, /truncated/);
+  assert.match(formatImports(res), /size cap/);
+});
+
+test('formatImports delimits each file by path and is empty with no imports', () => {
+  assert.equal(formatImports({ files: [], truncated: false }), '');
+  const out = formatImports({ files: [{ path: 'pages/Cart.ts', source: 'class Cart {}' }], truncated: false });
+  assert.match(out, /===== FILE: pages\/Cart\.ts =====\nclass Cart \{\}/);
+  assert.match(buildTranslatePrompt({ title: 't', source: 's', url: 'u', imports: out }), /FILE: pages\/Cart\.ts/);
+});
+
+test('the shop example spec pulls in its page objects and fixtures', () => {
+  const shop = fileURLToPath(new URL('../examples/shop/tests/checkout.spec.ts', import.meta.url));
+  const { files } = collectImports(shop);
+  assert.deepEqual(files.map((f) => f.path).sort(), ['fixtures.ts', 'pages/CartPage.ts', 'pages/LoginPage.ts', 'pages/ShopPage.ts']);
 });

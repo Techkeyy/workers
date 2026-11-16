@@ -21,34 +21,82 @@
     requestAnimationFrame(step);
   }
 
-  /* Scroll reveals: slide-up, wipes, staggered children, count-ups, repair loop sequence */
+  /* Headlines: wrap each word in an overflow-hidden line so it can rise into place. */
+  function splitWords(node, ctr) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (c) {
+      if (c.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        c.nodeValue.split(/(\s+)/).forEach(function (t) {
+          if (!t) return;
+          if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(' ')); return; }
+          var w = document.createElement('span'), i = document.createElement('span');
+          w.className = 'w'; i.className = 'wi'; i.textContent = t;
+          i.style.setProperty('--k', ctr.n++);
+          w.appendChild(i); frag.appendChild(w);
+        });
+        node.replaceChild(frag, c);
+      } else if (c.nodeType === 1) { splitWords(c, ctr); }
+    });
+  }
   document.querySelectorAll('.stagger').forEach(function (p) {
     Array.prototype.forEach.call(p.children, function (c, i) { c.style.setProperty('--i', i); });
   });
   if (anim) {
+    document.querySelectorAll('.split').forEach(function (h) {
+      h.setAttribute('aria-label', h.textContent.replace(/\s+/g, ' ').trim());
+      splitWords(h, { n: 0 });
+      Array.prototype.forEach.call(h.querySelectorAll('.w'), function (w) { w.setAttribute('aria-hidden', 'true'); });
+    });
     var nums = document.querySelectorAll('[data-count]');
     nums.forEach(function (n) { n.textContent = (0).toFixed(+(n.getAttribute('data-dec') || 0)); });
+    var ROOT = '0px 0px -12% 0px';
+    /* A reveal fires while the element is clearly on screen: 15% of it visible, or a big slice of the viewport for tall ones. */
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        if (e.intersectionRatio >= 0.15 || e.intersectionRect.height >= innerHeight * 0.3) {
+          e.target.classList.add('in'); io.unobserve(e.target);
+        }
+      });
+    }, { threshold: [0, 0.15, 0.3], rootMargin: ROOT });
+    document.querySelectorAll('.split, .stamp, .from-l, .from-r, .fade, .stagger').forEach(function (el) {
+      if (el.closest('.hero')) return;
+      io.observe(el);
+    });
+    /* Hero headline rises on load, a beat after first paint. */
+    var hh = document.querySelector('.hero .split');
+    if (hh) setTimeout(function () { hh.classList.add('in'); }, 250);
+
     var seen = function (sel, fn, opts) {
       var o = new IntersectionObserver(function (es) {
         es.forEach(function (e) { if (e.isIntersecting) { fn(e.target); o.unobserve(e.target); } });
-      }, opts || { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      }, opts);
       document.querySelectorAll(sel).forEach(function (el) { o.observe(el); });
     };
-    seen('.reveal, .stagger', function (el) { el.classList.add('in'); });
     seen('[data-count]', function (n) {
       var li = n.closest('li, .stat');
-      setTimeout(function () { countUp(n); }, li ? 120 * Array.prototype.indexOf.call(li.parentNode.children, li) : 0);
-    }, { threshold: 0.6 });
+      setTimeout(function () { countUp(n); }, li ? 160 * (Array.prototype.indexOf.call(li.parentNode.children, li) % 3) : 0);
+    }, { threshold: 0.6, rootMargin: ROOT });
     seen('#loop-steps', function (ol) {
       Array.prototype.forEach.call(ol.children, function (li, i) {
-        setTimeout(function () { li.classList.add('lit'); }, 250 + i * 900);
+        setTimeout(function () { li.classList.add('lit'); }, 150 + i * 650);
       });
-    }, { threshold: 0.35 });
+    }, { threshold: 0.3, rootMargin: ROOT });
     seen('#matrix-wrap', function () {
       matrixIn = true;
       var rows = document.querySelectorAll('#matrix-body tr');
-      rows.forEach(function (tr, i) { setTimeout(function () { tr.classList.add('on'); }, 150 + i * 130); });
-    }, { threshold: 0.25 });
+      rows.forEach(function (tr, i) { setTimeout(function () { tr.classList.add('on'); }, 350 + i * 190); });
+    }, { threshold: 0.25, rootMargin: ROOT });
+
+    /* Parallax fallback where CSS scroll-driven animations are missing: the burst moves at about 0.4x scroll speed. */
+    var burst = document.querySelector('.burst');
+    if (burst && !(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) {
+      var tick = false;
+      addEventListener('scroll', function () {
+        if (tick) return; tick = true;
+        requestAnimationFrame(function () { burst.style.translate = '0 ' + (Math.min(scrollY, innerHeight) * 0.6).toFixed(1) + 'px'; tick = false; });
+      }, { passive: true });
+    }
   }
 
   /* Copy buttons */
@@ -111,6 +159,14 @@
     repaired: ['good', 'Kane missed it at first, then the repair loop fixed it', 'Playwright failed. The first Kane translation passed (a miss). After the agent rewrote the test, Kane failed on this bug, so it caught it.'],
     alarm: ['good', 'Playwright raised a false alarm. Kane did not.', 'Playwright failed because a test id was renamed, though the app behaves the same. Kane passed, which is the right answer.'],
     quiet: ['good', 'Both stayed green, correctly', 'The app behaves the same, and neither suite complained.']
+  };
+  /* label, fill, text colour for the impact stamp beside each verdict */
+  var STAMP = {
+    both: ['CAUGHT', 'var(--signal)', '#15120E'],
+    miss: ['MISSED', 'var(--warn)', '#15120E'],
+    repaired: ['REPAIRED', 'var(--signal)', '#15120E'],
+    alarm: ['KANE CALM', 'var(--chip-pass)', 'var(--chip-pass-fg)'],
+    quiet: ['CALM', 'var(--chip-pass)', 'var(--chip-pass-fg)']
   };
   var shown = {}, current = null;
   var $ = function (id) { return document.getElementById(id); };
@@ -219,6 +275,10 @@
     v.appendChild(html('p', 'vh', m.id + ': ' + d[1]));
     v.appendChild(html('p', '', m.what));
     v.appendChild(html('p', '', d[2]));
+    var st = STAMP[m.cls], sv = el('svg', { 'class': 'stamp-burst', viewBox: '0 0 120 100', 'aria-hidden': 'true' });
+    sv.appendChild(el('polygon', { points: burstPts(60, 50, 56), fill: st[1] }));
+    sv.appendChild(el('text', { x: 60, y: 55, fill: st[2] }, st[0]));
+    v.appendChild(sv);
   }
 
   function select(id) {

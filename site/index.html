@@ -21,7 +21,7 @@
 <header class="top">
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="Workers home">
-      <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true"><rect width="64" height="64" rx="14" fill="var(--accent)"/><path d="M22 16h-8v32h8M42 16h8v32h-8" fill="none" stroke="var(--bg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 33l5 5 10-12" fill="none" stroke="var(--bg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="8" fill="var(--signal)" stroke="var(--ink)" stroke-width="4"/><path d="M22 16h-8v32h8M42 16h8v32h-8" fill="none" stroke="#15120E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 33l5 5 10-12" fill="none" stroke="#15120E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Workers
     </a>
     <nav aria-label="Main">
@@ -35,204 +35,224 @@
 
 <main id="main">
 
-<!-- 1. HERO -->
+<!-- HERO: the cover. Burst is full bleed, only type and buttons sit on it. -->
 <section class="hero" id="top">
-  <img class="burst" src="hero-burst.jpg" alt="" width="750" height="750" decoding="async" fetchpriority="high">
-  <div class="wrap hero-grid">
-    <div class="hero-copy stagger">
-      <p class="eyebrow">For teams with an existing Playwright suite</p>
-      <h1>Move your Playwright tests to Kane. <em>Prove nothing was lost.</em></h1>
-      <p class="lede">Workers rewrites each test as plain English, breaks your app on purpose, and checks that the new tests catch the same bugs as the old ones.</p>
-      <div class="cta">
-        <a class="btn primary" href="https://github.com/Techkeyy/workers">See it on GitHub</a>
-        <a class="btn ghost" href="report/">Read a real report</a>
-      </div>
+  <img class="burst" src="hero-burst.jpg" alt="" width="736" height="736" decoding="async" fetchpriority="high">
+  <i class="hero-dots" aria-hidden="true"></i>
+  <div class="wrap hero-copy">
+    <p class="tag hero-tag"><span>For teams with an existing Playwright suite</span></p>
+    <h1 class="split">Move your Playwright tests to Kane. <em>Prove nothing was lost.</em></h1>
+    <p class="lede"><span>Workers rewrites each test as plain English, breaks your app on purpose, and checks that the new tests catch the same bugs as the old ones.</span></p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Techkeyy/workers">See it on GitHub</a>
+      <a class="btn ghost" href="report/">Read a real report</a>
     </div>
+  </div>
+</section>
 
-    <figure class="hero-media reveal late" data-slot="hero-image">
-      <div class="hero-art">
-        <svg class="morph" viewBox="0 0 440 372" role="img" aria-labelledby="morph-t morph-d">
-          <title id="morph-t">A Playwright assertion becomes a plain-English Kane line</title>
-          <desc id="morph-d">Two lines of Playwright code that read the todo counter and expect the text "3 items left", followed by the Kane line "Verify the exact visible text of the todo counter in the footer is 3 items left".</desc>
-          <rect class="p-code" x="1" y="1" width="438" height="142" rx="12"/>
-          <text class="p-label" x="20" y="30">Playwright, from the demo suite</text>
-          <g class="code">
-            <text x="20" y="72"><tspan class="k">const</tspan> todoCount = page.<tspan class="f">getByTestId</tspan>(<tspan class="s">'todo-count'</tspan>)</text>
-            <text x="20" y="104"><tspan class="k">await</tspan> expect(todoCount).<tspan class="f">toHaveText</tspan>(<tspan class="s">'3 items left'</tspan>);</text>
-          </g>
-          <g class="arrow" aria-hidden="true">
-            <path d="M220 152v34" />
-            <path d="M208 176l12 12 12-12" />
-          </g>
-          <rect class="k-box" x="1" y="196" width="438" height="175" rx="12"/>
-          <text class="k-label" x="20" y="226">Kane CLI, same check in English</text>
-          <g class="english">
-            <text class="l1" x="20" y="268">Verify the exact visible text of</text>
-            <text class="l2" x="20" y="298">the todo counter in the footer is</text>
-            <text class="l3" x="20" y="328"><tspan class="q">"3 items left"</tspan>.</text>
-          </g>
-        </svg>
-      </div>
+<!-- TICKER -->
+<div class="ticker" role="img" aria-label="Break it. See who notices. Repair the test. Prove it.">
+  <div class="tk-track" aria-hidden="true">
+    <ul>
+      <li>Break it <b>→</b></li><li>See who notices <b>→</b></li><li>Repair the test <b>→</b></li><li>Prove it <b>→</b></li>
+      <li>Break it <b>→</b></li><li>See who notices <b>→</b></li><li>Repair the test <b>→</b></li><li>Prove it <b>→</b></li>
+    </ul>
+    <ul class="dup">
+      <li>Break it <b>→</b></li><li>See who notices <b>→</b></li><li>Repair the test <b>→</b></li><li>Prove it <b>→</b></li>
+      <li>Break it <b>→</b></li><li>See who notices <b>→</b></li><li>Repair the test <b>→</b></li><li>Prove it <b>→</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 1. ONE LINE, TRANSLATED (first panel) -->
+<section class="sec paper ht ht-r" id="translate">
+  <div class="wrap two">
+    <div class="txt">
+      <p class="eyebrow fade"><span class="idx">01</span> The idea</p>
+      <h2 class="split">One line, translated</h2>
+      <p class="lead fade">A selector-based assertion goes in. A sentence a person can read comes out. The check stays the same.</p>
+      <p class="tag tilt-mustard fade"><span>From the demo suite</span></p>
+    </div>
+    <figure class="panel card-morph from-r">
+      <svg class="morph" viewBox="0 0 440 372" role="img" aria-labelledby="morph-t morph-d">
+        <title id="morph-t">A Playwright assertion becomes a plain-English Kane line</title>
+        <desc id="morph-d">Two lines of Playwright code that read the todo counter and expect the text "3 items left", followed by the Kane line "Verify the exact visible text of the todo counter in the footer is 3 items left".</desc>
+        <rect class="p-code" x="1.5" y="1.5" width="437" height="141" rx="8"/>
+        <text class="p-label" x="20" y="30">Playwright, from the demo suite</text>
+        <g class="code">
+          <text x="20" y="72"><tspan class="k">const</tspan> todoCount = page.<tspan class="f">getByTestId</tspan>(<tspan class="s">'todo-count'</tspan>)</text>
+          <text x="20" y="104"><tspan class="k">await</tspan> expect(todoCount).<tspan class="f">toHaveText</tspan>(<tspan class="s">'3 items left'</tspan>);</text>
+        </g>
+        <g class="arrow" aria-hidden="true">
+          <path d="M220 152v34" />
+          <path d="M208 176l12 12 12-12" />
+        </g>
+        <rect class="k-box" x="1.5" y="196" width="437" height="174" rx="8"/>
+        <text class="k-label" x="20" y="226">Kane CLI, same check in English</text>
+        <g class="english">
+          <text class="l1" x="20" y="268">Verify the exact visible text of</text>
+          <text class="l2" x="20" y="298">the todo counter in the footer is</text>
+          <text class="l3" x="20" y="328"><tspan class="q">"3 items left"</tspan>.</text>
+        </g>
+      </svg>
       <figcaption>Real lines from the bundled demo suite and its ported Kane test.</figcaption>
     </figure>
   </div>
 </section>
 
 <!-- 2. PROBLEM -->
-<section class="band halftone ht-tr" id="problem">
-  <div class="wrap narrow">
-    <div class="reveal">
-      <p class="eyebrow"><span class="idx">01</span> The problem</p>
-      <h2 class="wipe">Rewriting a test suite is slow, and AI rewrites are hard to trust</h2>
-    </div>
-    <div class="problem-grid stagger">
+<section class="sec alt ht ht-l" id="problem">
+  <div class="wrap">
+    <p class="eyebrow fade"><span class="idx">02</span> The problem</p>
+    <h2 class="split wide-h">Rewriting a test suite is slow, and AI rewrites are hard to trust</h2>
+    <div class="cols stagger">
       <p><strong>Selector tests are brittle.</strong> Rename a test id and the test fails, though nothing a user sees has changed.</p>
       <p><strong>Rewrites take weeks.</strong> Moving a suite to a new tool by hand is dull work that rarely gets scheduled.</p>
       <p><strong>AI rewrites are not trusted.</strong> A generated test that passes is not proof that it still catches bugs.</p>
     </div>
-    <div class="stats stagger">
+    <div class="panel stats stamp">
       <p class="stat"><span class="num"><span class="n" data-count="54">54</span><span class="suf">/100</span></span><span class="lab">trust in AI-generated tests</span></p>
       <p class="stat"><span class="num"><span class="n" data-count="50">50</span><span class="suf">%</span></span><span class="lab">of AI-testing budget goes to generating tests</span></p>
       <p class="stat"><span class="num"><span class="n" data-count="17">17</span><span class="suf">%</span></span><span class="lab">goes to verifying them</span></p>
     </div>
-    <p class="src reveal">Source: TestMu AI, <a href="https://www.testmuai.com/research/state-of-ai-in-quality-engineering.md">State of AI in Quality Engineering</a>. Workers puts the effort on the verifying side.</p>
+    <p class="src fade">Source: TestMu AI, <a href="https://www.testmuai.com/research/state-of-ai-in-quality-engineering.md">State of AI in Quality Engineering</a>. Workers puts the effort on the verifying side.</p>
   </div>
 </section>
 
-<!-- 3. BREAK IT -->
-<section class="demo halftone ht-tl" id="break-it">
-  <div class="wrap">
-    <div class="reveal">
-      <p class="eyebrow"><span class="idx">02</span> Break it</p>
-      <h2 class="wipe">Break the app. See who notices.</h2>
-      <p class="lead">Workers applies one deliberate bug at a time (a mutant), runs the old Playwright test and the new Kane test, then undoes the bug. Pick a mutant to see what happened.</p>
-      <p class="replay"><span class="pill">Replay</span> Recorded results from a real run on 16 Nov 2026. Nothing here runs live.</p>
-    </div>
+<!-- 3. BREAK IT: the centrefold -->
+<section class="sec paper demo" id="break-it">
+  <div class="wrap wide">
+    <p class="eyebrow fade"><span class="idx">03</span> Break it</p>
+    <h2 class="split">Break the app. See who notices.</h2>
+    <p class="lead fade">Workers applies one deliberate bug at a time (a mutant), runs the old Playwright test and the new Kane test, then undoes the bug. Pick a mutant to see what happened.</p>
+    <p class="replay fade"><span class="pill">Replay</span> Recorded results from a real run on 16 Nov 2026. Nothing here runs live.</p>
 
-    <div class="demo-grid reveal">
-      <div class="demo-left">
-        <div class="mutants" role="group" aria-label="Mutants to apply">
-          <p class="grp">Bugs</p>
-          <div class="btnrow" id="bug-btns"></div>
-          <p class="grp">Harmless refactors</p>
-          <div class="btnrow" id="ref-btns"></div>
-          <button class="btn quiet" id="reset" type="button">Reset to clean app</button>
+    <div class="panel fold stamp">
+      <p class="tag tilt-red fold-tag"><span>Real run, 16 Nov</span></p>
+      <div class="demo-grid">
+        <div class="demo-left">
+          <div class="mutants" role="group" aria-label="Mutants to apply">
+            <p class="grp">Bugs</p>
+            <div class="btnrow" id="bug-btns"></div>
+            <p class="grp">Harmless refactors</p>
+            <div class="btnrow" id="ref-btns"></div>
+            <button class="btn quiet" id="reset" type="button">Reset to clean app</button>
+          </div>
+          <figure class="app">
+            <svg id="app-svg" viewBox="0 0 340 340" role="img" aria-labelledby="app-t">
+              <title id="app-t">Mini todo app used in the replay</title>
+              <defs>
+                <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.4" class="dotc"/></pattern>
+              </defs>
+              <rect class="a-card" x="1.5" y="1.5" width="337" height="337" rx="8"/>
+              <text class="a-title" x="170" y="46" text-anchor="middle">todos</text>
+              <rect class="a-input" x="20" y="62" width="300" height="34" rx="4"/>
+              <text class="a-ph" x="32" y="84">What needs to be done?</text>
+              <g id="scene"></g>
+            </svg>
+            <figcaption id="app-note" aria-live="polite">Clean app. Pick a mutant above.</figcaption>
+            <p class="calm" id="calm" hidden><span class="calm-tag">Calm</span> Nothing broke for the user. Kane stays green.</p>
+          </figure>
         </div>
-        <figure class="app">
-          <svg id="app-svg" viewBox="0 0 340 340" role="img" aria-labelledby="app-t">
-            <title id="app-t">Mini todo app used in the replay</title>
-            <defs>
-              <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.4" class="dotc"/></pattern>
-            </defs>
-            <rect class="a-card" x="1" y="1" width="338" height="338" rx="12"/>
-            <text class="a-title" x="170" y="46" text-anchor="middle">todos</text>
-            <rect class="a-input" x="20" y="62" width="300" height="34" rx="6"/>
-            <text class="a-ph" x="32" y="84">What needs to be done?</text>
-            <g id="scene"></g>
-          </svg>
-          <figcaption id="app-note" aria-live="polite">Clean app. Pick a mutant above.</figcaption>
-          <p class="calm" id="calm" hidden><span class="calm-tag">Calm</span> Nothing broke for the user. Kane stays green.</p>
-        </figure>
-      </div>
 
-      <div class="demo-right">
-        <div id="verdict" class="verdict-box" aria-live="polite">
-          <p class="vh">No mutant applied</p>
-          <p>Each button applies one change from <code>demo/workers.mutants.json</code> and reveals the recorded verdicts below.</p>
+        <div class="demo-right">
+          <div id="verdict" class="verdict-box" aria-live="polite">
+            <p class="vh">No mutant applied</p>
+            <p>Each button applies one change from <code>demo/workers.mutants.json</code> and reveals the recorded verdicts below.</p>
+          </div>
+          <div class="tablewrap" id="matrix-wrap" tabindex="0" role="region" aria-label="Old versus new verdicts">
+            <table class="matrix">
+              <thead><tr><th scope="col">Mutant</th><th scope="col">Test</th><th scope="col">Playwright</th><th scope="col">Kane</th></tr></thead>
+              <tbody id="matrix-body"></tbody>
+            </table>
+          </div>
+          <button class="btn quiet" id="reveal-all" type="button">Reveal all rows</button>
         </div>
-        <div class="tablewrap" id="matrix-wrap" tabindex="0" role="region" aria-label="Old versus new verdicts">
-          <table class="matrix">
-            <thead><tr><th scope="col">Mutant</th><th scope="col">Test</th><th scope="col">Playwright</th><th scope="col">Kane</th></tr></thead>
-            <tbody id="matrix-body"></tbody>
-          </table>
-        </div>
-        <button class="btn quiet" id="reveal-all" type="button">Reveal all rows</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 4. REPAIR LOOP -->
-<section class="band" id="loop">
+<!-- 4. REPAIR LOOP: three-panel strip -->
+<section class="sec alt" id="loop">
   <div class="wrap">
-    <div class="reveal">
-      <p class="eyebrow"><span class="idx">03</span> The repair loop</p>
-      <h2 class="wipe">When the new test is weaker, the agent rewrites it</h2>
-      <p class="lead">The agent sees what the old test asserted and what Kane did. It never sees the bug, so it cannot tune the test to one mutant.</p>
-    </div>
+    <p class="eyebrow fade"><span class="idx">04</span> The repair loop</p>
+    <h2 class="split wide-h">When the new test is weaker, the agent rewrites it</h2>
+    <p class="lead fade">The agent sees what the old test asserted and what Kane did. It never sees the bug, so it cannot tune the test to one mutant.</p>
     <ol class="loop" id="loop-steps" aria-label="Repair loop, three steps">
-      <li class="step s1">
+      <li class="step panel s1">
+        <span class="cap fail">Miss</span>
         <svg viewBox="0 0 48 48" aria-hidden="true"><circle pathLength="1" cx="24" cy="24" r="20"/><path pathLength="1" d="M16 16l16 16M32 16L16 32"/></svg>
         <h3>1. Kane missed it</h3>
         <p>Playwright failed on bug B3 (the counter says "3 item left"). The first Kane translation passed. A weaker test.</p>
       </li>
-      <li class="step s2">
+      <li class="step panel s2">
+        <span class="cap warn">Rewrite</span>
         <svg viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M10 34l4-12 18-14 6 6-14 18-12 4z"/><path pathLength="1" d="M28 12l8 8"/></svg>
         <h3>2. The agent rewrites it</h3>
         <p>Input: Playwright's assertion and Kane's step results. Round 1 was rejected: it failed on the clean app. Round 2 fixed it.</p>
       </li>
-      <li class="step s3">
+      <li class="step panel s3">
+        <span class="cap pass">Caught</span>
         <svg viewBox="0 0 48 48" aria-hidden="true"><circle pathLength="1" cx="24" cy="24" r="20"/><path pathLength="1" d="M14 25l7 7 13-15"/></svg>
         <h3>3. Kane catches it</h3>
         <p>The re-run passes on the clean app and fails on B3. Every other result held. Status: repaired.</p>
       </li>
     </ol>
-    <div class="wording stagger">
-      <div>
+    <div class="wording">
+      <div class="bubble bad from-l">
         <p class="wl">Round 1, rejected (broke on the clean app)</p>
-        <p class="wline bad">Verify visible text "3 items left" is shown on the page.</p>
+        <p class="wline">Verify visible text "3 items left" is shown on the page.</p>
       </div>
-      <div>
+      <div class="bubble good from-r">
         <p class="wl">Round 2, accepted (caught B3)</p>
-        <p class="wline good">Verify the exact visible text of the todo counter in the footer is "3 items left".</p>
+        <p class="wline">Verify the exact visible text of the todo counter in the footer is "3 items left".</p>
       </div>
     </div>
-    <p class="note reveal">Kane authoring is not deterministic, so the same translation can differ between runs. That is why Workers verifies instead of trusting.</p>
+    <p class="note fade">Kane authoring is not deterministic, so the same translation can differ between runs. That is why Workers verifies instead of trusting.</p>
   </div>
 </section>
 
-<!-- 5. PROOF -->
-<section class="proof halftone ht-tr" id="proof">
-  <div class="wrap">
-    <div class="reveal">
-      <p class="eyebrow"><span class="idx">04</span> The proof</p>
-      <h2 class="wipe">What the real run showed</h2>
-      <p class="lead">Demo app, 6 ported tests, 5 bugs and 2 harmless refactors. Run on 16 Nov 2026 with Kane CLI and a Codex agent.</p>
-    </div>
-    <ul class="tiles stagger">
+<!-- 5. PROOF: big numerals -->
+<section class="sec paper ht ht-r" id="proof">
+  <div class="wrap wide">
+    <p class="eyebrow fade"><span class="idx">05</span> The proof</p>
+    <h2 class="split">What the real run showed</h2>
+    <p class="lead fade">Demo app, 6 ported tests, 5 bugs and 2 harmless refactors. Run on 16 Nov 2026 with Kane CLI and a Codex agent.</p>
+    <ul class="panel tiles stamp">
       <li><span class="num"><span class="n" data-count="6">6</span></span><span class="lab">tests ported</span></li>
       <li><span class="num"><span class="n" data-count="7">7</span><span class="suf"> of 7</span></span><span class="lab">bug catches matched: whenever Playwright caught a bug, so did Kane, across 30 test-and-bug pairs</span></li>
       <li><span class="num"><span class="n" data-count="2">2</span></span><span class="lab">false alarms avoided: Playwright failed on a renamed test id, Kane stayed green</span></li>
       <li><span class="num"><span class="n" data-count="1">1</span></span><span class="lab">test repaired by the loop</span></li>
-      <li class="warn"><span class="num"><span class="n" data-count="1">1</span></span><span class="lab">planted bug (B2, "1 items left") slipped past both suites. The report says so.</span></li>
+      <li class="warn"><span class="num"><span class="n" data-count="1">1</span></span><span class="lab"><b class="wtag">Warning</b> planted bug (B2, "1 items left") slipped past both suites. The report says so.</span></li>
       <li><span class="num"><span class="n" data-count="389.8" data-dec="1">389.8</span></span><span class="lab">Kane credits for the whole run</span></li>
     </ul>
-    <p class="cta-line reveal"><a class="btn primary" href="report/">Read the full report</a> <span>Matrix, repair log, Kane dashboard links and the generated test files.</span></p>
+    <p class="cta-line fade"><a class="btn ghost" href="report/">Read the full report</a> <span>Matrix, repair log, Kane dashboard links and the generated test files.</span></p>
   </div>
 </section>
 
-<!-- 6. QUICKSTART -->
-<section class="band" id="quickstart">
+<!-- 6. QUICKSTART: terminal panel -->
+<section class="sec alt" id="quickstart">
   <div class="wrap narrow">
-    <div class="reveal">
-      <p class="eyebrow"><span class="idx">05</span> Quickstart</p>
-      <h2 class="wipe">Try it on the bundled demo</h2>
-      <p class="lead">Install from npm in any empty folder. A dry run translates one test with your coding agent and runs Playwright on every break, but skips Kane, so it costs no Kane credits.</p>
-    </div>
-    <div class="term stagger" role="group" aria-label="Quickstart commands">
+    <p class="eyebrow fade"><span class="idx">06</span> Quickstart</p>
+    <h2 class="split">Try it on the bundled demo</h2>
+    <p class="lead fade">Install from npm in any empty folder. A dry run translates one test with your coding agent and runs Playwright on every break, but skips Kane, so it costs no Kane credits.</p>
+    <div class="term panel from-l" role="group" aria-label="Quickstart commands">
+      <div class="term-bar" aria-hidden="true"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>empty-folder</span></div>
       <div class="cmd"><code><span class="pr">$</span> npm install workers-port</code><button type="button" class="copy" data-copy="npm install workers-port" aria-label="Copy npm install command">Copy</button></div>
       <div class="cmd"><code><span class="pr">$</span> npx playwright install chromium</code><button type="button" class="copy" data-copy="npx playwright install chromium" aria-label="Copy Playwright install command">Copy</button></div>
       <div class="cmd"><code><span class="pr">$</span> npx workers-port demo --dry-run --max-tests 1</code><button type="button" class="copy" data-copy="npx workers-port demo --dry-run --max-tests 1" aria-label="Copy demo command">Copy</button></div>
     </div>
-    <p class="after reveal">Workers runs with Claude Code or Codex as the coding agent (<code>--agent claude</code> or <code>--agent codex</code>). A Claude Code skill in the repo's <code>skill/</code> folder wraps the same command. Prefer the source? Clone <a href="https://github.com/Techkeyy/workers">the repo</a> and run <code>node bin/workers.js demo</code>.</p>
+    <p class="after fade">Workers runs with Claude Code or Codex as the coding agent (<code>--agent claude</code> or <code>--agent codex</code>). A Claude Code skill in the repo's <code>skill/</code> folder wraps the same command. Prefer the source? Clone <a href="https://github.com/Techkeyy/workers">the repo</a> and run <code>node bin/workers.js demo</code>.</p>
   </div>
 </section>
 
 <!-- 7. BUILT WITH -->
-<section class="built" id="built">
-  <div class="wrap narrow reveal">
-    <h2 class="wipe">Built with</h2>
-    <p><strong>Kane CLI</strong> by TestMu AI runs the plain-English tests. <strong>Playwright</strong> runs the original suite and lists its tests. <strong>Claude Code</strong> or <strong>Codex</strong> writes and repairs the Kane tests.</p>
+<section class="sec paper built" id="built">
+  <div class="wrap narrow">
+    <h2 class="split">Built with</h2>
+    <p class="fade"><strong>Kane CLI</strong> by TestMu AI runs the plain-English tests. <strong>Playwright</strong> runs the original suite and lists its tests. <strong>Claude Code</strong> or <strong>Codex</strong> writes and repairs the Kane tests.</p>
+    <p class="fade"><a class="btn primary" href="https://github.com/Techkeyy/workers">See it on GitHub</a></p>
   </div>
 </section>
 

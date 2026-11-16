@@ -205,15 +205,14 @@
   <div class="wrap narrow">
     <div class="reveal">
       <h2>Try it on the bundled demo</h2>
-      <p class="lead">A dry run prints the plan for one test without calling the agent or Kane, so it costs no credits.</p>
+      <p class="lead">Install from npm in any empty folder. A dry run translates one test with your coding agent and runs Playwright on every break, but skips Kane, so it costs no Kane credits.</p>
     </div>
     <div class="term reveal" role="group" aria-label="Quickstart commands">
-      <div class="cmd"><code><span class="pr">$</span> git clone https://github.com/Techkeyy/workers.git &amp;&amp; cd workers</code><button type="button" class="copy" data-copy="git clone https://github.com/Techkeyy/workers.git &amp;&amp; cd workers" aria-label="Copy git clone command">Copy</button></div>
-      <div class="cmd"><code><span class="pr">$</span> npm ci</code><button type="button" class="copy" data-copy="npm ci" aria-label="Copy npm ci command">Copy</button></div>
+      <div class="cmd"><code><span class="pr">$</span> npm install workers-port</code><button type="button" class="copy" data-copy="npm install workers-port" aria-label="Copy npm install command">Copy</button></div>
       <div class="cmd"><code><span class="pr">$</span> npx playwright install chromium</code><button type="button" class="copy" data-copy="npx playwright install chromium" aria-label="Copy Playwright install command">Copy</button></div>
-      <div class="cmd"><code><span class="pr">$</span> node bin/workers.js demo --dry-run --max-tests 1</code><button type="button" class="copy" data-copy="node bin/workers.js demo --dry-run --max-tests 1" aria-label="Copy demo command">Copy</button></div>
+      <div class="cmd"><code><span class="pr">$</span> npx workers-port demo --dry-run --max-tests 1</code><button type="button" class="copy" data-copy="npx workers-port demo --dry-run --max-tests 1" aria-label="Copy demo command">Copy</button></div>
     </div>
-    <p class="after">Workers runs with Claude Code or Codex as the coding agent (<code>--agent claude</code> or <code>--agent codex</code>). A Claude Code skill in the repo's <code>skill/</code> folder wraps the same command.</p>
+    <p class="after">Workers runs with Claude Code or Codex as the coding agent (<code>--agent claude</code> or <code>--agent codex</code>). A Claude Code skill in the repo's <code>skill/</code> folder wraps the same command. Prefer the source? Clone <a href="https://github.com/Techkeyy/workers">the repo</a> and run <code>node bin/workers.js demo</code>.</p>
   </div>
 </section>
 

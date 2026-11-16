@@ -2,7 +2,7 @@
 import { parseArgs } from 'node:util';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cpSync, existsSync, symlinkSync } from 'node:fs';
+import { cpSync, existsSync, lstatSync, renameSync, rmSync, symlinkSync, unlinkSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { port } from '../src/port.js';
 
@@ -16,11 +16,19 @@ function prepareDemo() {
   if (!/[\\/]node_modules[\\/]/.test(src)) return src;
   const dest = join(process.cwd(), 'workers-demo');
   if (!existsSync(dest)) {
-    cpSync(src, dest, { recursive: true });
+    // copy beside it, then rename: a copy cut short never leaves a half-filled workers-demo behind
+    const tmp = dest + '.tmp';
+    rmSync(tmp, { recursive: true, force: true });
+    cpSync(src, tmp, { recursive: true });
+    renameSync(tmp, dest);
     console.log(`Copied the demo app and its Playwright tests to ${dest}`);
   }
   const link = join(dest, 'node_modules');
   if (!existsSync(link)) {
+    try {
+      lstatSync(link); // a dangling junction from an earlier install: replace it
+      unlinkSync(link);
+    } catch {}
     const pwEntry = createRequire(import.meta.url).resolve('@playwright/test');
     symlinkSync(join(dirname(pwEntry), '..', '..'), link, 'junction');
   }
@@ -120,4 +128,8 @@ async function main() {
   }
 }
 
-main();
+main().catch((e) => {
+  console.error(`
+workers: ${e.message}`);
+  process.exit(1);
+});

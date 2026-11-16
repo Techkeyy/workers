@@ -100,3 +100,15 @@ test('every demo mutant "find" occurs exactly once in the current demo app', () 
     assert.equal(text.split(mu.find).length - 1, 1, mu.id);
   }
 });
+
+test('apply refuses a mutant file outside the app directory and changes nothing', () => {
+  const { dir } = fixture();
+  const outside = fixture('let a = 1;');
+  const rel = join('..', outside.dir.split(/[\/]/).pop(), 'app.js');
+  assert.throws(() => apply(dir, m({ file: rel })), /outside the app directory/);
+  assert.throws(() => apply(dir, m({ file: outside.file })), /outside the app directory/);
+  assert.ok(!existsSync(outside.file + BACKUP_SUFFIX));
+  assert.equal(readFileSync(outside.file, 'utf8'), 'let a = 1;');
+  rmSync(dir, { recursive: true });
+  rmSync(outside.dir, { recursive: true });
+});

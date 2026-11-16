@@ -91,3 +91,16 @@ test('no repairs: says so plainly', () => {
   r.tests.forEach((t) => (t.loop = []));
   assert.match(renderHtml({ ...r, headline: headline(r) }), /No repairs were needed: every ported test matched the old suite on the first try\./);
 });
+
+test('Kane share links: only http(s) become links; everything else is escaped or dropped', () => {
+  const evil = (shareUrl, title = 'T') => ({ ...report, tests: [{ ...report.tests[0], title, kane: { clean: { status: 'passed', shareUrl } }, loop: [] }] });
+  assert.ok(!renderHtml(evil('javascript:alert(1)')).includes('javascript:'));
+  assert.ok(!renderHtml(evil('data:text/html,x')).includes('data:text/html'));
+  const ok = renderHtml(evil('https://x.test/a?b=1&c="><script>'));
+  assert.match(ok, /<a href="https:\/\/x\.test\/a\?b=1&amp;c=&quot;&gt;&lt;script&gt;">run<\/a>/);
+  assert.ok(!ok.includes('<script>'));
+  // titles, reasons and diffs are escaped too
+  const x = renderHtml({ ...report, tests: [{ ...report.tests[1], title: '<img src=x onerror=1>', reason: '"><svg onload=1>', loop: [{ round: 1, weakOn: ['<b>'], change: '+<script>1</script>', error: '<i>', after: {} }] }] });
+  for (const raw of ['<img src=x', '<svg onload', '<script>1', '<i>']) assert.ok(!x.includes(raw), raw);
+  assert.ok(x.includes('&lt;img src=x onerror=1&gt;') && x.includes('&lt;script&gt;1&lt;/script&gt;'));
+});

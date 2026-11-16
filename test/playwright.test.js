@@ -34,3 +34,21 @@ test('results: mutant B3 run fails exactly the counter test, with a readable err
   assert.match(msg, /3 items left/);
   assert.doesNotMatch(msg, /\u001b\[/);
 });
+
+import { grepPattern } from '../src/run-playwright.js';
+import { quote } from '../src/util.js';
+
+test('grepPattern leaves no shell or regex metacharacter, and still matches the title', () => {
+  const title = 'a "q" & `x` $(y) %PATH% \ ^ | (z) [w] it\'s ! ; < > é';
+  const p = grepPattern(title);
+  assert.ok(!/["'`$%&\^|()[\]!;<>*+?{}]/.test(p), p);
+  assert.ok(new RegExp(p, 'i').test(title));
+  assert.equal(grepPattern('plain title-1_x'), 'plain title-1_x');
+});
+
+test('quote: POSIX uses single quotes so $(), backticks and $VAR stay literal', () => {
+  assert.equal(quote('$(rm -rf x)', false), "'$(rm -rf x)'");
+  assert.equal(quote("it's", false), "'it'\\''s'");
+  assert.equal(quote('plain/path.ts', false), 'plain/path.ts');
+  assert.equal(quote('a b', true), '"a b"');
+});

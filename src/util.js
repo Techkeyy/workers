@@ -1,8 +1,11 @@
 import { spawn } from 'node:child_process';
 
-function quote(arg) {
+export function quote(arg, win = process.platform === 'win32') {
   const s = String(arg);
-  return /^[\w@%+=:,./\\-]+$/.test(s) ? s : `"${s.replace(/"/g, '\\"')}"`;
+  if (/^[\w@+=:,./\\-]+$/.test(s)) return s;
+  // POSIX: single quotes, nothing inside is interpreted (no $(), backticks or $VAR expansion).
+  if (!win) return `'${s.replace(/'/g, `'\\''`)}'`;
+  return `"${s.replace(/"/g, '\\"')}"`;
 }
 
 // Run a command (shell on Windows so .cmd shims like npx/claude work).
@@ -15,7 +18,8 @@ export function run(cmd, args = [], { cwd, env, input, timeoutMs, onLine } = {})
     let stderr = '';
     let buf = '';
     let timer;
-    if (timeoutMs) timer = setTimeout(() => killTree(child), timeoutMs);
+    let timedOut = false;
+    if (timeoutMs) timer = setTimeout(() => ((timedOut = true), killTree(child)), timeoutMs);
     child.stdout.on('data', (d) => {
       const s = d.toString();
       stdout += s;
@@ -27,11 +31,11 @@ export function run(cmd, args = [], { cwd, env, input, timeoutMs, onLine } = {})
       }
     });
     child.stderr.on('data', (d) => (stderr += d.toString()));
-    child.on('error', (e) => resolve({ code: 127, stdout, stderr: stderr + e.message }));
+    child.on('error', (e) => resolve({ code: 127, stdout, stderr: stderr + e.message, timedOut }));
     child.on('close', (code) => {
       clearTimeout(timer);
       if (onLine && buf) onLine(buf);
-      resolve({ code: code ?? 1, stdout, stderr });
+      resolve({ code: code ?? 1, stdout, stderr, timedOut });
     });
     child.stdin.end(input !== undefined ? input : undefined);
   });

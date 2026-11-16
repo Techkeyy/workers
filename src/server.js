@@ -10,10 +10,11 @@ async function up(url) {
 }
 
 // Make sure the app is being served at `url`. Returns a stop() function.
-export async function ensureServer({ url, command, cwd }) {
+export async function ensureServer({ url, command, cwd, env }) {
   if (await up(url)) return async () => {};
   if (!command) throw new Error(`Nothing is serving ${url} and the Playwright config has no webServer.command to start it.`);
-  const child = spawn(command, { cwd, shell: true, stdio: 'ignore', windowsHide: true });
+  // webServer.env from the Playwright config (for example PORT) applies here too
+  const child = spawn(command, { cwd, shell: true, stdio: 'ignore', windowsHide: true, env: { ...process.env, ...(env ?? {}) } });
   for (let i = 0; i < 40; i++) {
     if (await up(url)) return async () => killTree(child);
     await new Promise((r) => setTimeout(r, 500));

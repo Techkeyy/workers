@@ -21,15 +21,19 @@ export function parseResults(json) {
   return map;
 }
 
+// Regex for a test title that is safe inside a shell command: letters, digits, space, _ - and non-ASCII are kept,
+// every other character (all shell and regex metacharacters) becomes '.', which still matches it. Matching a few
+// extra tests is harmless: results are mapped by test id.
+export const grepPattern = (title) => String(title).replace(/[\x00-\x1f\x21-\x2c\x2e-\x2f\x3a-\x40\x5b-\x5e\x60\x7b-\x7f]/g, '.');
+
 // Run the selected tests once (one Playwright process). Results are mapped by id.
 export async function runPlaywright(config, tests, { all = false } = {}) {
   const args = [];
   if (!all) {
-    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    args.push('--grep', `(${tests.map((t) => esc(t.title)).join('|')})`);
+    args.push('--grep', `(${tests.map((t) => grepPattern(t.title)).join('|')})`);
   }
   const map = parseResults(await playwrightJson(args, config));
   const out = {};
-  for (const t of tests) out[t.id] = map.get(t.id) ?? { passed: false, errorMessage: 'test did not run' };
+  for (const t of tests) out[t.id] = map.get(t.id) ?? { passed: false, errorMessage: 'test did not run', didNotRun: true };
   return out;
 }

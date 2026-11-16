@@ -2,7 +2,7 @@
 // <file>.workers-backup); revert() restores them. Restored on success, on errors, on SIGINT, and at
 // next startup if a previous run died.
 import { copyFileSync, existsSync, readFileSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, relative, resolve } from 'node:path';
 
 export const BACKUP_SUFFIX = '.workers-backup';
 
@@ -29,6 +29,8 @@ function revertFile(file) {
 
 export function apply(appDir, mutant) {
   const file = resolve(appDir, mutant.file);
+  const rel = relative(resolve(appDir), file);
+  if (rel === '' || rel.startsWith('..') || isAbsolute(rel)) throw new Error(`Mutant ${mutant.id}: file "${mutant.file}" is outside the app directory`);
   const backup = file + BACKUP_SUFFIX;
   if (existsSync(backup)) throw new Error(`${backup} already exists; a previous run was interrupted. Remove or restore it first.`);
   const original = readFileSync(file);
@@ -91,8 +93,10 @@ export function installSigintHandler(exit = (code) => process.exit(code)) {
   };
   process.on('SIGINT', handler);
   process.on('SIGTERM', handler);
+  process.on('SIGHUP', handler);
   return () => {
     process.off('SIGINT', handler);
     process.off('SIGTERM', handler);
+    process.off('SIGHUP', handler);
   };
 }

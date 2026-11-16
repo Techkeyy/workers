@@ -85,6 +85,9 @@ export async function port(opts) {
     for (const m of mutants) {
       log(`Playwright: mutant ${m.id} (${m.kind}) ...`);
       const res = await withMutant(appDir, m, () => runPlaywright(config, tests));
+      // A test that did not run is not a failure: counting it as one would fake a caught bug.
+      const missing = tests.filter((t) => res[t.id].didNotRun);
+      if (missing.length) throw new Error(`Playwright did not run ${missing.length} selected test(s) on mutant ${m.id}: ${missing.map((t) => t.title).join(', ')}`);
       states.forEach((s) => (s.pw[m.id] = res[s.test.id]));
       log(`  fails ${states.filter((s) => !s.pw[m.id].passed).length} of ${states.length} selected tests`);
     }
@@ -114,7 +117,7 @@ export async function port(opts) {
     }
 
     // 4. Kane
-    stopServer = await ensureServer({ url, command: inv.webServer?.command, cwd: inv.configDir });
+    stopServer = await ensureServer({ url, command: inv.webServer?.command, cwd: inv.configDir, env: inv.webServer?.env });
     const kane = async (state, col) => {
       const r = await runKane(state.mdPath);
       state.kane[col] = r;

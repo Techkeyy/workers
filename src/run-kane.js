@@ -2,7 +2,7 @@ import { basename, dirname } from 'node:path';
 import { run } from './util.js';
 
 // Parse Kane --agent NDJSON (ignores non-JSON lines) into a result object.
-export function parseKane(text, exitCode) {
+export function parseKane(text, exitCode, { timedOut = false } = {}) {
   const events = [];
   for (const line of String(text).split('\n')) {
     const s = line.trim();
@@ -19,8 +19,12 @@ export function parseKane(text, exitCode) {
   const failedRun = runEnds.find((e) => e.status === 'failed');
 
   let status;
-  if (exitCode === 0) status = summary?.overall_status === 'failed' ? 'failed' : summary || done ? 'passed' : 'error';
-  else if (exitCode === 1) status = 'failed';
+  // A verdict needs evidence in the stream. Exit 1 alone is not enough: cmd.exe also exits 1 when kane-cli is
+  // not found, and a killed (timed out) run can exit 1. Those are errors, never a pass or a fail.
+  const failEvidence = !!(failedStepEnd || failedRun || summary?.overall_status === 'failed' || done?.overall_status === 'failed');
+  if (timedOut || summary?.cancelled === true) status = 'error';
+  else if (exitCode === 0) status = summary?.overall_status === 'failed' || done?.overall_status === 'failed' ? 'failed' : summary || done ? 'passed' : 'error';
+  else if (exitCode === 1) status = failEvidence ? 'failed' : 'error';
   else status = 'error';
 
   let failedStep = null;
@@ -48,9 +52,9 @@ export function parseKane(text, exitCode) {
 export async function runKane(file, { timeoutMs = 900000 } = {}) {
   const args = ['testmd', 'run', basename(file), '--agent', '--headless'];
   const r = await run('kane-cli', args, { cwd: dirname(file), env: { KANE_CLI_USER_AGENT: 'workers' }, timeoutMs });
-  const result = parseKane(r.stdout, r.code);
+  const result = parseKane(r.stdout, r.code, { timedOut: r.timedOut });
   if (result.status === 'error' && !result.failedStep) {
-    result.errorText = (r.stderr || '').trim().split('\n').slice(-2).join(' ') || `kane-cli exited with code ${r.code}`;
+    result.errorText = (r.stderr || '').trim().split('\n').slice(-2).join(' ') || `kane-cli exited with code ${r.code}${r.timedOut ? ' (timed out)' : ''}`;
   }
   return result;
 }

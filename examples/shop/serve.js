@@ -1,7 +1,7 @@
 // Tiny zero-dependency static file server for examples/shop/app on port 4174.
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join, normalize, dirname } from 'node:path';
+import { extname, join, normalize, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'app');
@@ -15,10 +15,16 @@ const types = {
 };
 
 createServer(async (req, res) => {
-  const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  } catch {
+    res.writeHead(400).end('Bad request');
+    return;
+  }
   const rel = normalize(urlPath === '/' ? '/index.html' : urlPath);
   const file = join(root, rel);
-  if (!file.startsWith(root)) {
+  if (file !== root && !file.startsWith(root + sep)) {
     res.writeHead(403).end('Forbidden');
     return;
   }

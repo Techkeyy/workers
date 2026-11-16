@@ -53,3 +53,13 @@ test('non-JSON lines are ignored; exit codes 2 and 3 are errors, never verdicts'
   assert.equal(parseKane('', 3).status, 'error');
   assert.equal(parseKane('', 0).status, 'error'); // exit 0 with no verdict is not trusted
 });
+
+test('exit 1 with no failure evidence (kane-cli missing, killed, timed out) is an error, never a fail verdict', () => {
+  assert.equal(parseKane('', 1).status, 'error');
+  assert.equal(parseKane("'kane-cli' is not recognized as an internal or external command", 1).status, 'error');
+  assert.equal(parseKane(fx('replay-failed-mutant.ndjson'), 1, { timedOut: true }).status, 'error');
+  assert.equal(parseKane(fx('replay-passed.ndjson'), 0, { timedOut: true }).status, 'error');
+  // exit 1 with a passed stream is contradictory evidence: not a verdict either
+  assert.equal(parseKane(fx('replay-passed.ndjson'), 1).status, 'error');
+  assert.equal(parseKane(fx('replay-failed-mutant.ndjson'), 1).status, 'failed');
+});

@@ -173,7 +173,7 @@ export function renderHtml(report) {
       const pw = verdictGlyph(t.pw?.[c] ? t.pw[c].passed : undefined);
       const kane = verdictGlyph(t.kane?.[c] ? t.kane[c].status : undefined);
       const url = t.kane?.[c]?.shareUrl;
-      const link = url && url !== 'REDACTED' ? ` <a href="${esc(url)}">run</a>` : '';
+      const link = typeof url === 'string' && /^https?:\/\//i.test(url) ? ` <a href="${esc(url)}">run</a>` : '';
       const healed = t.kane?.[c]?.healTriggered ? '<span class="heal">healed</span>' : '';
       return `<td class="${esc(cls)} ${tone(cls)}" data-col="${esc(c)}${mutantOf(c) ? ` (${esc(mutantOf(c).kind)})` : ' (clean app)'}"><span class="cls">${esc(label(cls))}</span><span class="pair">PW ${pw} &middot; Kane ${kane}${link}</span>${healed}</td>`;
     }).join('');

@@ -175,6 +175,10 @@ skill/                Claude Code skill wrapping `workers port`
   - **Unverified:** claude adapter (no standalone login), the real `runKane` spawn, and the Kane half of `port.js`. Report HTML unstyled.
   - **Minor:** test 3's translation repeats the same fact as 4 Verify lines (rule 1 says keep the strictest). Tighten later.
 
+- 2026-11-16: credits. The owner's main account used its 10k in an earlier Kane hackathon. A hackathon organizer (Sparsh Kesari, in Slack) said to "use any other email id to redeem the credits". The owner redeemed 10k on an alt email.
+  - **Plan:** `kane-cli login --oauth --profile alt`, then `kane-cli profiles switch alt`.
+  - **Pending:** the owner confirms with the organizer whether the hackathon registration should also move to the alt email (scoring gate: "same email on both").
+
 ## Open blockers
 
 1. **Credits:** 179 available. Owner to claim the 10k (testmuai.com/kane-cli/#creditOffer) or ask in Slack.

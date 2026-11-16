@@ -1,18 +1,54 @@
-document.documentElement.classList.add('js');
 (function () {
   'use strict';
   var NS = 'http://www.w3.org/2000/svg';
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+  var anim = root.classList.contains('anim');
+  var reduce = !anim;
+  root.classList.add('js');
+  var matrixIn = !anim;      /* matrix rows visible straight away without motion */
+  var matrixReveal = function () {};
 
-  /* Scroll reveals */
-  var rv = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && !reduce) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    rv.forEach(function (el) { io.observe(el); });
-  } else {
-    rv.forEach(function (el) { el.classList.add('in'); });
+  function ease(t) { return 1 - Math.pow(1 - t, 3); }
+  function countUp(n) {
+    var to = parseFloat(n.getAttribute('data-count')), dec = +(n.getAttribute('data-dec') || 0);
+    var t0 = null, dur = 1500;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      n.textContent = (to * ease(p)).toFixed(dec);
+      if (p < 1) requestAnimationFrame(step); else n.textContent = to.toFixed(dec);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* Scroll reveals: slide-up, wipes, staggered children, count-ups, repair loop sequence */
+  document.querySelectorAll('.stagger').forEach(function (p) {
+    Array.prototype.forEach.call(p.children, function (c, i) { c.style.setProperty('--i', i); });
+  });
+  if (anim) {
+    var nums = document.querySelectorAll('[data-count]');
+    nums.forEach(function (n) { n.textContent = (0).toFixed(+(n.getAttribute('data-dec') || 0)); });
+    var seen = function (sel, fn, opts) {
+      var o = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { fn(e.target); o.unobserve(e.target); } });
+      }, opts || { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll(sel).forEach(function (el) { o.observe(el); });
+    };
+    seen('.reveal, .stagger', function (el) { el.classList.add('in'); });
+    seen('[data-count]', function (n) {
+      var li = n.closest('li, .stat');
+      setTimeout(function () { countUp(n); }, li ? 120 * Array.prototype.indexOf.call(li.parentNode.children, li) : 0);
+    }, { threshold: 0.6 });
+    seen('#loop-steps', function (ol) {
+      Array.prototype.forEach.call(ol.children, function (li, i) {
+        setTimeout(function () { li.classList.add('lit'); }, 250 + i * 900);
+      });
+    }, { threshold: 0.35 });
+    seen('#matrix-wrap', function () {
+      matrixIn = true;
+      var rows = document.querySelectorAll('#matrix-body tr');
+      rows.forEach(function (tr, i) { setTimeout(function () { tr.classList.add('on'); }, 150 + i * 130); });
+    }, { threshold: 0.25 });
   }
 
   /* Copy buttons */
@@ -42,23 +78,23 @@ document.documentElement.classList.add('js');
   var M = [
     { id: 'B1', kind: 'bug', name: 'Wrong count', test: T4, pw: 'fail', kane: 'fail', cls: 'both',
       what: 'The counter counts completed items instead of active ones.',
-      scene: { items: [[CHEESE, 0], [CAT, 1], [DOC, 0]], count: '1 item left', broken: 1, clear: 1 },
+      scene: { items: [[CHEESE, 0], [CAT, 1], [DOC, 0]], count: '1 item left', broken: 1, clear: 1, burst: 'count' },
       note: 'One item is ticked. Expected "2 items left", the app shows "1 item left".' },
     { id: 'B2', kind: 'bug', name: 'Always plural', test: T4, pw: 'pass', kane: 'pass', cls: 'miss',
       what: 'The counter always says "items", so one item reads "1 items left".',
-      scene: { items: [[CHEESE, 0]], count: '1 items left', broken: 1 },
+      scene: { items: [[CHEESE, 0]], count: '1 items left', broken: 1, burst: 'count' },
       note: 'Expected "1 item left", the app shows "1 items left".' },
     { id: 'B3', kind: 'bug', name: 'Always singular', test: 'append new items to the bottom of the list', pw: 'fail', kane: 'fail', cls: 'repaired',
       what: 'The counter always says "item", so three items read "3 item left".',
-      scene: { items: [[CHEESE, 0], [CAT, 0], [DOC, 0]], count: '3 item left', broken: 1 },
+      scene: { items: [[CHEESE, 0], [CAT, 0], [DOC, 0]], count: '3 item left', broken: 1, burst: 'count' },
       note: 'Expected "3 items left", the app shows "3 item left".' },
     { id: 'B4', kind: 'bug', name: 'Clear removes the wrong items', test: 'remove completed items when clicked', pw: 'fail', kane: 'fail', cls: 'both',
       what: '"Clear completed" removes the active items and keeps the completed one.',
-      scene: { items: [[CAT, 1]], count: '0 items left', broken: 1, clear: 1 },
+      scene: { items: [[CAT, 1]], count: '0 items left', broken: 1, clear: 1, burst: 'count' },
       note: 'After clicking "Clear completed", only the completed item is left. The two active items are gone.' },
     { id: 'B5', kind: 'bug', name: 'Escape saves the edit', test: 'cancel edits on escape', pw: 'fail', kane: 'fail', cls: 'both',
       what: 'Pressing Escape while editing saves the change instead of cancelling it.',
-      scene: { items: [[CHEESE, 0], ['feed the dog', 0, 1], [DOC, 0]], count: '3 items left' },
+      scene: { items: [[CHEESE, 0], ['feed the dog', 0, 1], [DOC, 0]], count: '3 items left', burst: 'row' },
       note: 'Typed "feed the dog" over "feed the cat", pressed Escape. The edit should be cancelled, but it was saved.' },
     { id: 'R1', kind: 'refactor', name: 'Renamed test id', test: T4, pw: 'fail', kane: 'pass', cls: 'alarm',
       what: 'The counter\'s test id changes from todo-count to item-counter. Behaviour is identical.',
@@ -92,15 +128,34 @@ document.documentElement.classList.add('js');
     return n;
   }
 
+  function burstPts(cx, cy, R) {
+    var n = 16, out = [], i, a, r;
+    for (i = 0; i < n * 2; i++) {
+      a = Math.PI * i / n - Math.PI / 2;
+      r = i % 2 ? R * 0.58 : R * (0.82 + 0.18 * ((i * 5) % 7) / 6);
+      out.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * 0.78 * Math.sin(a)).toFixed(1));
+    }
+    return out.join(' ');
+  }
+
   function drawScene(s, animate) {
     var g = $('scene'); while (g.firstChild) g.removeChild(g.firstChild);
     var y0 = 138, rh = 40, i;
+    var fyy = y0 + s.items.length * rh + 4;
+    if (s.burst) {
+      var bx = s.burst === 'row' ? 250 : 62, by = s.burst === 'row' ? y0 + rh - 5 : fyy - 6;
+      var bg = el('g', { 'class': 'bst' });
+      var pts = burstPts(bx, by, s.burst === 'row' ? 56 : 54);
+      bg.appendChild(el('polygon', { 'class': 'bst-fill', points: pts }));
+      bg.appendChild(el('polygon', { 'class': 'bst-dots', points: pts }));
+      g.appendChild(bg);
+    }
     s.items.forEach(function (it, idx) {
       var y = y0 + idx * rh;
       g.appendChild(el('line', { 'class': 'a-row', x1: 1, x2: 339, y1: y - 22, y2: y - 22 }));
       g.appendChild(el('circle', { 'class': 'a-chk', cx: 36, cy: y - 5, r: 10 }));
       if (it[1]) g.appendChild(el('path', { 'class': 'a-tick', d: 'M30 ' + (y - 5) + 'l5 5 8-9' }));
-      g.appendChild(el('text', { 'class': 'a-lbl' + (it[1] ? ' done' : ''), x: 58, y: y }, it[0]));
+      g.appendChild(el('text', { 'class': 'a-lbl' + (it[1] ? ' done' : '') + (s.burst === 'row' && it[2] && animate && !reduce ? ' shake' : ''), x: 58, y: y }, it[0]));
     });
     var fy = y0 + s.items.length * rh + 4;
     g.appendChild(el('line', { 'class': 'a-row', x1: 1, x2: 339, y1: fy - 24, y2: fy - 24 }));
@@ -129,7 +184,7 @@ document.documentElement.classList.add('js');
     var tb = $('matrix-body'); tb.textContent = '';
     M.forEach(function (m) {
       var tr = document.createElement('tr');
-      if (m.id === current) tr.className = 'sel';
+      tr.className = (m.id === current ? 'sel ' : '') + (matrixIn ? 'on' : '');
       var show = shown[m.id];
       var td0 = html('td', '', m.id);
       var td1 = html('td', 't', m.test);
@@ -175,6 +230,13 @@ document.documentElement.classList.add('js');
     drawScene(m ? m.scene : CLEAN, true);
     $('app-note').textContent = m ? m.note : 'Clean app. Pick a mutant above.';
     renderVerdict(m); renderMatrix();
+    var refac = !!m && m.kind === 'refactor';
+    $('calm').hidden = !refac;
+    $('app-svg').classList.toggle('calmed', refac);
+    if (m && anim) {
+      var idx = M.indexOf(m), row = $('matrix-body').children[idx];
+      if (row) { row.classList.add('flash'); }
+    }
   }
 
   M.forEach(function (m) {

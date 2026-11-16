@@ -6,3 +6,9 @@ workers-out/
 workers-out-preview/
 .vercel
 examples/shop/workers-out/
+
+# internal working files (kept locally, not published)
+director.md
+docs/video/
+docs/video-script.md
+scripts/

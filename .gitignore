@@ -3,3 +3,4 @@ test-results/
 playwright-report/
 .workers-run/
 workers-out/
+workers-out-preview/

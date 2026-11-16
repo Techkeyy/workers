@@ -235,6 +235,11 @@ skill/                Claude Code skill wrapping `workers port`
 - 2026-11-16, **disk:** C: was full (under 1 MB). With the owner's OK, cleared the npm cache (1.7 GB) and pip cache. About 1.2 GB free now. The owner should still free more for video recording.
 
 ## Remaining to submission
+0. **New gates from the updated master director skill (7A–7D), added 2026-11-16 after an outside review:**
+   - 7A: a representative-input run (the `examples/shop` page-object suite; builder in progress)
+   - 7B: a cold reviewer pass on the public artifacts after the shop run, and again before freeze
+   - 7C: hand-written mutants disclosed as a limit (consider agent-suggested mutants as NEXT)
+   - 7D: a placeholder audit (the README video TODO)
 1. Fresh-clone test (README quickstart, still marked pending).
 2. Audit (audit-skill, critical-bug skill) and the project-edge pass.
 3. Owner UAT, step by step.

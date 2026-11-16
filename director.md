@@ -199,6 +199,32 @@ skill/                Claude Code skill wrapping `workers port`
     - a refactor mutant Kane passes after healing is `false-alarm-avoided (healed)`
   - `--no-adaptive-heal` is no longer used.
 
+- 2026-11-16, **run 2: CORE OUTCOME OBSERVED (L3/L4 on the local demo).** Command: `workers demo --agent codex --agent-model gpt-5.6-terra --grep "<6 titles covering every mutant>"`. Heal on, cache restored per run, 389.8 credits, exit 0, `demo/app` clean afterwards.
+  - **Result:**
+    - all 6 ported and authored
+    - bug mutants caught, old 7 vs new 7
+    - false alarms avoided 2 (R1 on both counter tests)
+    - kane-weaker 0, kane-false-alarm 0, needs-human 0
+    - 1 planted bug (B2) slipped past both suites, honestly reported
+  - **The closed loop fired for real** on "append new items":
+    - The first translation was `kane-weaker` on B3. The recorded check differed from run 1's, which shows that Kane authoring is nondeterministic. That is exactly why verification is needed.
+    - **Round 1:** the agent rewrote the test, which became `broken-on-clean`.
+    - **Round 2:** the agent fixed it ("exact visible text of the todo counter in the footer is '3 items left'"). Kane re-authored and **caught B3**, and all other cells held. Final status `repaired`.
+  - A backup of this run's output is in `$TEMP/run2-out-backup`. The report was re-rendered with the new design.
+  - **Polish backlog found while reviewing:**
+    1. The loop "change" is a naive line-set diff, and round 2's displayed diff omits the counter line. Use a real LCS/unified diff.
+    2. The before/after table overflows at about 500 px; wrap it in the scroll container.
+    3. The lone credits tile wraps onto its own row.
+    4. Line counts: `_test.md` total 116 vs Playwright 79. **Do NOT pitch "fewer lines"**; the pitch is no selectors and plain English.
+  - **Ledger:**
+
+    | Claim | Status |
+    | --- | --- |
+    | "ported tests catch the same bugs" | PROVEN on the demo (6 tests × 5 bug mutants) |
+    | "closed loop" | PROVEN (1 real repair, 2 rounds) |
+    | "false alarms avoided" | PROVEN (2) |
+    | "agent can't game it" | SUPPORTED: round 1's weaker rewrite was rejected by the runs, not trusted |
+
 ## Open blockers
 
 1. ~~Credits~~ RESOLVED: alt profile, about 10,980 credits on 2026-11-16.

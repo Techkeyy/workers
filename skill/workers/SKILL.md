@@ -11,7 +11,7 @@ Workers ports a Playwright suite to Kane `_test.md` files with a coding agent, t
 
 Check these before running anything:
 
-- Node 18 or newer.
+- Node 22 or newer.
 - `kane-cli` installed and logged in: `kane-cli whoami`.
 - Kane credits: `kane-cli balance`. Authoring costs about 40 credits per test.
 - A runnable Playwright suite, with a config file and an app that starts (or is already running at `--url`).

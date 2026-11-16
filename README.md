@@ -2,7 +2,7 @@
 
 Workers ports your Playwright suite to Kane CLI tests and proves the new tests catch the same bugs, by breaking your app on purpose. When a ported test is weaker, your coding agent rewrites it from Kane's own result.
 
-**[Live site](https://workers-port.vercel.app)** · **[A real report](https://workers-port.vercel.app/report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · **Demo video: TODO**
+**[Live site](https://workers-port.vercel.app)** · **[Real report: TodoMVC](https://workers-port.vercel.app/report/)** · **[Real report: shop app](https://workers-port.vercel.app/shop-report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · **Demo video: TODO**
 
 Teams want off brittle selector tests. Rewriting a suite by hand takes weeks, and nobody trusts an AI rewrite they cannot check. TestMu's own [*State of AI in Quality Engineering 2026*](https://www.testmuai.com/research/state-of-ai-in-quality-engineering.md) puts the median trust in AI-generated tests at 54 out of 100, and finds teams spend 50% of their AI testing budget on generating tests but only 17% on verifying them.
 
@@ -95,6 +95,33 @@ Four of the five bugs (B1, B3, B4, B5) are caught by at least one test in both s
 - **First translation:** `kane-weaker` on B3 (the counter shows "3 item left"). Playwright caught it, Kane did not. In an earlier run the same test caught B3 first time, so Kane's authoring is not deterministic. That is why the port has to be verified.
 - **Round 1:** the agent rewrote the test. The rewrite broke on the clean app (`broken-on-clean`) and was rejected. The agent's word was not trusted, the run was.
 - **Round 2:** the agent fixed it, using the wording "exact visible text of the todo counter ... is '3 items left'". Kane re-authored it, caught B3, and every other cell held. Final status `repaired`.
+
+## Results: a second app with a real-world suite
+
+TodoMVC's example suite is tidy. Real suites are not. So I ran Workers on a second app, [`examples/shop`](examples/shop) ("Inkwell Supply": login, cart, coupon, checkout), with a Playwright suite written the way teams write them:
+
+- page objects in their own files (`pages/LoginPage.ts`, `ShopPage.ts`, `CartPage.ts`)
+- a `loggedInPage` fixture built with `test.extend`
+- role-based locators
+- three spec files, 10 tests in total
+
+**What this exposed and fixed:** the translator only sent the agent the test block, so imported page objects were invisible to it. It now includes the local files a spec imports (two levels deep, capped at 40 KB). In the translations:
+
+- the fixture became the real login steps with the demo account
+- `addToCart('Fountain Pen')` became `Click the button labeled "Add Fountain Pen to cart".`
+
+**The result:**
+
+| | |
+| --- | --- |
+| Tests ported | 10/10 |
+| Bug catches, old suite / Kane | 8 / 8 |
+| False alarms avoided (a renamed `data-testid`) | 5 |
+| Kane weaker / needs human | 0 / 0 |
+
+[Read the full shop report](https://workers-port.vercel.app/shop-report/).
+
+This run was interrupted halfway by a machine restart and finished with `--resume`, so the credits figure in that report only covers the resumed part.
 
 ## Quickstart
 

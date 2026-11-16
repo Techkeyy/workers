@@ -225,6 +225,24 @@ skill/                Claude Code skill wrapping `workers port`
     | "false alarms avoided" | PROVEN (2) |
     | "agent can't game it" | SUPPORTED: round 1's weaker rewrite was rejected by the runs, not trusted |
 
+- 2026-11-16, **shipped surfaces** (owner approved publishing):
+  - **GitHub:** public repo https://github.com/Techkeyy/workers, created after a full-history secret scan (only hits were Kane dashboard share links in the report, kept as public proof). Homepage set to the site, with topics added.
+  - **npm:** `workers-port@0.1.0` is live and tagged latest, published by the owner via browser auth (account praiseprodigyy). npm leaves a `0.0.0-stage` placeholder from staged publishing, which is harmless. Verified: a fresh `npm install workers-port`, then `npx workers-port --help` works.
+  - **Packaging bug found and fixed before publish:** Node refuses TypeScript inside `node_modules`, so `demo` now copies `demo/` to `./workers-demo` with a `node_modules` junction to the package's `@playwright/test`. Verified with a tarball install and a demo dry run.
+  - **Live site:** https://workers-port.vercel.app (Vercel project `workers-port`, scope techkeyys-projects; static `site/`). `/report/` serves the real run-2 report. The site quickstart now uses npm, and the dry-run copy was corrected (a dry run DOES call the agent).
+  - The README link bar has the live site, report and npm; the video is TODO.
+  - npm's README page updates on the next version publish.
+- 2026-11-16, **disk:** C: was full (under 1 MB). With the owner's OK, cleared the npm cache (1.7 GB) and pip cache. About 1.2 GB free now. The owner should still free more for video recording.
+
+## Remaining to submission
+1. Fresh-clone test (README quickstart, still marked pending).
+2. Audit (audit-skill, critical-bug skill) and the project-edge pass.
+3. Owner UAT, step by step.
+4. Demo video (demo-video skill), 3–5 min on YouTube; add the link to the README, site and npm (0.1.1).
+5. 2+ public posts.
+6. Submit the form before 2026-11-19 18:29 UTC.
+7. Owner: confirm the hackathon registration email question with the organizer.
+
 ## Open blockers
 
 1. ~~Credits~~ RESOLVED: alt profile, about 10,980 credits on 2026-11-16.

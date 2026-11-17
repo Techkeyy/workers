@@ -1,6 +1,6 @@
 {
   "name": "workers-port",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Port a Playwright suite to Kane CLI tests and prove the new tests catch the same bugs, by breaking your app on purpose.",
   "type": "module",
   "license": "MIT",

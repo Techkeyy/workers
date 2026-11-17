@@ -246,6 +246,14 @@ cp -r skill/workers ~/.claude/skills/
 
 Use `.claude/skills/` instead for a single project, then start a new Claude Code session. See [`skill/README.md`](skill/README.md).
 
+**Tested.** In a clean folder with only `npm install workers-port` and the skill in `.claude/skills/`, I gave a fresh Claude Code session one line: "Port my Playwright tests to Kane… only 1 test… don't spend any Kane credits yet."
+
+- **Skill loaded on its own:** the session's first action was to load the Workers skill.
+- **Followed the workflow:** it checked `kane-cli whoami`, the balance and the agent, then ran `workers demo --dry-run --max-tests 1`.
+- **Dry run result:** codex translated the test and Playwright ran it on all 7 mutants, for 0 Kane credits.
+- **Stopped before spending:** it showed a credit estimate (about 40) and waited for approval.
+- **Caught a weak pick:** it pointed out that the test `--max-tests 1` picked catches none of the bugs, and suggested `--grep` for one that does.
+
 ## How I tried to break it
 
 | Attack | Result |

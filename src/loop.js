@@ -72,11 +72,11 @@ export function collectEvidence(state, mutants) {
 
 // deps: { agent, model, writeMd(state, md), evaluate(state) -> updates state.kane/state.cells, log }
 // Mutates state: state.md, state.status, state.loop (per-round log).
-export async function repairLoop(state, mutants, { rounds = 2, agent, model, writeMd, evaluate, log = () => {} }) {
+export async function repairLoop(state, mutants, { rounds = 2, agent, model, writeMd, evaluate, log = () => {}, tighten = false }) {
   state.loop = state.loop ?? [];
   for (let round = 1; round <= rounds && needsRepair(state.cells); round++) {
     const weak = Object.keys(state.cells).filter((k) => state.cells[k] === 'kane-weaker' || state.cells[k] === 'broken-on-clean');
-    const prompt = buildRepairPrompt({ title: state.test.title, pwSource: state.pwSource, pwImports: state.pwImports, currentMd: state.md, ...collectEvidence(state, mutants) });
+    const prompt = buildRepairPrompt({ title: state.test.title, pwSource: state.pwSource, pwImports: state.pwImports, currentMd: state.md, ...collectEvidence(state, mutants), rules: loadRules(tighten) });
     log(`  repair round ${round}/${rounds} for "${state.test.title}" (weaker on: ${weak.join(', ')})`);
     let md;
     try {

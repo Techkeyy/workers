@@ -3,7 +3,17 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const loadRules = () => readFileSync(join(here, 'rules.md'), 'utf8');
+export const loadRules = (tighten = false) =>
+  readFileSync(join(here, 'rules.md'), 'utf8') + (tighten ? `
+
+${readFileSync(join(here, 'rules-tighten.md'), 'utf8')}` : '');
+
+// Tighten mode: the whole spec file goes along as reference for exact label formats (capped).
+export const specReference = (file, src) =>
+  `
+
+// ===== FILE: ${file.split(/[\/]/).pop()} (whole spec file, reference for exact visible text only) =====
+${src.slice(0, 40000)}`;
 
 // ---- extract the relevant Playwright source for one test -------------------------------------
 
@@ -203,12 +213,12 @@ export function validateTestMd(md, { expectCount = 0 } = {}) {
 // ---- translate one test ---------------------------------------------------------------------
 
 // agent: {name, run(prompt, {model}) -> text}. Retries once, telling the agent what was wrong.
-export async function translateTest({ test, url, agent, model }) {
+export async function translateTest({ test, url, agent, model, tighten = false }) {
   const src = readFileSync(test.file, 'utf8');
   const { source } = extractSource(src, test.line);
   const expectCount = countExpects(source);
-  const imports = formatImports(collectImports(test.file));
-  const base = buildTranslatePrompt({ title: test.title, source, url, imports });
+  const imports = formatImports(collectImports(test.file)) + (tighten ? specReference(test.file, src) : '');
+  const base = buildTranslatePrompt({ title: test.title, source, url, imports, rules: loadRules(tighten) });
   let prompt = base;
   let problems = [];
   for (let attempt = 1; attempt <= 2; attempt++) {

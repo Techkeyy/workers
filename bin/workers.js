@@ -53,6 +53,8 @@ Options:
   --agent claude|codex   coding agent that writes the tests (default: claude; falls back to
                          codex if claude is not logged in and codex is)
   --agent-model <name>   model name passed to the agent
+  --tighten              translate loose Playwright text checks (toContainText, regex) into the exact
+                         visible text a user would check; finds bugs the old suite lets through
   --resume               reuse the _test.md files already in --out (after an interrupted run);
                          Kane replays their recordings instead of authoring them again
   --dry-run              everything except Kane: list, translate, run Playwright on every
@@ -77,6 +79,7 @@ const options = {
   'agent-model': { type: 'string' },
   'dry-run': { type: 'boolean', default: false },
   resume: { type: 'boolean', default: false },
+  tighten: { type: 'boolean', default: false },
   help: { type: 'boolean', short: 'h', default: false },
 };
 
@@ -113,6 +116,7 @@ async function main() {
     agentModel: v['agent-model'],
     dryRun: v['dry-run'],
     resume: v.resume,
+    tighten: v.tighten,
   };
   for (const k of ['config', 'app', 'mutants']) {
     if (!opts[k]) {

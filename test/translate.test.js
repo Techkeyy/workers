@@ -164,3 +164,17 @@ test('the shop example spec pulls in its page objects and fixtures', () => {
   const { files } = collectImports(shop);
   assert.deepEqual(files.map((f) => f.path).sort(), ['fixtures.ts', 'pages/CartPage.ts', 'pages/LoginPage.ts', 'pages/ShopPage.ts']);
 });
+
+test('tighten mode adds its rules only when asked', async () => {
+  const { loadRules } = await import('../src/translate.js');
+  assert.ok(!loadRules().includes('Tighten mode'));
+  assert.ok(loadRules(true).includes('Tighten mode'));
+  assert.ok(loadRules(true).includes('exact visible text'));
+});
+
+test('specReference carries the whole spec file, capped at 40 KB', async () => {
+  const { specReference } = await import('../src/translate.js');
+  const ref = specReference('/x/tests/demo.spec.ts', 'a'.repeat(50000));
+  assert.ok(ref.includes('FILE: demo.spec.ts'));
+  assert.ok(ref.length < 40200);
+});

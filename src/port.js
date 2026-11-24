@@ -69,7 +69,7 @@ export async function port(opts) {
         md = readFileSync(mdPath, 'utf8');
         log(`      reused ${mdPath}`);
       } else {
-        const r = await translateTest({ test, url, agent, model: opts.agentModel });
+        const r = await translateTest({ test, url, agent, model: opts.agentModel, tighten: opts.tighten });
         md = r.md;
         mkdirSync(dirname(mdPath), { recursive: true });
         writeFileSync(mdPath, md);
@@ -101,6 +101,7 @@ export async function port(opts) {
       generatedAt: new Date().toISOString(),
       dryRun: !!opts.dryRun,
       mutants: mutants.map(({ id, kind, description }) => ({ id, kind, description })),
+      mode: opts.tighten ? 'tighten' : 'faithful',
       tests: states.map((s) => ({ id: s.test.id, title: s.test.title, status: s.status, reason: s.reason, cells: s.cells, pw: s.pw, kane: s.kane, loop: s.loop, pwLines: s.pwLines, mdLines: s.mdLines, credits: s.credits, mdPath: s.mdPath })),
     });
 
@@ -173,6 +174,7 @@ export async function port(opts) {
         },
         evaluate,
         log,
+        tighten: opts.tighten,
       });
       if (s.status === 'translated') s.status = 'ported';
     }

@@ -27,7 +27,7 @@ Built for the Kane CLI hackathon.
 | **Bar 3: agent and Kane talk to each other** | The [repair loop](#the-repair-loop-kane-talks-back-to-the-agent): Kane's result on a mutant goes into the agent's prompt, the agent rewrites the test, Kane runs it again. Screenshot: [`repair-loop.jpg`](docs/images/repair-loop.jpg). Live: the Repair loop section of the [TodoMVC report](https://workers-port.vercel.app/report/). |
 | **Ships** | On npm as [`workers-port`](https://www.npmjs.com/package/workers-port), a live [site](https://workers-port.vercel.app) with a [break-it demo](https://workers-port.vercel.app/#break-it), a Claude Code [skill](skill/workers/SKILL.md), 87 passing unit tests. |
 | **Verified** | The check is the product: a bug mutant counts as caught only when Playwright and Kane both fail it, from exit codes and JSON. A bug that slipped past both suites (B2) is reported, not hidden. See [How I tried to break it](#how-i-tried-to-break-it). |
-| **Closed loop** | Fired twice, both real. In run 2, "append new items" was `kane-weaker` on B3: round 1's rewrite broke on the clean app and was rejected, round 2 caught B3. In a [deliberate attack](#attack-a-deliberately-useless-test), a planted useless test was flagged `kane-weaker` on B1 and B3 and repaired in one round ([report](https://workers-port.vercel.app/attack-report/)). |
+| **Closed loop** | Fired three times, all real, with both agents. In run 2, "append new items" was `kane-weaker` on B3: round 1's rewrite broke on the clean app and was rejected, round 2 caught B3. In a [deliberate attack](#attack-a-deliberately-useless-test), a planted useless test was flagged `kane-weaker` on B1 and B3 and repaired in one round ([report](https://workers-port.vercel.app/attack-report/)), then the same again with Claude Code as the agent ([report](https://workers-port.vercel.app/attack-report-claude/)). |
 | **Craft** | `npm install workers-port`, then a [dry run that costs no Kane credits](#quickstart). `--resume` after an interrupted run. Findings for the Kane team: [K1, T1, K2](#platform-feedback-for-kane-cli). |
 
 Raw data behind every number: [TodoMVC `report.json`](https://workers-port.vercel.app/report/report.json) and [shop `report.json`](https://workers-port.vercel.app/shop-report/report.json).
@@ -135,6 +135,8 @@ The obvious way to cheat a port is a test that asserts nothing. It passes on the
 
 Report: [attack-report](https://workers-port.vercel.app/attack-report/) · [raw `report.json`](https://workers-port.vercel.app/attack-report/report.json)
 
+**Same attack, with Claude Code as the agent.** I repeated it with `--agent claude`. The result was the same: the useless test was flagged `kane-weaker` on B1 and B3, and Claude rewrote it in one round with the exact counter text and the exact list order. Kane then caught both bugs, for 60.3 credits. Report: [attack-report-claude](https://workers-port.vercel.app/attack-report-claude/) · [raw `report.json`](https://workers-port.vercel.app/attack-report-claude/report.json)
+
 ## Results: a second app with a real-world suite
 
 TodoMVC's example suite is tidy. Real suites are not. So I ran Workers on a second app, [`examples/shop`](examples/shop) ("Inkwell Supply": login, cart, coupon, checkout), with a Playwright suite written the way teams write them:
@@ -202,7 +204,7 @@ node bin/workers.js demo --dry-run --max-tests 1
 node bin/workers.js demo --max-tests 3
 ```
 
-The claude adapter is the default (`--agent claude`, falling back to codex if claude is not logged in and codex is). To use Codex: `--agent codex`. If Codex's configured default model is not available on your account, pass `--agent-model <a model your account supports>`. My runs used `--agent codex --agent-model gpt-5.6-terra`.
+The claude adapter is the default (`--agent claude`, falling back to codex if claude is not logged in and codex is). To use Codex: `--agent codex`. If Codex's configured default model is not available on your account, pass `--agent-model <a model your account supports>`. The TodoMVC and shop runs used `--agent codex --agent-model gpt-5.6-terra`. The second attack run used `--agent claude`.
 
 `--grep "title one|title two"` ports only tests whose title contains one of the strings. Run 2 used it to pick the six tests that cover every mutant. Without `--max-tests` or `--grep`, the demo ports the whole 24-test spec.
 
@@ -303,7 +305,7 @@ I built on `kane-cli` 0.10.4 (`testmd run`, NDJSON `--agent` output, `output-<st
 ## Limitations
 
 - Mutants are hand-written. Workers does not generate them.
-- The claude adapter is the default and is unit-tested, but the published runs used codex (model `gpt-5.6-terra`). I have not exercised the claude adapter end to end.
+- Both agents are proven with real Kane runs, but on different scales. The two full app runs used codex. Claude Code was run on one test: a dry-run translation, and the attack repair with real Kane runs.
 - Kane runs sequentially, about a minute each.
 - Desktop web only.
 - Tests run against a local app.

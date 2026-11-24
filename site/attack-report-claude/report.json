@@ -1,0 +1,364 @@
+{
+ "generatedAt": "2026-11-24T06:21:18.990Z",
+ "dryRun": false,
+ "mutants": [
+  {
+   "id": "B1",
+   "kind": "bug",
+   "description": "Active count counts completed items instead"
+  },
+  {
+   "id": "B2",
+   "kind": "bug",
+   "description": "Counter always says \"items\" (so \"1 items left\")"
+  },
+  {
+   "id": "B3",
+   "kind": "bug",
+   "description": "Counter always says \"item\" (so \"3 item left\")"
+  },
+  {
+   "id": "B4",
+   "kind": "bug",
+   "description": "\"Clear completed\" removes active items instead"
+  },
+  {
+   "id": "B5",
+   "kind": "bug",
+   "description": "Escape saves the edit instead of cancelling it"
+  },
+  {
+   "id": "R1",
+   "kind": "refactor",
+   "description": "Counter test-id renamed from todo-count to item-counter (same behaviour)"
+  },
+  {
+   "id": "R2",
+   "kind": "refactor",
+   "description": "\"Clear completed\" button keeps its text; extra class and data attribute added (same behaviour)"
+  }
+ ],
+ "tests": [
+  {
+   "id": "849da1cee0c412ce5534-2531b32b950949c93e0b",
+   "title": "should append new items to the bottom of the list",
+   "status": "repaired",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-caught",
+    "B2": "parity-missed",
+    "B3": "parity-caught",
+    "B4": "parity-missed",
+    "B5": "parity-missed",
+    "R1": "false-alarm-avoided",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\n  - waiting for getByText('3 items left')\n\n\n  59 |   \n  60 |     // Check test using different methods.\n> 61 |     await expect(page.getByText('3 items left')).toBeVisible();\n     |                                                  ^\n  62 |     await expect(todoCount).toHaveText('3 items left');\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n    at ~/AppData/Local/Temp/attack-demo/tests/demo-todo-app.spec.ts:61:50"
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByText('3 items left')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByText('3 items left') with timeout 5000ms\n  - waiting for getByText('3 items left')\n\n\n  59 |   \n  60 |     // Check test using different methods.\n> 61 |     await expect(page.getByText('3 items left')).toBeVisible();\n     |                                                  ^\n  62 |     await expect(todoCount).toHaveText('3 items left');\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n    at ~/AppData/Local/Temp/attack-demo/tests/demo-todo-app.spec.ts:61:50"
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected: \"3 items left\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n\n\n  60 |     // Check test using different methods.\n  61 |     await expect(page.getByText('3 items left')).toBeVisible();\n> 62 |     await expect(todoCount).toHaveText('3 items left');\n     |                             ^\n  63 |     await expect(todoCount).toContainText('3');\n  64 |     await expect(todoCount).toHaveText(/3/);\n  65 |\n    at ~/AppData/Local/Temp/attack-demo/tests/demo-todo-app.spec.ts:62:29"
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"3 items ",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [
+      "reviewed the todo list on localhost | The requested todo list was reviewed on the page.\nThe list contains three items in order: “buy some cheese,” “feed the cat,” and “book a doctors appointment.”\nThe footer shows “3 items left,” so the requested list state is present."
+     ],
+     "credits": 11.704970000000003,
+     "replayDecisions": 1,
+     "authorDecisions": 1,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M862DGT12D7G5100N0Y846H6/dashboard/share/US_9PL0C7B2C7JATPCPXX4F4FIKAAEW1STK304ZMA6U8QMHVTQH6TRO1S6X20Q521PJ?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 3,
+      "summary": "assert: the exact visible text of the todo counter is \"3 items left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "failed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"3 items ",
+      "failed: assert: the exact visible text of the todo counter is \"3 items left\""
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 3",
+      "The page shows three unchecked todo items but the counter does not match them. | The counter is displaying the wrong remaining-item total for the list currently shown.\nFix the remaining-items counter so it counts the three unchecked todos and displays \"3 items left\".\nevidence: objective_contradiction: Checkpoint assertion failed: \"the exact visible text of the todo counter is \"3 items left\"\" | Checkpoint assertion failed: \"the exact visible text of the todo counter is \"3 items left\"\""
+     ],
+     "credits": 8.848980000000001,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 3,
+      "summary": "assert: the exact visible text of the todo counter is \"3 items left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "failed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"3 items ",
+      "failed: assert: the exact visible text of the todo counter is \"3 items left\""
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 3",
+      "The todo list contains three items, but the counter visibly says \"3 item left\" instead of \"3 items left\". | The counter text does not use the plural word \"items\" when the list has three remaining todos.\nUpdate the todo counter’s plural wording so counts greater than one display \"items left\".\nevidence: objective_contradiction: Checkpoint assertion failed: \"the exact visible text of the todo counter is \"3 items left\"\" | Checkpoint assertion failed: \"the exact visible text of the todo counter is \"3 items left\"\""
+     ],
+     "credits": 9.982579999999999,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the queued typing steps to complete",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing Enter key to add \"buy some cheese\"",
+      "passed: fill: Typing into What needs to be done? input field",
+      "passed: press_key: Pressing Enter to add feed the cat",
+      "passed: fill: Typing book a doctors appointment in the What needs to be done? box",
+      "passed: press_key: Pressing Enter to add the appointment request",
+      "passed: analyze: Reading the todo list items in order",
+      "passed: analyze: Reading the todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"3 items left\"",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the "
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 2,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [
+    {
+     "round": 1,
+     "weakOn": [
+      "B1",
+      "B3"
+     ],
+     "change": "…\n \n ## Check the page\n-Verify the todo list is visible.\n+Verify the exact visible text of the todo counter is \"3 items left\".\n+Verify the list shows exactly these items, in this order: \"buy some cheese\", \"feed the cat\", \"book a doctors appointment\".\n ",
+     "after": {
+      "clean": "ok",
+      "B1": "parity-caught",
+      "B2": "parity-missed",
+      "B3": "parity-caught",
+      "B4": "parity-missed",
+      "B5": "parity-missed",
+      "R1": "false-alarm-avoided",
+      "R2": "parity"
+     }
+    }
+   ],
+   "pwLines": 17,
+   "mdLines": 17,
+   "credits": 60.32836,
+   "mdPath": "tests/01-should-append-new-items-to-the-bottom-of-the-list/01-should-append-new-items-to-the-bottom-of-the-list_test.md"
+  }
+ ],
+ "headline": {
+  "testsSelected": 1,
+  "testsPorted": 1,
+  "bugCells": 5,
+  "bugsCaughtOld": 2,
+  "bugsCaughtNew": 2,
+  "falseAlarmsAvoided": 1,
+  "kaneStronger": 0,
+  "kaneWeaker": 0,
+  "kaneFalseAlarms": 0,
+  "needsHuman": 0,
+  "pwLines": 17,
+  "mdLines": 17,
+  "credits": 60.3
+ }
+}

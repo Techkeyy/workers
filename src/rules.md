@@ -6,7 +6,7 @@ Kane is an AI browser agent. It reads plain-English steps, drives a real browser
 
 - Start with YAML frontmatter, exactly these keys: `mode: testing`, `url: <app url>`, `headless: true`, `max_steps: 15`.
 - Then a single `# Title` line (the Playwright test title, in plain English).
-- Then 2 to 4 `## Step name` headings. Each step has a short plain-English body. Keep the step count small: every step is authored and replayed separately.
+- Then 2 to 6 `## Step name` headings. Each step has a short plain-English body. Kane caps the browser actions it takes within one step (`max_steps`, and its own waits count), so **keep each step to about 8 actions or fewer**. Split a long flow, such as a sign-up form with several fields, across two steps. If Kane reports "Maximum steps exceeded", split the step that hit it.
 - Use the frontmatter `url` instead of `page.goto('/')`. Do not write a navigate step for it. The first step starts on that page.
 
 ## Rules

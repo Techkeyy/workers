@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    # Kane CLI runs need a Kane account and credits, so CI runs everything else:
+    # the unit tests and both Playwright suites the mutants are checked against.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Unit tests
+        run: npm test
+      - name: Playwright suite, TodoMVC demo (24 tests)
+        run: npm run demo:test
+      - name: Playwright suite, shop example (10 tests)
+        run: npm run shop:test

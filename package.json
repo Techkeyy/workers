@@ -23,7 +23,8 @@
     "demo:serve": "node demo/serve.js",
     "demo:test": "playwright test -c demo/playwright.config.ts",
     "test": "node --test",
-    "workers": "node bin/workers.js"
+    "workers": "node bin/workers.js",
+    "shop:test": "playwright test -c examples/shop/playwright.config.ts"
   },
   "dependencies": {
     "@playwright/test": "^1.65.1"

@@ -4,7 +4,7 @@
 
 Workers ports your Playwright suite to Kane CLI tests and proves the new tests catch the same bugs, by breaking your app on purpose. When a ported test is weaker, your coding agent rewrites it from Kane's own result.
 
-**[Live site](https://workers-port.vercel.app)** · **[Report: TodoMVC](https://workers-port.vercel.app/report/)** · **[Report: shop app](https://workers-port.vercel.app/shop-report/)** · **[Report: tighten](https://workers-port.vercel.app/tighten-report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · [Source](https://github.com/Techkeyy/workers)
+**[Live site](https://workers-port.vercel.app)** · **[Report: TodoMVC](https://workers-port.vercel.app/report/)** · **[Report: shop app](https://workers-port.vercel.app/shop-report/)** · **[Report: tighten](https://workers-port.vercel.app/tighten-report/)** · **[Report: bulletproof-react](https://workers-port.vercel.app/oss-report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · [Source](https://github.com/Techkeyy/workers)
 
 **[Watch the 3-minute film](https://youtu.be/Ch378w02KHE)**
 
@@ -14,7 +14,7 @@ Teams want off brittle selector tests. Rewriting a suite by hand takes weeks, an
 
 > *"The agent says the new tests are equivalent. Would they actually catch the bug the old ones caught?"*
 
-Workers answers that question with a run, not with the agent's word. Every ported test is checked against deliberate breaks of your app (mutants), side by side with the original Playwright test. **A ported test is only accepted if it catches the same bugs.** On real runs Kane did better than that: across both apps it avoided **7 false alarms** the selector tests raised, and with `--tighten` it **caught 2 bugs the original Playwright test missed** ([below](#tighten-mode-where-kane-beats-the-old-suite)).
+Workers answers that question with a run, not with the agent's word. Every ported test is checked against deliberate breaks of your app (mutants), side by side with the original Playwright test. **A ported test is only accepted if it catches the same bugs.** On real runs Kane did better than that: across three apps it avoided **8 false alarms** the selector tests raised, and with `--tighten` it **caught 2 bugs the original Playwright test missed** ([below](#tighten-mode-where-kane-beats-the-old-suite)).
 
 Built for the Kane CLI hackathon.
 
@@ -24,7 +24,7 @@ Built for the Kane CLI hackathon.
 
 | Criterion | Where to see it |
 |---|---|
-| **Bar 1: works end to end** | Two real runs, published as reports: [TodoMVC](https://workers-port.vercel.app/report/) (6 tests, 7 mutants) and a second app, [shop](https://workers-port.vercel.app/shop-report/) (10 tests, 7 mutants). Each ran the full path: list, translate with a coding agent, Playwright on every mutant, Kane on every mutant, parity diff, repair, report. See the [Quickstart](#quickstart). |
+| **Bar 1: works end to end** | Real runs on three apps, published as reports: [TodoMVC](https://workers-port.vercel.app/report/) (6 tests, 7 mutants) and a second app, [shop](https://workers-port.vercel.app/shop-report/) (10 tests, 7 mutants), plus a real open-source app, [bulletproof-react](https://workers-port.vercel.app/oss-report/), on its maintainers' own Playwright test. Each ran the full path: list, translate with a coding agent, Playwright on every mutant, Kane on every mutant, parity diff, repair, report. See the [Quickstart](#quickstart). |
 | **Bar 2: Kane caught or proved something** | Kane failed on the same planted bugs Playwright failed on: 7 of 7 test and bug pairs in TodoMVC, 8 of 8 in the shop ([how to read these](#results-run-2-on-the-bundled-todomvc-demo)). It also passed 2 and 5 harmless refactors that broke the Playwright selectors. With `--tighten`, Kane **caught 2 bugs Playwright missed** (B2 "1 items left", B3 "2 item left"): [tighten report](https://workers-port.vercel.app/tighten-report/). Screenshots: [`report-matrix.jpg`](docs/images/report-matrix.jpg), [`shop-report.jpg`](docs/images/shop-report.jpg). |
 | **Bar 3: agent and Kane talk to each other** | The [repair loop](#the-repair-loop-kane-talks-back-to-the-agent): Kane's result on a mutant goes into the agent's prompt, the agent rewrites the test, Kane runs it again. Screenshot: [`repair-loop.jpg`](docs/images/repair-loop.jpg). Live: the Repair loop section of the [TodoMVC report](https://workers-port.vercel.app/report/). |
 | **Ships** | On npm as [`workers-port`](https://www.npmjs.com/package/workers-port), a live [site](https://workers-port.vercel.app) with a [break-it demo](https://workers-port.vercel.app/#break-it), a Claude Code [skill](skill/workers/SKILL.md), 89 unit tests plus both Playwright suites run on every push by [public CI](https://github.com/Techkeyy/workers/actions/workflows/ci.yml). |
@@ -138,6 +138,23 @@ The obvious way to cheat a port is a test that asserts nothing. It passes on the
 Report: [attack-report](https://workers-port.vercel.app/attack-report/) · [raw `report.json`](https://workers-port.vercel.app/attack-report/report.json)
 
 **Same attack, with Claude Code as the agent.** I repeated it with `--agent claude`. The result was the same: the useless test was flagged `kane-weaker` on B1 and B3, and Claude rewrote it in one round with the exact counter text and the exact list order. Kane then caught both bugs, for 60.3 credits. Report: [attack-report-claude](https://workers-port.vercel.app/attack-report-claude/) · [raw `report.json`](https://workers-port.vercel.app/attack-report-claude/report.json)
+
+## Results: a real open-source app (bulletproof-react)
+
+To answer "what happens on a real one?" with something I did not write, I ran Workers on [alan2207/bulletproof-react](https://github.com/alan2207/bulletproof-react) (`apps/react-vite`, commit `9506629`), a widely used reference app whose Playwright suite is written by its maintainers. Its tests log in through a Playwright **setup project** (`auth.setup.ts` plus `storageState`), the way real suites do, so the test file itself never shows the login. I used its `profile` test and two mutants, to keep credits low.
+
+| | Playwright (maintainers' test) | Kane (ported by Workers) |
+| --- | --- | --- |
+| Clean app | passes | passes: signs up, logs in, updates the profile |
+| B1: profile update drops the bio | fails (caught) | fails (caught) |
+| R1: close button label "Close" becomes "Dismiss", same behaviour | fails (false alarm) | passes (false alarm avoided) |
+
+It took three attempts, and the two failures each exposed a real gap in Workers, now fixed:
+
+1. **Login in a setup project was invisible.** The first translation had no login, Kane hit the login page, and the agent's repair answer was not a valid test. Workers now sends `*.setup.*` files to the agent, and retries an invalid repair answer once.
+2. **One step was too long for Kane.** The sign-up form fitted into one step, which ran past Kane's per-step action cap ("Maximum steps exceeded 16/15"). The rules now keep each step to about 8 actions and split long flows.
+
+The third run passed for 102.1 Kane credits (about 173 across all three). Report: [oss-report](https://workers-port.vercel.app/oss-report/) · [raw `report.json`](https://workers-port.vercel.app/oss-report/report.json) · [how to reproduce](examples/bulletproof-react/README.md)
 
 ## Tighten mode: where Kane beats the old suite
 

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "B1",
+    "kind": "bug",
+    "description": "Profile update drops the bio, so the saved bio never appears",
+    "file": "src/features/users/components/update-profile.tsx",
+    "find": "updateProfileMutation.mutate({ data: values });",
+    "replace": "updateProfileMutation.mutate({ data: { ...values, bio: '' } });"
+  },
+  {
+    "id": "R1",
+    "kind": "refactor",
+    "description": "Notification close button's screen-reader label renamed from Close to Dismiss (same look and behaviour)",
+    "file": "src/components/ui/notifications/notification.tsx",
+    "find": "<span className=\"sr-only\">Close</span>",
+    "replace": "<span className=\"sr-only\">Dismiss</span>"
+  }
+]

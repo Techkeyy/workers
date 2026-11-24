@@ -1,0 +1,387 @@
+{
+ "generatedAt": "2026-11-24T07:42:16.206Z",
+ "dryRun": false,
+ "mutants": [
+  {
+   "id": "B1",
+   "kind": "bug",
+   "description": "Active count counts completed items instead"
+  },
+  {
+   "id": "B2",
+   "kind": "bug",
+   "description": "Counter always says \"items\" (so \"1 items left\")"
+  },
+  {
+   "id": "B3",
+   "kind": "bug",
+   "description": "Counter always says \"item\" (so \"3 item left\")"
+  },
+  {
+   "id": "B4",
+   "kind": "bug",
+   "description": "\"Clear completed\" removes active items instead"
+  },
+  {
+   "id": "B5",
+   "kind": "bug",
+   "description": "Escape saves the edit instead of cancelling it"
+  },
+  {
+   "id": "R1",
+   "kind": "refactor",
+   "description": "Counter test-id renamed from todo-count to item-counter (same behaviour)"
+  },
+  {
+   "id": "R2",
+   "kind": "refactor",
+   "description": "\"Clear completed\" button keeps its text; extra class and data attribute added (same behaviour)"
+  }
+ ],
+ "mode": "tighten",
+ "tests": [
+  {
+   "id": "849da1cee0c412ce5534-bbb1bb0c9c77cda96f15",
+   "title": "should display the current number of todo items",
+   "status": "ported",
+   "cells": {
+    "clean": "ok",
+    "B1": "parity-caught",
+    "B2": "kane-stronger",
+    "B3": "kane-stronger",
+    "B4": "parity-missed",
+    "B5": "parity-missed",
+    "R1": "false-alarm-avoided",
+    "R2": "parity"
+   },
+   "pw": {
+    "clean": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected substring: \"1\"\nReceived string:    \"0 items left\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n    13 × locator resolved to <span class=\"todo-count\" data-testid=\"todo-count\">…</span>\n       - unexpected value \"0 items left\"\n\n\n  268 |     await newTodo.press('Enter');\n  269 |\n> 270 |     await expect(todoCount).toContainText('1');\n      |                             ^\n  271 |\n  272 |     await newTodo.fill(TODO_ITEMS[1]);\n  273 |     await newTodo.press('Enter');\n    at ~/AppData/Local/Temp/attack-demo/tests/demo-todo-app.spec.ts:270:29"
+    },
+    "B2": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B3": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B4": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "B5": {
+     "passed": true,
+     "errorMessage": null
+    },
+    "R1": {
+     "passed": false,
+     "errorMessage": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('todo-count')\nExpected substring: \"1\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toContainText\" getByTestId('todo-count') with timeout 5000ms\n  - waiting for getByTestId('todo-count')\n\n\n  268 |     await newTodo.press('Enter');\n  269 |\n> 270 |     await expect(todoCount).toContainText('1');\n      |                             ^\n  271 |\n  272 |     await newTodo.fill(TODO_ITEMS[1]);\n  273 |     await newTodo.press('Enter');\n    at ~/AppData/Local/Temp/attack-demo/tests/demo-todo-app.spec.ts:270:29"
+    },
+    "R2": {
+     "passed": true,
+     "errorMessage": null
+    }
+   },
+   "kane": {
+    "clean": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"1 item l",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: wait: PRIMARY: Reload the page",
+      "passed: analyze: ANALYZE(textual_visual, 'The exact visible text of the todo counter is \"2 items ",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"."
+     ],
+     "runSummaries": [
+      "added a to-do item on the local to-do list | You asked to add “buy some cheese” to the to-do list.\nEntered “buy some cheese” in the “What needs to be done?” box and submitted it.\nThe new to-do was added successfully, and the list shows “1 item left.”",
+      "added “feed the cat” to the todo list on localhost | Added “feed the cat” to the todo list by entering it in the “What needs to be done?” box and pressing Enter.\nThe todo counter showed “2 items left,” confirming the requested item was added.",
+      "reloaded the todo list on localhost | Reloaded the todo page as requested.\nConfirmed the todo list shows “buy some cheese” followed by “feed the cat”.\nConfirmed the footer displays “2 items left”."
+     ],
+     "credits": 48.1868875,
+     "replayDecisions": 0,
+     "authorDecisions": 3,
+     "healTriggered": false,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M86788WRYND9PFKNX0EF5GEE/dashboard/share/US_FSVE9WRB2YV8X31FPDLGXACUC7FLUK90YBHDUDEJAQ4A0UFJWDBZGY91XHK9TAVG?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "B1": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 6,
+      "summary": "assert: the exact visible text of the todo counter is \"1 item left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "failed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: type: Typing buy some cheese into the What needs to be done? box",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: click: Clicking the Toggle Todo checkbox for the buy some cheese row",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"1 item l",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: wait: PRIMARY: wait 500 ms after adding the todo",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"2 items ",
+      "failed: assert: the exact visible text of the todo counter is \"2 items left\""
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 6",
+      "added a to-do item on the local to-do app | Added “buy some cheese” to the to-do list as requested.\nThe list now shows “1 item left,” confirming the item was added.",
+      "The run added “feed the cat” successfully, but the page already contained a completed todo, so the visible counter correctly showed “1 item left” rather than “2 items left.” | The starting todo list was not empty: “buy some cheese” was already completed. Adding one unfinished item leaves one unfinished item, not two.\nReset the todo list before this test, or update the expected counter to match the fixture that includes one completed todo. | Final verification failed: \"the exact visible text of the todo counter is \"2 items left\"\""
+     ],
+     "credits": 14.696609999999998,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B2": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 6,
+      "summary": "assert: the exact visible text of the todo counter is \"1 item left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "failed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press the Enter key",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"1 item l",
+      "failed: assert: the exact visible text of the todo counter is \"1 item left\""
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 6",
+      "With one remaining todo, the counter displays “1 items left” instead of “1 item left.” | The counter does not switch to the singular word when exactly one todo remains.\nUpdate the counter wording so it shows “1 item left” for exactly one remaining todo and uses “items” for all other counts.\nevidence: objective_contradiction: Final verification failed: \"the exact visible text of the todo counter is \"1 item left\"\" | Final verification failed: \"the exact visible text of the todo counter is \"1 item left\"\""
+     ],
+     "credits": 8.73221,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B3": {
+     "status": "failed",
+     "exitCode": 1,
+     "failedStep": {
+      "index": 5,
+      "summary": "assert: the exact visible text of the todo counter is \"2 items left\""
+     },
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: Waiting for the next step in the plan",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the visible todo counter text",
+      "failed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: the exact visible text of the todo counter is \"2 items left\"",
+      "failed: wait: Waiting because the displayed todo counter differs from the required exact text"
+     ],
+     "runSummaries": [
+      "assertion_failed: @ step 5",
+      "After adding a second incomplete todo, the footer says \"2 item left\" instead of \"2 items left\". | The footer's item-count wording does not switch to the plural form when more than one todo remains.\nUpdate the counter wording so counts greater than one display \"items left\".\nevidence: objective_contradiction: The visible footer reads \"2 item left\", not the required \"2 items left\". | The visible footer reads \"2 item left\", not the required \"2 items left\"."
+     ],
+     "credits": 11.787594999999998,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": null
+    },
+    "B4": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: Waiting for the next step in the plan",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Reloading the page",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"."
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "B5": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: Waiting for the next step in the plan",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Reloading the page",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"."
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    },
+    "R1": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "failed: analyze: Reading the visible todo counter text",
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: ",
+      "passed: press_key: PRIMARY: press Enter to submit the text in the \"What needs to be done?\" box",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"1 item l",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: queued plan (2 steps): type \"What needs to be done?\"; press_key \"What needs to b",
+      "passed: type: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"2 items ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: analyze: ANALYZE(textual_visual, 'the exact visible text of the todo counter is \"2 items ",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"."
+     ],
+     "runSummaries": [
+      "analyzer_failed: @ step 5",
+      "added a to-do item on the local to-do app | You asked to add “buy some cheese” to the to-do list.\nEntered the item in the “What needs to be done?” box and submitted it.\nThe to-do list now shows “1 item left,” confirming the item was added.",
+      "added “feed the cat” to the to-do list on localhost | Added “feed the cat” to the to-do list by entering it in the “What needs to be done?” box and submitting it.\nThe to-do counter showed “2 items left,” confirming the item was added successfully.",
+      "reloaded the todo list on localhost | Reloaded the todo page as requested.\nConfirmed the todo list contains “buy some cheese” followed by “feed the cat.”\nConfirmed the footer shows “2 items left.”"
+     ],
+     "credits": 18.264969999999998,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": true,
+     "shareUrl": "https://test-manager.lambdatest.com/projects/01M7J5MTJQ9H5T4HJSHPTYNZEC/test-cases/01M86788WRYND9PFKNX0EF5GEE/dashboard/share/US_RAGPXZNBP05E68FD2V6V70VMDAAO8NDNI7621LVLBR5BALL2Z7CVGM8IULJ48OVR?type=summary&agentView=true&fqdn=summary-page"
+    },
+    "R2": {
+     "status": "passed",
+     "exitCode": 0,
+     "failedStep": null,
+     "stepSummaries": [
+      "passed: navigate: Navigate to http://localhost:4183/",
+      "passed: wait: Waiting for the plan input to be ready",
+      "passed: fill: Type \"buy some cheese\" into \"What needs to be done?\"",
+      "passed: press_key: Pressing the Enter key",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"1 item left\"",
+      "passed: wait: Waiting for the next step in the plan",
+      "passed: fill: Type \"feed the cat\" into \"What needs to be done?\"",
+      "passed: press_key: Press Enter",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"",
+      "passed: refresh: Navigate refresh",
+      "passed: wait: Reloading the page",
+      "passed: analyze: Reading the todo items in list order",
+      "passed: analyze: Reading the visible todo counter text",
+      "passed: assert: the list shows exactly these items, in this order: \"buy some cheese\", \"feed the ",
+      "passed: assert: the exact visible text of the todo counter is \"2 items left\"."
+     ],
+     "runSummaries": [],
+     "credits": 0,
+     "replayDecisions": 3,
+     "authorDecisions": 0,
+     "healTriggered": false,
+     "shareUrl": null
+    }
+   },
+   "loop": [],
+   "pwLines": 18,
+   "mdLines": 21,
+   "credits": 101.6682725,
+   "mdPath": "tests/01-should-display-the-current-number-of-todo-items/01-should-display-the-current-number-of-todo-items_test.md"
+  }
+ ],
+ "headline": {
+  "testsSelected": 1,
+  "testsPorted": 1,
+  "bugCells": 5,
+  "bugsCaughtOld": 1,
+  "bugsCaughtNew": 3,
+  "falseAlarmsAvoided": 1,
+  "kaneStronger": 2,
+  "kaneWeaker": 0,
+  "kaneFalseAlarms": 0,
+  "needsHuman": 0,
+  "pwLines": 18,
+  "mdLines": 21,
+  "credits": 101.7
+ }
+}

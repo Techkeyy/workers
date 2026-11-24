@@ -218,16 +218,17 @@
   <div class="wrap wide">
     <p class="eyebrow fade"><span class="idx">05</span> The proof</p>
     <h2 class="split">What the real run showed</h2>
-    <p class="lead fade">Demo app, 6 ported tests, 5 bugs and 2 harmless refactors. Run on 16 Nov 2026 with Kane CLI and a Codex agent.</p>
+    <p class="lead fade">Demo app, 6 ported tests, 5 bugs and 2 harmless refactors, run on 16 Nov 2026 with Kane CLI and a Codex agent. The tighten run followed on 24 Nov with a Claude Code agent.</p>
     <ul class="panel tiles stamp">
       <li><span class="num"><span class="n" data-count="6">6</span></span><span class="lab">tests ported</span></li>
       <li><span class="num"><span class="n" data-count="7">7</span><span class="suf"> of 7</span></span><span class="lab">bug catches matched: whenever Playwright caught a bug, so did Kane, across 30 test-and-bug pairs</span></li>
       <li><span class="num"><span class="n" data-count="2">2</span></span><span class="lab">false alarms avoided: Playwright failed on a renamed test id, Kane stayed green</span></li>
       <li><span class="num"><span class="n" data-count="1">1</span></span><span class="lab">test repaired by the loop</span></li>
-      <li class="warn"><span class="num"><span class="n" data-count="1">1</span></span><span class="lab"><b class="wtag">Warning</b> planted bug (B2, "1 items left") slipped past both suites. The report says so.</span></li>
+      <li><span class="num"><span class="n" data-count="2">2</span></span><span class="lab">bugs Kane caught that Playwright missed, with <code>--tighten</code>: "1 items left" and "2 item left" slipped past the old test's loose check</span></li>
       <li><span class="num"><span class="n" data-count="389.8" data-dec="1">389.8</span></span><span class="lab">Kane credits for the whole run</span></li>
     </ul>
     <p class="cta-line fade"><a class="btn ghost" href="report/">Read the full report</a> <span>Matrix, repair log, Kane dashboard links and the generated test files.</span></p>
+    <p class="cta-line fade"><a class="btn ghost" href="tighten-report/">Read the tighten report</a> <span>Same mutants, same unchanged Playwright test: the tightened Kane test caught B2 and B3, which the old suite let through. In faithful mode B2 slipped past both, and the report says so.</span></p>
     <p class="cta-line fade"><a class="btn ghost" href="shop-report/">Read the shop report</a> <span>A second app with page objects, fixtures and three spec files: 10 of 10 tests ported, 8 of 8 bug catches matched, 5 false alarms avoided.</span></p>
   </div>
 </section>

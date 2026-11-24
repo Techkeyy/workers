@@ -1,8 +1,10 @@
 # Workers
 
+[![CI](https://github.com/Techkeyy/workers/actions/workflows/ci.yml/badge.svg)](https://github.com/Techkeyy/workers/actions/workflows/ci.yml)
+
 Workers ports your Playwright suite to Kane CLI tests and proves the new tests catch the same bugs, by breaking your app on purpose. When a ported test is weaker, your coding agent rewrites it from Kane's own result.
 
-**[Live site](https://workers-port.vercel.app)** · **[Report: TodoMVC](https://workers-port.vercel.app/report/)** · **[Report: shop app](https://workers-port.vercel.app/shop-report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · [Source](https://github.com/Techkeyy/workers)
+**[Live site](https://workers-port.vercel.app)** · **[Report: TodoMVC](https://workers-port.vercel.app/report/)** · **[Report: shop app](https://workers-port.vercel.app/shop-report/)** · **[Report: tighten](https://workers-port.vercel.app/tighten-report/)** · **[npm: workers-port](https://www.npmjs.com/package/workers-port)** · [Source](https://github.com/Techkeyy/workers)
 
 **[Watch the 3-minute film](https://youtu.be/Ch378w02KHE)**
 
@@ -12,7 +14,7 @@ Teams want off brittle selector tests. Rewriting a suite by hand takes weeks, an
 
 > *"The agent says the new tests are equivalent. Would they actually catch the bug the old ones caught?"*
 
-Workers answers that question with a run, not with the agent's word. Every ported test is checked against deliberate breaks of your app (mutants), side by side with the original Playwright test. **A ported test is only accepted if it catches the same bugs, and it avoids the false alarms the selector tests raise.**
+Workers answers that question with a run, not with the agent's word. Every ported test is checked against deliberate breaks of your app (mutants), side by side with the original Playwright test. **A ported test is only accepted if it catches the same bugs.** On real runs Kane did better than that: across both apps it avoided **7 false alarms** the selector tests raised, and with `--tighten` it **caught 2 bugs the original Playwright test missed** ([below](#tighten-mode-where-kane-beats-the-old-suite)).
 
 Built for the Kane CLI hackathon.
 
@@ -23,12 +25,12 @@ Built for the Kane CLI hackathon.
 | Criterion | Where to see it |
 |---|---|
 | **Bar 1: works end to end** | Two real runs, published as reports: [TodoMVC](https://workers-port.vercel.app/report/) (6 tests, 7 mutants) and a second app, [shop](https://workers-port.vercel.app/shop-report/) (10 tests, 7 mutants). Each ran the full path: list, translate with a coding agent, Playwright on every mutant, Kane on every mutant, parity diff, repair, report. See the [Quickstart](#quickstart). |
-| **Bar 2: Kane caught or proved something** | Kane failed on the same planted bugs Playwright failed on: 7 of 7 test and bug pairs in TodoMVC, 8 of 8 in the shop ([how to read these](#results-run-2-on-the-bundled-todomvc-demo)). It also passed 2 and 5 harmless refactors that broke the Playwright selectors. Screenshots: [`report-matrix.jpg`](docs/images/report-matrix.jpg), [`shop-report.jpg`](docs/images/shop-report.jpg). |
+| **Bar 2: Kane caught or proved something** | Kane failed on the same planted bugs Playwright failed on: 7 of 7 test and bug pairs in TodoMVC, 8 of 8 in the shop ([how to read these](#results-run-2-on-the-bundled-todomvc-demo)). It also passed 2 and 5 harmless refactors that broke the Playwright selectors. With `--tighten`, Kane **caught 2 bugs Playwright missed** (B2 "1 items left", B3 "2 item left"): [tighten report](https://workers-port.vercel.app/tighten-report/). Screenshots: [`report-matrix.jpg`](docs/images/report-matrix.jpg), [`shop-report.jpg`](docs/images/shop-report.jpg). |
 | **Bar 3: agent and Kane talk to each other** | The [repair loop](#the-repair-loop-kane-talks-back-to-the-agent): Kane's result on a mutant goes into the agent's prompt, the agent rewrites the test, Kane runs it again. Screenshot: [`repair-loop.jpg`](docs/images/repair-loop.jpg). Live: the Repair loop section of the [TodoMVC report](https://workers-port.vercel.app/report/). |
-| **Ships** | On npm as [`workers-port`](https://www.npmjs.com/package/workers-port), a live [site](https://workers-port.vercel.app) with a [break-it demo](https://workers-port.vercel.app/#break-it), a Claude Code [skill](skill/workers/SKILL.md), 87 passing unit tests. |
-| **Verified** | The check is the product: a bug mutant counts as caught only when Playwright and Kane both fail it, from exit codes and JSON. A bug that slipped past both suites (B2) is reported, not hidden. See [How I tried to break it](#how-i-tried-to-break-it). |
+| **Ships** | On npm as [`workers-port`](https://www.npmjs.com/package/workers-port), a live [site](https://workers-port.vercel.app) with a [break-it demo](https://workers-port.vercel.app/#break-it), a Claude Code [skill](skill/workers/SKILL.md), 89 unit tests plus both Playwright suites run on every push by [public CI](https://github.com/Techkeyy/workers/actions/workflows/ci.yml). |
+| **Verified** | The check is the product: a bug mutant counts as caught only when Playwright and Kane both fail it, from exit codes and JSON. A bug that slipped past both suites in faithful mode (B2) is reported, not hidden, and `--tighten` then catches it. See [How I tried to break it](#how-i-tried-to-break-it). |
 | **Closed loop** | Fired three times, all real, with both agents. In run 2, "append new items" was `kane-weaker` on B3: round 1's rewrite broke on the clean app and was rejected, round 2 caught B3. In a [deliberate attack](#attack-a-deliberately-useless-test), a planted useless test was flagged `kane-weaker` on B1 and B3 and repaired in one round ([report](https://workers-port.vercel.app/attack-report/)), then the same again with Claude Code as the agent ([report](https://workers-port.vercel.app/attack-report-claude/)). |
-| **Craft** | `npm install workers-port`, then a [dry run that costs no Kane credits](#quickstart). `--resume` after an interrupted run. Findings for the Kane team: [K1, T1, K2](#platform-feedback-for-kane-cli). |
+| **Craft** | `npm install workers-port`, then a [dry run that costs no Kane credits](#quickstart). `--resume` after an interrupted run, `--tighten` to find where the old suite is too loose. Findings for the Kane team: [K1, T1, K2](#platform-feedback-for-kane-cli). |
 
 Raw data behind every number: [TodoMVC `report.json`](https://workers-port.vercel.app/report/report.json) and [shop `report.json`](https://workers-port.vercel.app/shop-report/report.json).
 
@@ -137,6 +139,23 @@ Report: [attack-report](https://workers-port.vercel.app/attack-report/) · [raw 
 
 **Same attack, with Claude Code as the agent.** I repeated it with `--agent claude`. The result was the same: the useless test was flagged `kane-weaker` on B1 and B3, and Claude rewrote it in one round with the exact counter text and the exact list order. Kane then caught both bugs, for 60.3 credits. Report: [attack-report-claude](https://workers-port.vercel.app/attack-report-claude/) · [raw `report.json`](https://workers-port.vercel.app/attack-report-claude/report.json)
 
+## Tighten mode: where Kane beats the old suite
+
+Workers translates faithfully by default, so a loose Playwright check stays loose. Playwright's own counter test checks the counter with `toContainText('1')` and `toContainText('2')`, so it passes when the counter says "1 items left". That is why B2 slipped past both suites in run 2.
+
+`--tighten` translates loose text checks into the exact visible text a person would read, worked out from the test file itself. On that counter test the agent (Claude Code) wrote `Verify the exact visible text of the todo counter is "1 item left"`. Then a real run against all 7 mutants:
+
+| Mutant | Playwright (unchanged example test) | Kane, tightened |
+| --- | --- | --- |
+| B1: count shows completed items | fails (caught) | fails (caught) |
+| **B2: always "items" ("1 items left")** | **passes (missed)** | **fails (caught)** |
+| **B3: always "item" ("2 item left")** | **passes (missed)** | **fails (caught)** |
+| R1: test id renamed, same behaviour | fails (false alarm) | passes (false alarm avoided) |
+
+So the result was `kane-stronger` on 2 bugs, with nothing lost and 101.7 credits spent. The mutants are the same ones used since day one, and the Playwright test is Playwright's own unchanged example. The only difference is that the Kane test checks what a user reads.
+
+Report: [tighten-report](https://workers-port.vercel.app/tighten-report/) · [raw `report.json`](https://workers-port.vercel.app/tighten-report/report.json)
+
 ## Results: a second app with a real-world suite
 
 TodoMVC's example suite is tidy. Real suites are not. So I ran Workers on a second app, [`examples/shop`](examples/shop) ("Inkwell Supply": login, cart, coupon, checkout), with a Playwright suite written the way teams write them:
@@ -218,7 +237,7 @@ Credits, as I measured them: about 40 per authored test, 0 per clean replay, 10 
 node bin/workers.js port --config playwright.config.ts --app ./my-app --mutants workers.mutants.json
 ```
 
-Options: `--url`, `--out`, `--grep`, `--max-tests`, `--repair-rounds`, `--agent`, `--agent-model`, `--resume`, `--dry-run`. Run `node bin/workers.js --help` for the full list. Run `--dry-run` first.
+Options: `--url`, `--out`, `--grep`, `--max-tests`, `--repair-rounds`, `--agent`, `--agent-model`, `--resume`, `--tighten`, `--dry-run`. Run `node bin/workers.js --help` for the full list. Run `--dry-run` first.
 
 The mutants file is a JSON array. Each mutant edits one file in `--app` with an exact find and replace, temporarily:
 
@@ -271,7 +290,7 @@ Use `.claude/skills/` instead for a single project, then start a new Claude Code
 
 **A bug-mutant cell is only `parity-caught` when both suites actually failed. Verdicts come from exit codes and JSON, never from the agent.** Rules decide, the agent only writes tests.
 
-The Workers code itself has 87 unit tests (`npm test`, which runs `node --test`), plus the real runs above.
+The Workers code itself has 89 unit tests (`npm test`, which runs `node --test`), plus the real runs above.
 
 ## Architecture
 
@@ -309,7 +328,7 @@ I built on `kane-cli` 0.10.4 (`testmd run`, NDJSON `--agent` output, `output-<st
 - Kane runs sequentially, about a minute each.
 - Desktop web only.
 - Tests run against a local app.
-- One planted bug (B2) slipped past both suites in the TodoMVC demo.
+- In faithful mode one planted bug (B2) slipped past both suites in the TodoMVC demo. `--tighten` catches it, but tighten mode is only as good as the agent's reading of the expected text.
 - Ctrl+C reverts any applied mutant, but a dev server that Workers started itself may keep running; stop it by hand.
 - `--resume` reuses existing `_test.md` files as they are. If you edit a Playwright spec between runs, delete its folder in `--out` first.
 

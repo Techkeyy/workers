@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -142,6 +142,38 @@ export function collectImports(specFile, { maxBytes = 40 * 1024, depth = 2 } = {
 }
 
 // Prompt section for the collected imports ('' when there are none).
+// Playwright setup projects (auth.setup.ts and similar) often log in before the tests run, so the
+// test itself never shows the login. Collect *.setup.* files from the spec's folder and up to two
+// parent folders, so the agent can write those steps into the Kane test.
+export function collectSetupFiles(specFile, { maxBytes = 20 * 1024 } = {}) {
+  const out = [];
+  let dir = dirname(resolve(specFile));
+  let used = 0;
+  for (let level = 0; level < 3; level++) {
+    let names = [];
+    try { names = readdirSync(dir); } catch { break; }
+    for (const name of names.sort()) {
+      if (!/\.setup\.(ts|js|mjs|mts)$/.test(name)) continue;
+      const full = join(dir, name);
+      if (out.some((f) => f.path === full)) continue;
+      const text = readFileSync(full, 'utf8');
+      if (used + text.length > maxBytes) break;
+      used += text.length;
+      out.push({ path: full, rel: relative(dirname(resolve(specFile)), full).split(sep).join('/') || name, text });
+    }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return out;
+}
+
+export function formatSetupFiles(files) {
+  if (!files.length) return '';
+  return '\n\n# Playwright setup files (they run before the tests, for example to log in)\n' +
+    files.map((f) => `// ===== SETUP FILE: ${f.rel} =====\n${f.text}`).join('\n');
+}
+
 export function formatImports({ files, truncated }) {
   if (!files.length) return '';
   const blocks = files.map((f) => `// ===== FILE: ${f.path} =====
@@ -217,7 +249,7 @@ export async function translateTest({ test, url, agent, model, tighten = false }
   const src = readFileSync(test.file, 'utf8');
   const { source } = extractSource(src, test.line);
   const expectCount = countExpects(source);
-  const imports = formatImports(collectImports(test.file)) + (tighten ? specReference(test.file, src) : '');
+  const imports = formatImports(collectImports(test.file)) + formatSetupFiles(collectSetupFiles(test.file)) + (tighten ? specReference(test.file, src) : '');
   const base = buildTranslatePrompt({ title: test.title, source, url, imports, rules: loadRules(tighten) });
   let prompt = base;
   let problems = [];

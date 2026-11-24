@@ -178,3 +178,16 @@ test('specReference carries the whole spec file, capped at 40 KB', async () => {
   assert.ok(ref.includes('FILE: demo.spec.ts'));
   assert.ok(ref.length < 40200);
 });
+
+test('collectSetupFiles finds Playwright setup files next to and above the spec', async () => {
+  const { collectSetupFiles, formatSetupFiles } = await import('../src/translate.js');
+  const root = mkdtempSync(join(tmpdir(), 'workers-setup-'));
+  mkdirSync(join(root, 'e2e', 'tests'), { recursive: true });
+  writeFileSync(join(root, 'e2e', 'tests', 'auth.setup.ts'), "setup('authenticate', async () => {});");
+  writeFileSync(join(root, 'e2e', 'tests', 'profile.spec.ts'), "test('profile', async () => {});");
+  writeFileSync(join(root, 'e2e', 'global.setup.ts'), '// one level up');
+  const files = collectSetupFiles(join(root, 'e2e', 'tests', 'profile.spec.ts'));
+  assert.deepEqual(files.map((f) => f.rel).sort(), ['../global.setup.ts', 'auth.setup.ts']);
+  assert.match(formatSetupFiles(files), /SETUP FILE: auth\.setup\.ts/);
+  assert.equal(formatSetupFiles([]), '');
+});

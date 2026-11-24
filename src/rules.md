@@ -22,6 +22,8 @@ Kane is an AI browser agent. It reads plain-English steps, drives a real browser
 7. **States that Playwright checks through classes or attributes** (`toHaveClass('completed')`, `toBeChecked`) should be stated as what a user can see: "is shown as completed (checked and struck through)", "the checkbox is checked".
 8. **Keep the original intent.** Do not add checks the test did not make, and do not remove any. Do not weaken exact values.
 
+9. **Setup files.** If "Playwright setup files" are included, they run before the test (for example to sign up or log in, saved with `storageState`), so the test itself starts already logged in. Kane starts from a fresh browser, so put those steps at the start of the Kane test as a first `##` step. Write the real flow in plain English. Where the setup uses random data (a generated user), write simple fixed values instead (for example `Ada Lovelace`, `ada@example.test`, a password like `Password123!`, team `Workers`).
+
 ## Output
 
 Output ONLY the contents of the `_test.md` file. No explanations before or after, and no surrounding code fences.

@@ -81,7 +81,12 @@ export async function repairLoop(state, mutants, { rounds = 2, agent, model, wri
     let md;
     try {
       md = cleanOutput(await agent.run(prompt, { model }));
-      const problems = validateTestMd(md, { expectCount: countExpects(state.pwSource) });
+      let problems = validateTestMd(md, { expectCount: countExpects(state.pwSource) });
+      if (problems.length) {
+        const retry = `${prompt}\n\n# Your previous answer was rejected\nProblems:\n${problems.map((p) => `- ${p}`).join('\n')}\nReturn ONLY the corrected full \`_test.md\`, starting with the --- frontmatter.`;
+        md = cleanOutput(await agent.run(retry, { model }));
+        problems = validateTestMd(md, { expectCount: countExpects(state.pwSource) });
+      }
       if (problems.length) throw new Error(`agent returned an invalid _test.md: ${problems.join('; ')}`);
     } catch (e) {
       state.loop.push({ round, weakOn: weak, change: '', error: e.message, after: { ...state.cells } });

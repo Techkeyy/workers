@@ -109,3 +109,18 @@ test('repairLoop does nothing when the test is already at parity', async () => {
   await repairLoop(s, mutants, { rounds: 2, agent: { run: async () => assert.fail('no call expected') }, writeMd: () => {}, evaluate: async () => {} });
   assert.equal(s.loop.length, 0);
 });
+
+test('repairLoop retries an invalid answer once, telling the agent what was wrong', async () => {
+  const s = state();
+  const prompts = [];
+  const answers = ['Sorry, I need to log in first.', BETTER];
+  await repairLoop(s, mutants, {
+    rounds: 2,
+    agent: { run: async (p) => (prompts.push(p), answers.shift()) },
+    writeMd: () => {},
+    evaluate: async (st) => { st.cells = { clean: 'ok', B3: 'parity-caught', R1: 'false-alarm-avoided' }; },
+  });
+  assert.equal(prompts.length, 2);
+  assert.match(prompts[1], /previous answer was rejected/);
+  assert.equal(s.status, 'repaired');
+});
